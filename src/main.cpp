@@ -10,7 +10,7 @@ int main() {
     SDL_Renderer* renderer = SDL_CreateRenderer(window, nullptr);
 
     // Charger une police
-    TTF_Font* font = TTF_OpenFont("Montserrat/Montserrat-VariableFont_wght.ttf", 50);
+    TTF_Font* font = TTF_OpenFont("police/Montserrat/static/Montserrat-ExtraBoldItalic.ttf", 50);
 
     // Créer une surface texte
     SDL_Color color = {255, 255, 255, 255}; // blanc
