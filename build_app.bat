@@ -1,0 +1,1 @@
+clang++ src/main.cpp -o build/app_ex.exe -I./libs/SDL3 -I./libs/SDL3/SDL3_ttf -I./libs/SDL3/lSDL3_image -L./libs/SDL3/lSDL3_image -L./libs/SDL3/SDL3_ttf -L/libs/SDL3 -lSDL3 -lSDL3_image -lSDL3_ttf
