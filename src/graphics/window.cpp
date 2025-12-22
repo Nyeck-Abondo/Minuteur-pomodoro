@@ -46,13 +46,10 @@ namespace App {
                         
                         DrawCircle(particles[i], particlesColor.blue(), mAppRenderer);
                         //deplacement aleatoire
-                        mrandom.x = (std::rand() & 30) + 20;
-                        mrandom.y = (std::rand() & 30) + 20;
-                        particles[i].centerX += mrandom.Addition(particles[i]).x;
-                        particles[i].centerY += mrandom.Addition(particles[i]).y;
-
-                        particles[i].centerX *= 0.002;
-                        particles[i].centerY *= 0.002;
+                        mrandom.x = (std::rand() & 1) + 0.01;
+                        mrandom.y = (std::rand() & 1) + 0.01;
+                        particles[i].centerX = particles[i].centerX + mrandom.Addition(particles[i]).x * 0.005;
+                        particles[i].centerY = particles[i].centerY + mrandom.Addition(particles[i]).y * 0.005;
                     }
                 break;
 

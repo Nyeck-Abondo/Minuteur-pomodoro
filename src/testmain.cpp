@@ -19,7 +19,7 @@ int main() {
         }
         window.CreateDeign(window.mCurrenTheme);
         window.PresentWindow();
-        SDL_Delay(150);
+        SDL_Delay(15);
     }
     window.ShutdownWindow();
     return 0;
