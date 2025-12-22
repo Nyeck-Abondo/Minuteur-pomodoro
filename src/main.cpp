@@ -19,7 +19,7 @@ int main() {
     }
 
     //inmage de fond 
-    SDL_Surface* imgSurface = IMG_Load("assets/img.jpg");
+    SDL_Surface* imgSurface = IMG_Load("C:/Users/Administrator/Documents/Github/Minuteur-pomodoro/assets/black_wallpaper.jpg");
     if (!imgSurface) {
         std::cerr << "Echec de creation de la surface: " << SDL_GetError();
         return 1;
@@ -29,15 +29,14 @@ int main() {
     SDL_DestroySurface(imgSurface);
 
     // Charger une police
-    TTF_Font* font = TTF_OpenFont("police/Montserrat/static/Montserrat-ExtraBoldItalic.ttf", 50);
+    TTF_Font* font = TTF_OpenFont("C:/Users/Administrator/Documents/Github/Minuteur-pomodoro/police/Montserrat/static/Montserrat-ExtraBoldItalic.ttf", 50);
 
     // Créer une surface texte
     SDL_Color color = {255, 255, 255, 255}; // blanc
     std::string chrono;
-    int minutes = 00;
-    int secondes = 05;
-    SDL_Surface* surface = TTF_RenderText_Blended(font, "03:00",SDL_strlen("03:00"), color);
-
+    int minutes = 20;
+    int secondes = 00;
+    SDL_Surface* surface = TTF_RenderText_Blended(font, "20:00",SDL_strlen("20:00"), color);
     // Convertir en texture
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_DestroySurface(surface);
@@ -55,12 +54,12 @@ int main() {
             if (event.type == SDL_EVENT_QUIT) running = false;
         }
         //applocation de l'image de fond de l'application
-        SDL_RenderClear(renderer);
-        SDL_RenderTexture(renderer, imgTexture, nullptr, nullptr);
+        
 
         //Variation du compteur: temps defini arbitrairement
         chrono = std::to_string(minutes) + " : ";
         chrono += std::to_string(secondes);
+        //gestion de l'affichage du compteur
         if (secondes < 10) {
             chrono = std::to_string(minutes) + " : ";
             chrono += "0";
@@ -94,10 +93,11 @@ int main() {
         SDL_FRect dst = {300, 300, w, h};
 
         //affichage des textures
+        SDL_RenderClear(renderer);
+        SDL_RenderTexture(renderer, imgTexture, nullptr, nullptr);
         SDL_RenderTexture(renderer, texture, nullptr, &dst);
 
         
-
         SDL_RenderPresent(renderer);
         SDL_DestroyTexture(texture);
         SDL_Delay(1000);
