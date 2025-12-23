@@ -25,8 +25,11 @@ namespace App {
 
             //rendu
             void InitializeUi();
-            void UiSection();
-
+            void Uistyle();
+            void ParameterUi();
+            void LoginUi();
+            void ProfileUi();
+            void HelpUi();
 
         };
     } //namespace Uigraphics

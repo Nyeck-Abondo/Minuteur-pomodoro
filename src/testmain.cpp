@@ -6,10 +6,11 @@ int main() {
         std::cerr <<"Erreur de creation de la fenetre toute entiere!"<<std::endl;
         return 1;
     }
-    window.mCurrenTheme = App::backEnd::backGround::BLUE_THEME;
+    window.mCurrenTheme = App::backEnd::backGround::GREEN_THEME;
     window.SpawnRandomParticles();
     SDL_Event event;
     bool running = true;
+    int time = 0;
 
     while (running) {
         while (SDL_PollEvent(&event)) {
@@ -17,9 +18,14 @@ int main() {
                 running = false;
             }
         }
+       if ( time == 200){
+        window.SpawnRandomParticles();
+        time = 0;
+       }
         window.CreateDeign(window.mCurrenTheme);
         window.PresentWindow();
         SDL_Delay(15);
+        time++;
     }
     window.ShutdownWindow();
     return 0;

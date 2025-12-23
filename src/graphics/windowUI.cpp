@@ -7,6 +7,10 @@ namespace App{
                 : mio(nullptr), Uifont(nullptr), mtoggleConfig(nullptr) {
                     std::cout << "🛠️ cration de la fenetre imgui reussi !!"<<std::endl;
         }
+
+        void windowUi::InitializeUi() {
+            
+        }
         
         //style de UI
         void windowUi::Uistyle() {
