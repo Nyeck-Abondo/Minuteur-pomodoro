@@ -41,11 +41,11 @@ namespace App {
             ~window();
             
             //GETTERS
-            SDL_Window* GetWindowSDL() { return mappWindow;}
-            SDL_Renderer* GetRenderer() { return mAppRenderer;}
-            float GetWindowHeight() { return mwinHeight;}
-            float GetWindowWidth() { return mwinWidth;}
-            bool Initialised() { return winIsinitialise;}
+            SDL_Window* GetWindowSDL() const { return mappWindow;}
+            SDL_Renderer* GetRenderer() const { return mAppRenderer;}
+            float GetWindowHeight() const { return mwinHeight;}
+            float GetWindowWidth() const { return mwinWidth;}
+            bool Initialised() const { return winIsinitialise;}
 
             //Initialisation et fermeture de la fenetre
             bool InitialiseWindow();
@@ -53,15 +53,15 @@ namespace App {
             void ShutdownWindow();
 
             //chargement des images et du text
-            SDL_Texture* TextureImg();
-            SDL_Texture* TextureText();
+            SDL_Texture* TextureImg(std::string file, SDL_Renderer* renderer) const;
+            SDL_Texture* TextureText(SDL_Renderer* renderer);
 
             //rendu des particules de la fenetre
             void SpawnRandomParticles();
-            backEnd::vector2D RandomDirection();
+            backEnd::vector2D RandomDirection() const;
             void StayInBounds(); 
             void CreateDeign(backEnd::backGround theme);
-            void DrawCircle(backEnd::circle round, backEnd::color effect, SDL_Renderer* renderer);
+            void DrawCircle(backEnd::circle round, backEnd::color effect, SDL_Renderer* renderer) const;
         };
     } // namespace Graphics
 } //namespace App

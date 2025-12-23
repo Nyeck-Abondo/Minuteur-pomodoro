@@ -1,12 +1,15 @@
 #include "../include/window.h"
+#include <windows.h>
 
 int main() {
+    SetConsoleCP(CP_UTF8);
+
     App::Graphics::window window(900.0f, 1600.0f, "chrono pomodoro");
     if(window.InitialiseWindow() == false) {
         std::cerr <<"Erreur de creation de la fenetre toute entiere!"<<std::endl;
         return 1;
     }
-    window.mCurrenTheme = App::backEnd::backGround::GREEN_THEME;
+    window.mCurrenTheme = App::backEnd::backGround::PINK_THEME;
     window.SpawnRandomParticles();
     SDL_Event event;
     bool running = true;
@@ -18,7 +21,7 @@ int main() {
                 running = false;
             }
         }
-       if ( time == 200){
+       if ( time == 300){
         window.SpawnRandomParticles();
         time = 0;
        }

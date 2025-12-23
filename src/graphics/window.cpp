@@ -4,8 +4,9 @@ namespace App {
     namespace Graphics {        
         window::window (float height, float width, const std::string& title) 
             : mwinHeight(height), mwinWidth(width), mwinTitle(title), mappWindow(nullptr)
-            , mAppRenderer(nullptr), mfont(nullptr), ImgTexture(nullptr), winIsinitialise(false)
-            , textTexture(nullptr), mrandongenerator(std::random_device{} ()) {
+            , mAppRenderer(nullptr), mfont(TTF_OpenFont("police/Montserrat/static/Montserrat-BoldItalic.ttf", 25.0f))
+            , ImgTexture(nullptr), winIsinitialise(false), textTexture(nullptr)
+            , mrandongenerator(std::random_device{} ()) {
                 std::cout << "✅ initialisation de la fenetre avec succes !!"<< std::endl;
             }
             window::~window(){
@@ -53,7 +54,7 @@ namespace App {
                 break;
 
                 case backEnd::backGround::GREEN_THEME :
-                    SDL_SetRenderDrawColor(mAppRenderer, 0, 0, 0, 150);
+                    SDL_SetRenderDrawColor(mAppRenderer, 61, 61, 61, 150);
                     SDL_RenderClear(mAppRenderer);
                     for (auto& part : particles) {
                         StayInBounds();
@@ -65,40 +66,107 @@ namespace App {
                 break;
 
                 case backEnd::backGround::BEAUTIFULL_GRADIENT :
-                    
+                    SDL_RenderTexture(mAppRenderer, TextureImg("assets/img.jpg", mAppRenderer), nullptr, nullptr); 
                 break;
 
                 case backEnd::backGround::DARK_THEME :
-
+                    SDL_SetRenderDrawColor(mAppRenderer, 61, 61, 61, 255);
+                    SDL_RenderClear(mAppRenderer);
+                    for (auto& part : particles) {
+                        StayInBounds();
+                        DrawCircle(part, particlesColor.brokenWhite(), mAppRenderer);
+                        //deplacement aleatoire des particules
+                        mrandom = RandomDirection();
+                        part.centerX += mrandom.x * 0.005f;
+                        part.centerY += mrandom.y * 0.005f;
+                    }
                 break;
                 
                 case backEnd::backGround::ORIGINAL_DARK :
-
+                    SDL_RenderTexture(mAppRenderer, TextureImg("assets/black_wallpaper.jpg", mAppRenderer), nullptr, nullptr);
                 break;
 
                 case backEnd::backGround::PINK_THEME :
-
+                    SDL_SetRenderDrawColor(mAppRenderer, 247, 247, 247, 255);
+                    SDL_RenderClear(mAppRenderer);
+                    for (auto& part : particles) {
+                        StayInBounds();
+                        DrawCircle(part, particlesColor.pink(), mAppRenderer);
+                        //deplacement aleatoire des particules
+                        mrandom = RandomDirection();
+                        part.centerX += mrandom.x * 0.005f;
+                        part.centerY += mrandom.y * 0.005f;
+                    }
                 break;
 
                 case backEnd::backGround::PURPLE_THEME :
-
+                    SDL_SetRenderDrawColor(mAppRenderer, 61, 61, 61, 255);
+                    SDL_RenderClear(mAppRenderer);
+                    for (auto& part : particles) {
+                        StayInBounds();
+                        DrawCircle(part, particlesColor.purple(), mAppRenderer);
+                        //deplacement aleatoire des particules
+                        mrandom = RandomDirection();
+                        part.centerX += mrandom.x * 0.005f;
+                        part.centerY += mrandom.y * 0.005f;
+                    }
                 break;
 
-                case backEnd::backGround::RED_THEME :
+                case backEnd::backGround::RED_THEME_LIGHT :
+                    SDL_SetRenderDrawColor(mAppRenderer, 247, 247, 247, 255);
+                    SDL_RenderClear(mAppRenderer);
+                    for (auto& part : particles) {
+                        StayInBounds();
+                        DrawCircle(part, particlesColor.red(), mAppRenderer);
+                        //deplacement aleatoire des particules
+                        mrandom = RandomDirection();
+                        part.centerX += mrandom.x * 0.005f;
+                        part.centerY += mrandom.y * 0.005f;
+                    }
+                break;
 
+                case backEnd::backGround::RED_THEME : 
+                    SDL_SetRenderDrawColor(mAppRenderer, 10, 10, 10, 255);
+                    SDL_RenderClear(mAppRenderer);
+                    for (auto& part : particles) {
+                        StayInBounds();
+                        DrawCircle(part, particlesColor.red(), mAppRenderer);
+                        //deplacement aleatoire des particules
+                        mrandom = RandomDirection();
+                        part.centerX += mrandom.x * 0.005f;
+                        part.centerY += mrandom.y * 0.005f;
+                    }
                 break;
 
                 case backEnd::backGround::YELLOW_THEME :
-
+                    SDL_SetRenderDrawColor(mAppRenderer, 61, 61, 61, 255);
+                    SDL_RenderClear(mAppRenderer);
+                    for (auto& part : particles) {
+                        StayInBounds();
+                        DrawCircle(part, particlesColor.yellow(), mAppRenderer);
+                        //deplacement aleatoire des particules
+                        mrandom = RandomDirection();
+                        part.centerX += mrandom.x * 0.005f;
+                        part.centerY += mrandom.y * 0.005f;
+                    }
                 break;
 
-                case backEnd::backGround::COLOR_THEME :
-
+                case backEnd::backGround::PINK_THEME_LIGHT :
+                    SDL_SetRenderDrawColor(mAppRenderer, 61, 61, 61, 255);
+                    SDL_RenderClear(mAppRenderer);
+                    for (auto& part : particles) {
+                        StayInBounds();
+                        DrawCircle(part, particlesColor.pink(), mAppRenderer);
+                        //deplacement aleatoire des particules
+                        mrandom = RandomDirection();
+                        part.centerX += mrandom.x * 0.005f;
+                        part.centerY += mrandom.y * 0.005f;
+                    }
                 break;
             }
         }
 
-        backEnd::vector2D window::RandomDirection() {
+        backEnd::vector2D window::RandomDirection() const {
             std::uniform_real_distribution<> dis(-1.0f, 1.0f);
             return backEnd::vector2D(dis(mrandongenerator), dis(mrandongenerator));
         }
@@ -135,7 +203,7 @@ namespace App {
                 particles[i].radius = dir(mrandongenerator);
             }
         }
-        void window::DrawCircle(backEnd::circle round, backEnd::color effect, SDL_Renderer* renderer) {
+        void window::DrawCircle(backEnd::circle round, backEnd::color effect, SDL_Renderer* renderer) const {
             //creation d'un rendu personnalise
             SDL_SetRenderDrawColor(renderer, effect.r, effect.g, effect.b, effect.a);
 
@@ -153,15 +221,26 @@ namespace App {
             }
         }
 
-        SDL_Texture* window::TextureImg(backEnd::backGround image) {
+        SDL_Texture* window::TextureImg(std::string file, SDL_Renderer* renderer) const {
             //creation d'une surface
-            SDL_Surface* imgsurface = nullptr;
-            if (image == backEnd::backGround::ORIGINAL_DARK) {
-                SDL_Surface* imgsurface = IMG_Load("assets/black_wallpaper.jpg");
-            }
-            if (image == backEnd::backGround::BEAUTIFULL_GRADIENT) {
-                SDL_Surface* imgsurface = IMG_Load("assets/img.jpg");
-            }
+            SDL_Surface* imgsurface = IMG_Load(file.c_str());
+            //creation de la texture
+            SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, imgsurface);
+            SDL_DestroySurface(imgsurface);
+
+            return texture;
         }
-    } 
-}
+
+        SDL_Texture* window::TextureText(SDL_Renderer* renderer) {
+            //creation de la surface
+            std::string message = "Welcome To Pomodoro App";
+            SDL_Color colorbg = {0, 0, 0, 200};
+            SDL_Color colorfg = {255, 255, 255, 255};
+
+            SDL_Surface* fontSurface = TTF_RenderText_Shaded(mfont, message.c_str(), SDL_strlen(message.c_str()), colorfg, colorbg);
+            SDL_Texture* fontTexture = SDL_CreateTextureFromSurface(renderer, fontSurface);
+
+            return fontTexture;
+        }
+    } //namespace backend
+}//namespace app

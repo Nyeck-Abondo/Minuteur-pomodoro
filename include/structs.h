@@ -84,15 +84,16 @@ namespace App{
         //Cette enumeration permet le choix du theme de fond en local de la fenetre
         enum class backGround {
             DARK_THEME,
-            COLOR_THEME,
             RED_THEME,
+            RED_THEME_LIGHT,
             PURPLE_THEME,
             PINK_THEME,
+            PINK_THEME_LIGHT,
             YELLOW_THEME,
             BLUE_THEME,
             GREEN_THEME,
-            ORIGINAL_LOCAL,
-            BEAUTIFULL_CITY,
+            ORIGINAL_DARK,
+            BEAUTIFULL_GRADIENT,
         };
 
         //choix des onglets de l'application
