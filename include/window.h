@@ -41,8 +41,8 @@ namespace App {
             ~window();
             
             //GETTERS
-            SDL_Window* GetWindowSDL() const { return mappWindow;}
-            SDL_Renderer* GetRenderer() const { return mAppRenderer;}
+            SDL_Window* GetWindowSDL() { return mappWindow;}
+            SDL_Renderer* GetRenderer()  { return mAppRenderer;}
             float GetWindowHeight() const { return mwinHeight;}
             float GetWindowWidth() const { return mwinWidth;}
             bool Initialised() const { return winIsinitialise;}
