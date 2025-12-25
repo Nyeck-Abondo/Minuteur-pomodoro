@@ -12,18 +12,22 @@ int main() {
         std::cerr <<"Erreur de creation de la fenetre toute entiere!"<<std::endl;
         return 1;
     }
-    window.mCurrenTheme = App::backEnd::backGround::PINK_THEME;
-    window.SpawnRandomParticles();
+    //theme de debut par defaut
+    window.mCurrenTheme = App::backEnd::OfficialTheme::BLUE_THEME;
+
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     App::Uigraphics::windowUi windowui(800, 600, 16.0f, ImGui::GetIO());
     windowui.InitializeUi(window.GetRenderer(), window.GetWindowSDL());
     igThemeV3(7, 7, 7, 0, 0, 1, 1);
+
     SDL_Event event;
     bool running = true;
     bool demo = true;
     bool custom = true;
-    int time = 0;
+    int texture_limitator = 0;
+
+    window.ChangePrincipalTheme(window.mCurrenTheme);
 
     while (running) {
         while (SDL_PollEvent(&event)) {
@@ -32,29 +36,33 @@ int main() {
                 running = false;
             }
         }
-       if ( time == 300){
-        window.SpawnRandomParticles();
-        time = 0;
-       }
-        
+
         ImGui_ImplSDLRenderer3_NewFrame();
         ImGui_ImplSDL3_NewFrame();
         ImGui::NewFrame();
 
+        if(custom) ImGui::ShowDemoWindow(&custom);
+
         if (custom) {
             ImGui::Begin("chrono");
+            if (ImGui::Button("Purpule theme")) {
+                //changement de la valeur du theme et retour a l'etiquette
+                window.mCurrenTheme = App::backEnd::OfficialTheme::PURPLE_THEME;
+                SDL_DestroyTexture(window.GetWindowTexture());
+                window.ChangePrincipalTheme(window.mCurrenTheme);
+            }
             ImGui::End();
         }
         ImGui::Render();
-        window.CreateDeign(window.mCurrenTheme);
+        SDL_RenderTexture(window.GetRenderer(), window.GetWindowTexture(), nullptr, nullptr);
         ImGui_ImplSDLRenderer3_RenderDrawData(ImGui::GetDrawData(), window.GetRenderer());
         window.PresentWindow();
         SDL_Delay(15);
-        time++;
     }
     ImGui_ImplSDLRenderer3_Shutdown(); 
     ImGui_ImplSDL3_Shutdown(); 
     ImGui::DestroyContext();
+    SDL_DestroyTexture(window.GetWindowTexture());
     window.ShutdownWindow();
     return 0;
 }

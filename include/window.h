@@ -25,17 +25,11 @@ namespace App {
             float mwinHeight;
             float mwinWidth;
             float mfontSize;
-            backEnd::circle particles[40];
             bool winIsinitialise;
             std::string mwinTitle;
-            backEnd::vector2D mrandom; //deplacement aleatoire
 
         public:
-            backEnd::backGround mCurrenTheme; //theme de fond
-            backEnd::color mBgColor;
-            backEnd::color particlesColor;
-           
-
+            backEnd::OfficialTheme mCurrenTheme; //theme de fond
             //constructeur et destructeur de la classe
             window (float height, float width, const std::string& title);
             ~window();
@@ -43,6 +37,7 @@ namespace App {
             //GETTERS
             SDL_Window* GetWindowSDL() { return mappWindow;}
             SDL_Renderer* GetRenderer()  { return mAppRenderer;}
+            SDL_Texture* GetWindowTexture() { return ImgTexture; }
             float GetWindowHeight() const { return mwinHeight;}
             float GetWindowWidth() const { return mwinWidth;}
             bool Initialised() const { return winIsinitialise;}
@@ -53,15 +48,11 @@ namespace App {
             void ShutdownWindow();
 
             //chargement des images et du text
-            SDL_Texture* TextureImg(std::string file, SDL_Renderer* renderer) const;
+            void TextureImg(const char* file);
             SDL_Texture* TextureText(SDL_Renderer* renderer);
 
             //rendu des particules de la fenetre
-            void SpawnRandomParticles();
-            backEnd::vector2D RandomDirection() const;
-            void StayInBounds(); 
-            void CreateDeign(backEnd::backGround theme);
-            void DrawCircle(backEnd::circle round, backEnd::color effect, SDL_Renderer* renderer) const;
+            void ChangePrincipalTheme(backEnd::OfficialTheme theme);
         };
     } // namespace Graphics
 } //namespace App
