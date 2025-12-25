@@ -19,13 +19,16 @@ int main() {
     ImGui::CreateContext();
     App::Uigraphics::windowUi windowui(800, 600, 16.0f, ImGui::GetIO());
     windowui.InitializeUi(window.GetRenderer(), window.GetWindowSDL());
+    //mise en place du theme
     igThemeV3(7, 7, 7, 0, 0, 1, 1);
+    //chargement des textures
+    windowui.CreateUITexture(window.GetRenderer());
 
     SDL_Event event;
     bool running = true;
     bool demo = true;
     bool custom = true;
-    int texture_limitator = 0;
+    static bool no_background = false;
 
     window.ChangePrincipalTheme(window.mCurrenTheme);
 
@@ -41,16 +44,20 @@ int main() {
         ImGui_ImplSDL3_NewFrame();
         ImGui::NewFrame();
 
-        if(custom) ImGui::ShowDemoWindow(&custom);
-
         if (custom) {
-            ImGui::Begin("chrono");
+            //definition de la position de la prochaine fentre imgui
+            ImGui::SetNextWindowPos(ImVec2(800.0f, 450.0f), 0, ImVec2(0.5, 0.5f));
+             //definition de la taille par defaut de la fentre imgui
+            ImGui::SetNextWindowSize(ImVec2(1600, 900.f));
+            ImGui::Begin("chrono", &custom, ImGuiWindowFlags_NoBackground);
+            ImGui::Toggle("unable BG", &no_background, ImGuiToggleFlags_Animated);
             if (ImGui::Button("Purpule theme")) {
                 //changement de la valeur du theme et retour a l'etiquette
                 window.mCurrenTheme = App::backEnd::OfficialTheme::PURPLE_THEME;
                 SDL_DestroyTexture(window.GetWindowTexture());
                 window.ChangePrincipalTheme(window.mCurrenTheme);
             }
+            windowui.ParameterUi();
             ImGui::End();
         }
         ImGui::Render();
@@ -59,9 +66,7 @@ int main() {
         window.PresentWindow();
         SDL_Delay(15);
     }
-    ImGui_ImplSDLRenderer3_Shutdown(); 
-    ImGui_ImplSDL3_Shutdown(); 
-    ImGui::DestroyContext();
+    windowui.ShutdownUI();
     SDL_DestroyTexture(window.GetWindowTexture());
     window.ShutdownWindow();
     return 0;

@@ -3,6 +3,7 @@
 #include <string>
 #include <cstdlib>
 #include <cstdint>
+#include "../libs/SDL3/SDL.h"
 
 namespace App{
     namespace backEnd{
@@ -41,6 +42,21 @@ namespace App{
             STATISTICS,
             PROFILE,
             HELP
+        };
+
+        //ensembles des textures d'images a generer
+        struct textureUi {
+            SDL_Texture* soundTexture;
+            SDL_Texture* restTexture;
+            SDL_Texture* chronoTexture;
+            SDL_Texture* profilTexture;
+            SDL_Texture* settingsTexture;
+        };
+
+        //taille des textures
+        struct sizeTexture {
+            float w;
+            float h;
         };
     } // namespace backEnd 
 }// namespace App

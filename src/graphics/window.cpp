@@ -42,13 +42,13 @@ namespace App {
             SDL_Surface* surface = nullptr;
             switch (theme) {
                 case backEnd::OfficialTheme::BLUE_THEME :
-                    surface = IMG_Load("assets/blue.jpg");
+                    surface = IMG_Load("assets/backgrounds/dark_02.jpg");
                     ImgTexture = SDL_CreateTextureFromSurface(mAppRenderer, surface);
                     SDL_DestroySurface(surface);
                 break;
 
                 case backEnd::OfficialTheme::PURPLE_THEME :
-                    surface = IMG_Load("assets/Windows Wallpaper Black Purple R.jpg");
+                    surface = IMG_Load("assets/backgrounds/Windows Wallpaper Black Purple R.jpg");
                     ImgTexture = SDL_CreateTextureFromSurface(mAppRenderer, surface);
                     SDL_DestroySurface(surface);
                 break;

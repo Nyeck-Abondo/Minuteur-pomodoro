@@ -1,15 +1,19 @@
 #include "../include/windowUI.h"
+#include "../libs/SDL3/SDL.h"
 #include <iostream>
+#define STB_IMAGE_IMPLEMENTATION
+#include "../libs/stb/stb_image.h"
 
 namespace App{
     namespace Uigraphics{
         windowUi::windowUi(float width, float height, float fontsize, ImGuiIO& io)
-                : Uifont(nullptr), mio(io), mStyle(ImGui::GetStyle()), isInitialise(false) {
+                : Uifont(nullptr), mio(io), mStyle(ImGui::GetStyle()), isInitialise(false),
+                mtools({nullptr, nullptr, nullptr, nullptr, nullptr}) {
                     std::cout << "🛠️ cration de la fenetre imgui reussi !!"<<std::endl;
         }
          windowUi::~windowUi() {
             std::cout<<"destruction propre de imgui interface"<<std::endl;
-         }
+        }
 
         void windowUi::InitializeUi(SDL_Renderer* renderer, SDL_Window* window) {
             mio.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
@@ -19,7 +23,69 @@ namespace App{
             ImGui_ImplSDL3_InitForSDLRenderer(window, renderer);
             ImGui_ImplSDLRenderer3_Init(renderer);
         }
+
+        void windowUi::ShutdownUI() {
+            ImGui_ImplSDLRenderer3_Shutdown();
+            ImGui_ImplSDL3_Shutdown();
+            ImGui::DestroyContext();
+            //textures crees
+            SDL_DestroyTexture(mtools.chronoTexture);
+            SDL_DestroyTexture(mtools.profilTexture);
+            SDL_DestroyTexture(mtools.restTexture);
+            SDL_DestroyTexture(mtools.settingsTexture);
+            SDL_DestroyTexture(mtools.soundTexture);
+        }
+
+        void windowUi::ParameterUi() {
+            
+            if (ImGui::ImageButton("##button01",(ImTextureID)(intptr_t)mtools.settingsTexture, ImVec2(50, 50))) {
+                ImGui::BeginChild("##param", ImVec2(150, 250));
+                ImGui::EndChild();
+            }
+            ImGui::Toggle("sounds",&activate_sound, ImGuiToggleFlags_Animated);
+           
+
+        }
+
+        SDL_Texture* windowUi::Load_imageTexture(SDL_Renderer* renderer, const char* fileLocation) {
+            int width, height, channels;
+            unsigned char* image_data = stbi_load(fileLocation, &width, &height, &channels, 4);
+            //verification du chargement de l'image en memoire
+            if (!image_data) {
+                std::cerr << "Erreur de chargement de l'image: " << stbi_failure_reason() << std::endl;
+                return nullptr;
+            }
+            std::cout << "image : "<< fileLocation << " taille : " << width << " x " << height << std::endl;
+            std::cout << "image : " << fileLocation << "chargee avec succes!" << std::endl; 
+            //creation de la texutre
+            SDL_Texture* texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_STATIC, width, height);
+            if (!texture) {
+                std::cerr << "Erreur de creation de la texture: " << SDL_GetError() << std::endl;
+                stbi_image_free(image_data);
+                return nullptr;
+            }
+            //copie des pixel
+            SDL_UpdateTexture(texture, nullptr, image_data, width * 4);
+            //liberation de la memeoire
+            stbi_image_free(image_data);
+            return texture;
+        }
         
+        void windowUi::CreateUITexture(SDL_Renderer* Renderer) {
+            mtools.settingsTexture = Load_imageTexture(Renderer, "assets/tools/setting_4251007.png");
+            mtools.chronoTexture = Load_imageTexture(Renderer, "assets/tools/timer_15553848.png");
+            mtools.profilTexture = Load_imageTexture(Renderer, "assets/tools/user_8104772.png");
+            mtools.restTexture = Load_imageTexture(Renderer, "assets/tools/person_17580600.png");
+            mtools.soundTexture = Load_imageTexture(Renderer, "assets/tools/equalizer_13123538.png");
+
+            //recuperation des dimensions
+            SDL_GetTextureSize(mtools.settingsTexture, &settings.w, &settings.w);
+            SDL_GetTextureSize(mtools.chronoTexture, &chrono.w, &chrono.h);
+            SDL_GetTextureSize(mtools.profilTexture, &profile.w, &profile.h);
+            SDL_GetTextureSize(mtools.restTexture, &rest.w, &rest.h);
+            SDL_GetTextureSize(mtools.soundTexture, &sound.w, &sound.h);
+        }
+
         //style de UI
         void windowUi::Uistyle() {
             mStyle = ImGui::GetStyle();
