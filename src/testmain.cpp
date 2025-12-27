@@ -17,7 +17,7 @@ int main() {
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
-    App::Uigraphics::windowUi windowui(800, 600, 16.0f, ImGui::GetIO());
+    App::Uigraphics::windowUi windowui(1600, 900, 16.0f, ImGui::GetIO());
     windowui.InitializeUi(window.GetRenderer(), window.GetWindowSDL());
     //mise en place du theme
     igThemeV3(7, 7, 7, 0, 0, 1, 1);
@@ -49,15 +49,15 @@ int main() {
             ImGui::SetNextWindowPos(ImVec2(800.0f, 450.0f), 0, ImVec2(0.5, 0.5f));
              //definition de la taille par defaut de la fentre imgui
             ImGui::SetNextWindowSize(ImVec2(1600, 900.f));
-            ImGui::Begin("chrono", &custom, ImGuiWindowFlags_NoBackground);
-            ImGui::Toggle("unable BG", &no_background, ImGuiToggleFlags_Animated);
+            ImGui::Begin("chrono", &custom, ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoTitleBar);
+
             if (ImGui::Button("Purpule theme")) {
                 //changement de la valeur du theme et retour a l'etiquette
                 window.mCurrenTheme = App::backEnd::OfficialTheme::PURPLE_THEME;
                 SDL_DestroyTexture(window.GetWindowTexture());
                 window.ChangePrincipalTheme(window.mCurrenTheme);
             }
-            windowui.ParameterUi();
+            windowui.ParameterUi(4, 25, 4, 8, 5);
             ImGui::End();
         }
         ImGui::Render();

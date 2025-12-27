@@ -43,11 +43,13 @@ namespace App {
             bool Initialised() const { return winIsinitialise;}
 
             //Initialisation et fermeture de la fenetre
+
             bool InitialiseWindow();
             void PresentWindow();
             void ShutdownWindow();
 
             //chargement des images et du text
+            
             void TextureImg(const char* file);
             SDL_Texture* TextureText(SDL_Renderer* renderer);
 

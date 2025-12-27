@@ -3,6 +3,7 @@
 #include <string>
 #include <cstdlib>
 #include <cstdint>
+#include <iostream>
 #include "../libs/SDL3/SDL.h"
 
 namespace App{
@@ -12,6 +13,9 @@ namespace App{
             float secondes;
             char chrono[256];
 
+            Timer(int min, float second): minutes(min), secondes(second) {
+                std::cout << "✅ creation du chronometre reussie !" << std::endl;
+            }
             void timeleft() {
                 sprintf(chrono,"%d : %0.2f", minutes, secondes);
                 if (minutes >= 0) {
@@ -34,14 +38,8 @@ namespace App{
         enum class OfficialTheme {
             BLUE_THEME,
             PURPLE_THEME,
-        };
-
-        //choix des onglets de l'application
-        enum class UiNavigation {
-            PARAMETERS,
-            STATISTICS,
-            PROFILE,
-            HELP
+            DARK_THEME,
+            AOT_THEME
         };
 
         //ensembles des textures d'images a generer
@@ -51,6 +49,8 @@ namespace App{
             SDL_Texture* chronoTexture;
             SDL_Texture* profilTexture;
             SDL_Texture* settingsTexture;
+            SDL_Texture* work;
+            SDL_Texture* statistics;
         };
 
         //taille des textures

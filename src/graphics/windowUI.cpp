@@ -15,6 +15,14 @@ namespace App{
             std::cout<<"destruction propre de imgui interface"<<std::endl;
         }
 
+        /**
+         * InitializeUi
+         *  @brief- initialise la fenetre imgui
+         * @param renderer correspond au moteur de rendu de la fenetre parent SDL
+         * @param window correspond a la fenetre SDL elle meme(la variable qui 
+         * prend en charge sa creation).
+         * @return nothing. 
+         */
         void windowUi::InitializeUi(SDL_Renderer* renderer, SDL_Window* window) {
             mio.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
             mtoggleConfig.Flags |= ImGuiToggleFlags_Animated;
@@ -24,6 +32,10 @@ namespace App{
             ImGui_ImplSDLRenderer3_Init(renderer);
         }
 
+        /**
+         * @name ShutdownUI()
+         * @brief -Ferme proprement la fentre imgui elle ne prend aucun parametre
+         */
         void windowUi::ShutdownUI() {
             ImGui_ImplSDLRenderer3_Shutdown();
             ImGui_ImplSDL3_Shutdown();
@@ -36,15 +48,51 @@ namespace App{
             SDL_DestroyTexture(mtools.soundTexture);
         }
 
-        void windowUi::ParameterUi() {
-            
-            if (ImGui::ImageButton("##button01",(ImTextureID)(intptr_t)mtools.settingsTexture, ImVec2(50, 50))) {
-                ImGui::BeginChild("##param", ImVec2(150, 250));
-                ImGui::EndChild();
-            }
-            ImGui::Toggle("sounds",&activate_sound, ImGuiToggleFlags_Animated);
-           
+        /**
+         * @name parameterUi
+         * @brief cette fontion est chargée d'afficher les options de parametrage de
+         * l'application. elle comprend les reglages de volumes, les reglages des 
+         * sessions de temps de travail et de repos, le nombre d'intervalle de repos
+         * long
+         * 
+         * @param session_number -cette variable gere le  nombre de session pomodoro
+         * ou encore connu sous le nom de session de concentration
+         * @param workinTime -cette variable est en charge de la regulation du temps
+         * de travail de l'utilisateur. elle varien entre 5 et 60 minutes pour assurer
+         * une concentration optimale
+         * @param short_breakTime Cette variable gère la durée des session de pause courtes.
+         * elle varie entre 5 et 30 minutes, selon la convenance de l'utilisateur.
+         * @param long_BreakTime Ce paramètre s'occupe de la définition de la durée des longues
+         * sessions de pause. Elle s'étend de 20 à 60 minutes selon les préférences de lùutilisateur
+         * @param long_BreakInterval defini une constente d'apparition des longues pauses.
+         * elle peut varier entre 5 et 10. ces chiffres représentant le nombre de session pomodoro
+         * repos court.
+         * @param volume permet la gestion du vokume du minuteur
+         * @param theme permet de changer le theme en arriere plan de la'application
+         * @return nothing
+         */
+        void windowUi::ParameterUi(int session_mumber, int workingTime, int short_breakTime, int long_BreakTime, int long_BreakInterval, int volume, backEnd::OfficialTheme theme) {
+            ImGui::SetNextWindowPos(ImVec2(251.0f, 400.0f), 0, ImVec2(0, 0.75f));
+            ImGui::BeginChild("##parameter", ImVec2(500, 600), 0, ImGuiWindowFlags_Modal);
 
+            //gestion du son de l'application
+            ImGui::SeparatorText("Son");
+            ImGui::Text("Volume");
+            ImGui::SameLine(0.0f, 2.0f);
+            ImGui::SliderInt(" ", &volume, 0, 100);
+            ImGui::Text("Son actif");
+            ImGui::SameLine(0.0f, 2.0f);
+            ImGui::Toggle(" ", &activate_sound, ImGuiToggleFlags_Animated);
+
+            //changement des themes dans le parametrage
+            int current_item = -1;
+            ImGui::SeparatorText("Theme de lapplication");
+            ImGui::BeginCombo("Theme", usefullTheme);
+            
+            ImGui::SetCursorPos(ImVec2(250.0f - 100, 300.0f - 100.0f));
+            ImGui::Image((ImTextureID)(intptr_t)mtools.profilTexture, ImVec2(200, 200));    
+
+            ImGui::EndChild();
         }
 
         SDL_Texture* windowUi::Load_imageTexture(SDL_Renderer* renderer, const char* fileLocation) {
@@ -72,18 +120,21 @@ namespace App{
         }
         
         void windowUi::CreateUITexture(SDL_Renderer* Renderer) {
-            mtools.settingsTexture = Load_imageTexture(Renderer, "assets/tools/setting_4251007.png");
+            mtools.settingsTexture = Load_imageTexture(Renderer, "assets/tools/icons8-slider-100.png");
             mtools.chronoTexture = Load_imageTexture(Renderer, "assets/tools/timer_15553848.png");
             mtools.profilTexture = Load_imageTexture(Renderer, "assets/tools/user_8104772.png");
             mtools.restTexture = Load_imageTexture(Renderer, "assets/tools/person_17580600.png");
-            mtools.soundTexture = Load_imageTexture(Renderer, "assets/tools/equalizer_13123538.png");
-
+            mtools.soundTexture = Load_imageTexture(Renderer, "assets/tools/icons8-musical-note-100.png");
+            mtools.statistics =Load_imageTexture(Renderer, "assets/tools/icons8-analytique-100 (1).png");
+            mtools.work = Load_imageTexture(Renderer, "assets/tools/icons8-travaux-de-jardinage-100 (1).png");
             //recuperation des dimensions
             SDL_GetTextureSize(mtools.settingsTexture, &settings.w, &settings.w);
             SDL_GetTextureSize(mtools.chronoTexture, &chrono.w, &chrono.h);
             SDL_GetTextureSize(mtools.profilTexture, &profile.w, &profile.h);
             SDL_GetTextureSize(mtools.restTexture, &rest.w, &rest.h);
             SDL_GetTextureSize(mtools.soundTexture, &sound.w, &sound.h);
+            SDL_GetTextureSize(mtools.statistics, &statistic.w, &statistic.h);
+            SDL_GetTextureSize(mtools.work, &work.w, &work.h);
         }
 
         //style de UI
