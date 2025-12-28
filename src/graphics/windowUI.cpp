@@ -17,7 +17,7 @@ namespace App{
          */
         windowUi::windowUi(float fontsize, ImGuiIO& io)
                 : Uifont(nullptr), mio(io), mStyle(ImGui::GetStyle()), isInitialise(false),
-                mtools({nullptr, nullptr, nullptr, nullptr, nullptr}) {
+                mtools({nullptr, nullptr, nullptr, nullptr, nullptr}), mfontSize(fontsize) {
                     std::cout << "🛠️ cration de la fenetre imgui reussi !!"<<std::endl;
         }
          windowUi::~windowUi() {
@@ -55,6 +55,8 @@ namespace App{
             SDL_DestroyTexture(mtools.restTexture);
             SDL_DestroyTexture(mtools.settingsTexture);
             SDL_DestroyTexture(mtools.soundTexture);
+            SDL_DestroyTexture(mtools.statistics);
+            SDL_DestroyTexture(mtools.work);
         }
 
         /**

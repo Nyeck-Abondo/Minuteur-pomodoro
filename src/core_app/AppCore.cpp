@@ -2,8 +2,8 @@
 namespace App {
     namespace core {
         //constructeur
-        AppCore::AppCore(float width, float height, std::string title, ImGuiIO& io): mwindow(height, width, title), mwindowUi(28.0f, io)
-        , mworkSession(20, 0.0f), mshortBreak(5, 0), mLongbreak(15, 0.0f), mSessionNumber(5), mLong_breakInterval(2), mstatistics(), mvolume(50) {
+        AppCore::AppCore(float width, float height, std::string title, ImGuiIO& io): mwindow(height, width, title), mwindowUi(25.0f, io)
+        , mworkSession(1, 2.0f), mshortBreak(1, 5), mLongbreak(15, 0.0f), mSessionNumber(5), mLong_breakInterval(2), mstatistics(), mvolume(50) {
             std::cout << "🧰 Creation du coeur de l'application reussie avec succes !!" << std::endl;
         }
 
@@ -17,18 +17,46 @@ namespace App {
                 ImGui_ImplSDLRenderer3_NewFrame();
                 ImGui_ImplSDL3_NewFrame();
                 ImGui::NewFrame();
+                
 
                 ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), 0, ImVec2(0.5f, 0.5f));
                 ImGui::SetNextWindowSize(ImVec2(mwindow.GetWindowWidth(), mwindow.GetWindowHeight()));
                 ImGui::Begin("Minuteur Pomodoro", &show_interface, ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
 
+                ImGui::PushFont(mwindowUi.GetFontUi(), mwindowUi.GetFontSize());
                 ImGui::BeginChild("##Tools barr", ImVec2(250.0f, 900.0f));
+                if (ImGui::Selectable("Parametre", &show_parameters, 0, ImVec2(250.0f, 100.0f))) {
+                    
+                }
+                if(ImGui::Selectable("Statistique", &show_statistics, 0, ImVec2(250.0f, 100.0f))) {
 
-                ImGui::Selectable("Parametre", &show_parameters, 0, ImVec2(250.0f, 100.0f));
-                ImGui::Selectable("Statistique", show_statistics, 0, ImVec2(250.0f, 100.0f));
+                }
+                if(ImGui::Selectable("Get Started", &Get_started, 0, ImVec2(250.0f, 100.0f))) {
+
+                }
+                ImGui::EndChild();
+                if (show_parameters) {
+                    ParameterUi(mSessionNumber, mworkSession, mshortBreak, mLongbreak, mLong_breakInterval, mvolume);
+                    show_statistics = false;
+                }
+                if (show_statistics) {
+                    statisticsUi();
+                    show_parameters = false;
+                }
+                ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+                ImGui::SetNextWindowPos(ImVec2(center.x, center.y), 0, ImVec2(0.5, 0.55));
+                ImGui::BeginChild("##chrono01", ImVec2(400.0f, 350.0f), ImGuiChildFlags_None, ImGuiWindowFlags_NoBackground);
+
+                if (Get_started) {
+                    //calcul du temps restant
+                    mworkSession.timeleft();
+                }
+                
+                ImGui::Text("%s", mworkSession.chrono);
 
                 ImGui::EndChild();
 
+                ImGui::PopFont();
                 ImGui::End();
                 //presentation du rendu de l'application
                 AppPresent();
@@ -75,6 +103,9 @@ namespace App {
             mwindow.ChangePrincipalTheme(mwindow.mCurrenTheme);
             std::cout << "initialisation des statistiques a 0" <<std::endl;
 
+            //chargement des textures
+            mwindowUi.CreateUITexture(mwindow.GetRenderer());
+
             return true;
         }
 
@@ -108,7 +139,7 @@ namespace App {
          * @return nothing
          */
         void AppCore::ParameterUi(int session_mumber, backEnd::Timer work, backEnd::Timer short_breakTime, backEnd::Timer long_BreakTime, int long_BreakInterval, int volume) {
-            ImGui::SetNextWindowPos(ImVec2(251.0f, 400.0f), 0, ImVec2(0, 0.75f));
+            ImGui::SetNextWindowPos(ImVec2(251.0f, 400.0f), 0, ImVec2(0, 0.55f));
             ImGui::BeginChild("##parameter", ImVec2(500, 600), 0, ImGuiWindowFlags_Modal);
 
             //gestion du son de l'application
@@ -117,9 +148,6 @@ namespace App {
             ThemeSettings();
             //parametrage du temps des sessions
             
-            ImGui::SetCursorPos(ImVec2(250.0f - 100, 300.0f - 100.0f));
-            ImGui::Image((ImTextureID)(intptr_t)mwindowUi.GettextureUI().settingsTexture, ImVec2(200, 200));    
-
             ImGui::EndChild();
         }
 
@@ -130,7 +158,7 @@ namespace App {
             ImGui::SliderInt(" ", &mvolume, 0, 100);
             ImGui::Text("Son actif");
             ImGui::SameLine(0.0f, 2.0f);
-            ImGui::Toggle(" ", &activate_sound, ImGuiToggleFlags_Animated);
+            ImGui::Toggle("##sound", &activate_sound, ImGuiToggleFlags_Animated);
         }
 
         /**
@@ -141,18 +169,17 @@ namespace App {
         void AppCore::ThemeSettings() {
             //changement des themes dans le parametrage avec un combo
             const char* mTheme [] = {"Blue Theme", "Purple Theme", "Dark Light", "AOT Theme"};
-            int current_item_id = 0;
+            static int current_item_id = 0;
             //ici on verra Blue Theme en ouvrant le combo
             const char* preview_value = mTheme[current_item_id];
 
             ImGui::SeparatorText("Theme de lapplication");
-                if(ImGui::BeginCombo("Theme", preview_value, ImGuiComboFlags_HeightLarge)) {
+            if(ImGui::BeginCombo("Theme", preview_value)) {
 
-                    for (int i; i < IM_ARRAYSIZE(mTheme); i++) {
+                for (int i = 0; i < IM_ARRAYSIZE(mTheme); i++) {
                     const bool selected = (current_item_id == i);
                     if (ImGui::Selectable(mTheme[i], selected)){
                         current_item_id = i;
-                        
                     }
                     //on met un focus sur l'objet actuel
                     if (selected) {
@@ -163,39 +190,49 @@ namespace App {
                         switch (i) {
                             case 0:
                                 mwindow.mCurrenTheme = backEnd::OfficialTheme::BLUE_THEME;
+                                mwindow.ChangePrincipalTheme(mwindow.mCurrenTheme);
+                                SDL_RenderTexture(mwindow.GetRenderer(),mwindow.GetWindowTexture(), nullptr, nullptr);
                             break;
                             case 1:
                                 mwindow.mCurrenTheme = backEnd::OfficialTheme::PURPLE_THEME;
+                                mwindow.ChangePrincipalTheme(mwindow.mCurrenTheme);
+                                SDL_RenderTexture(mwindow.GetRenderer(),mwindow.GetWindowTexture(), nullptr, nullptr);
                             break;
                             case 2:
                                 mwindow.mCurrenTheme = backEnd::OfficialTheme::DARK_THEME;
+                                mwindow.ChangePrincipalTheme(mwindow.mCurrenTheme);
+                                SDL_RenderTexture(mwindow.GetRenderer(),mwindow.GetWindowTexture(), nullptr, nullptr);
                             break;
                             case 3:
                                 mwindow.mCurrenTheme = backEnd::OfficialTheme::AOT_THEME;
+                                mwindow.ChangePrincipalTheme(mwindow.mCurrenTheme);
+                                SDL_RenderTexture(mwindow.GetRenderer(),mwindow.GetWindowTexture(), nullptr, nullptr);
                             break;
                         }
-                        mwindow.ChangePrincipalTheme(mwindow.mCurrenTheme);
                     }
                 }
-
-                ImGui::EndCombo();
+                ImGui::EndCombo();            
             }
         }
 
-        void AppCore::statisticsUi(bool& show) {
+        void AppCore::statisticsUi() {
             ImVec2 center = ImGui::GetMainViewport()->GetCenter();
 
             //section des sessions teminees
             ImGui::SetNextWindowPos(ImVec2(center.x - 250.0f, center.y), 0, ImVec2(0.5f, 0.5f));
-            ImGui::BeginChild("##SessionDone", ImVec2(200, 300), ImGuiChildFlags_AlwaysAutoResize);
+            ImGui::BeginChild("##SessionDone", ImVec2(200, 300));
             ImGui::Text("Sessions Complétées");
-            ImGui::Text("%s",std::to_string(mstatistics.work_time).c_str());
+            //calcul des sessions completes
+            mstatistics.WorkSessionComplete(mworkSession.minutes, Get_started);
+            ImGui::Text("%s",std::to_string(mstatistics.period.completed).c_str());
             ImGui::EndChild();
 
             //section des sessions sautees
             ImGui::SetNextWindowPos(center, 0, ImVec2(0.5f, 0.5f));
-            ImGui::BeginChild("##periodSKiped", ImVec2(200.0f, 300.0f), ImGuiChildFlags_AlwaysAutoResize);
+            ImGui::BeginChild("##periodSKiped", ImVec2(200.0f, 300.0f));
             ImGui::Text("sessions Sautées");
+            //calcul des statistiques
+            mstatistics.WorkSessionComplete(mworkSession.minutes, Get_started);
             ImGui::Text("%s",std::to_string(mstatistics.period.skiped).c_str());
             ImGui::EndChild();
         }

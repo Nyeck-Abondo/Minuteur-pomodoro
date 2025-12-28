@@ -36,7 +36,7 @@ namespace App {
             ~windowUi();
 
             //GETTERS
-            backEnd::textureUi GettextureUI() const { return mtools; }
+            backEnd::textureUi GettextureUI() { return mtools; }
             ImGuiStyle GetUIstyle() const { return mStyle;}
             ImFont* GetFontUi() const { return Uifont;}
             ImGuiToggleConfig GetToggleConfig() const { return mtoggleConfig;}

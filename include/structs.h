@@ -31,6 +31,13 @@ namespace App{
                 if (minutes < 10) {
                    sprintf(chrono,"0%d : %0.2f", minutes, secondes);
                 }
+                if (minutes < 10 && secondes < 10) {
+                    sprintf(chrono, "0%d : 0%0.2f", minutes, secondes);
+                }
+                if(secondes <= 0 && minutes <= 0) {
+                    secondes = 0;
+                    sprintf(chrono, "0%d : 0%0.2f", minutes, secondes);
+                }
             }
         };
 

@@ -32,7 +32,7 @@ namespace App {
             session period;
             paused rest;
 
-            stats(): work_time(0), period({0 , 0}), rest({0, 0}) {}
+            stats(): work_time(0), period({5 , 5}), rest({0, 0}) {}
 
             void workingTime(int minutes, bool work) {
                 int current_time = minutes;
@@ -41,16 +41,13 @@ namespace App {
                     current_time = minutes;
                     work_time++;
                 }
-                
             }
 
             void WorkSessionComplete(int minutes, bool finished) {
-                if (minutes < 0 && finished) {
+                if (minutes == 0) {
                     period.completed++;
                 }
-                else {
-                    period.skiped++;
-                }
+                
             }
 
             void ShortRestSessionDone(int minutes, bool done) {

@@ -29,7 +29,7 @@ namespace App {
                 return false;
             }
             //fond par defaut
-            mCurrenTheme = App::backEnd::OfficialTheme::DARK_THEME;
+            mCurrenTheme = App::backEnd::OfficialTheme::PURPLE_THEME;
 
             winIsinitialise = true;
             return winIsinitialise;
@@ -66,19 +66,19 @@ namespace App {
             SDL_Surface* surface = nullptr;
             switch (theme) {
                 case backEnd::OfficialTheme::BLUE_THEME :
-                    surface = IMG_Load("../assets/backgrounds/klaus-andersen-2aWVqmjluIQ-unsplash (2).jpg");
+                    surface = IMG_Load("assets/backgrounds/klaus-andersen-2aWVqmjluIQ-unsplash (2).jpg");
                     ImgTexture = SDL_CreateTextureFromSurface(mAppRenderer, surface);
                     SDL_DestroySurface(surface);
                 break;
 
                 case backEnd::OfficialTheme::PURPLE_THEME :
-                    surface = IMG_Load("../assets/backgrounds/liquid_purple.jpg");
+                    surface = IMG_Load("assets/backgrounds/liquid_purple.jpg");
                     ImgTexture = SDL_CreateTextureFromSurface(mAppRenderer, surface);
                     SDL_DestroySurface(surface);
                 break;
 
                 case backEnd::OfficialTheme::AOT_THEME :
-                    surface = IMG_Load("../assets/backgrounds/AOT_theme.jpg");
+                    surface = IMG_Load("assets/backgrounds/AOT_theme.jpg");
                     ImgTexture = SDL_CreateTextureFromSurface(mAppRenderer, surface);
                     SDL_DestroySurface(surface);
                 break;

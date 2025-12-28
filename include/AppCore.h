@@ -44,9 +44,9 @@ namespace App {
             //utilitaire
 
             void ParameterUi(int session_mumber, backEnd::Timer work, backEnd::Timer short_breakTime, backEnd::Timer long_BreakTime, int long_BreakInterval, int volume);
-            void statisticsUi(bool& show);
+            void statisticsUi();
             void SessionChange();
-
+            
             //sous instances des fenetres secondaires
             void ThemeSettings();
             void TimeSettings();
