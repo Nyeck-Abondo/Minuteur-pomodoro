@@ -21,7 +21,6 @@ namespace App {
             SDL_Texture* textTexture;
             SDL_Texture* ImgTexture;
             TTF_Font* mfont;
-            mutable std::mt19937 mrandongenerator; //generateur de nombre aleatoire
             float mwinHeight;
             float mwinWidth;
             float mfontSize;
@@ -49,11 +48,12 @@ namespace App {
             void ShutdownWindow();
 
             //chargement des images et du text
-            
+
             void TextureImg(const char* file);
             SDL_Texture* TextureText(SDL_Renderer* renderer);
 
             //rendu des particules de la fenetre
+            
             void ChangePrincipalTheme(backEnd::OfficialTheme theme);
         };
     } // namespace Graphics

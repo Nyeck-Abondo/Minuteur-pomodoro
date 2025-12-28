@@ -2,7 +2,7 @@
 namespace App {
     namespace core {
         //constructeur
-        AppCore::AppCore(float width, float height, std::string title, ImGuiIO& io): mwindow(height, width, title), mwindowUi(width, height, 28.0f, io)
+        AppCore::AppCore(float width, float height, std::string title, ImGuiIO& io): mwindow(height, width, title), mwindowUi(28.0f, io)
         , mworkSession(20, 0.0f), mshortBreak(5, 0), mLongbreak(15, 0.0f), mSessionNumber(5), mLong_breakInterval(2), mstatistics(), mvolume(50) {
             std::cout << "🧰 Creation du coeur de l'application reussie avec succes !!" << std::endl;
         }
@@ -18,12 +18,14 @@ namespace App {
                 ImGui_ImplSDL3_NewFrame();
                 ImGui::NewFrame();
 
-                ImGui::SetNextWindowSize(ImVec2(mwindowUi.GetUIwidth(), mwindowUi.GetUIheight()));
+                ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), 0, ImVec2(0.5f, 0.5f));
+                ImGui::SetNextWindowSize(ImVec2(mwindow.GetWindowWidth(), mwindow.GetWindowHeight()));
                 ImGui::Begin("Minuteur Pomodoro", &show_interface, ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
 
-                ImGui::BeginChild("##Tools barr", ImVec2(250.0f, mwindowUi.GetUIheight()));
+                ImGui::BeginChild("##Tools barr", ImVec2(250.0f, 900.0f));
 
-                ImGui::Selectable("Parametre", &show_parameters, 0, ImVec2(250.0f, 30.0f));
+                ImGui::Selectable("Parametre", &show_parameters, 0, ImVec2(250.0f, 100.0f));
+                ImGui::Selectable("Statistique", show_statistics, 0, ImVec2(250.0f, 100.0f));
 
                 ImGui::EndChild();
 

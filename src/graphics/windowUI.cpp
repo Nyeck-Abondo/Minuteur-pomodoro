@@ -15,7 +15,7 @@ namespace App{
          * par la fenetre ImGui pour l'ecriture du texte.
          * @param io represente l'objet.
          */
-        windowUi::windowUi(float width, float height, float fontsize, ImGuiIO& io)
+        windowUi::windowUi(float fontsize, ImGuiIO& io)
                 : Uifont(nullptr), mio(io), mStyle(ImGui::GetStyle()), isInitialise(false),
                 mtools({nullptr, nullptr, nullptr, nullptr, nullptr}) {
                     std::cout << "🛠️ cration de la fenetre imgui reussi !!"<<std::endl;

@@ -22,8 +22,6 @@ namespace App {
             backEnd::textureUi mtools;
 
             //window size
-            float UiWidth;
-            float UiHeight;
             float mfontSize;
             
             //window state
@@ -34,7 +32,7 @@ namespace App {
             
             public:
             //constructeur && destructeur
-            windowUi (float width, float height, float fontsize, ImGuiIO& io);
+            windowUi (float fontsize, ImGuiIO& io);
             ~windowUi();
 
             //GETTERS
@@ -42,8 +40,6 @@ namespace App {
             ImGuiStyle GetUIstyle() const { return mStyle;}
             ImFont* GetFontUi() const { return Uifont;}
             ImGuiToggleConfig GetToggleConfig() const { return mtoggleConfig;}
-            float GetUIwidth() const { return UiWidth; }
-            float GetUIheight() const { return UiHeight; }
             float GetFontSize() const { return mfontSize; }
             bool GetInitialisation() const { return isInitialise; }
 
