@@ -38,8 +38,9 @@ namespace App{
         enum class OfficialTheme {
             BLUE_THEME,
             PURPLE_THEME,
-            DARK_THEME,
-            AOT_THEME
+            DARK_LIGHT_THEME,
+            AOT_THEME,
+            DARK_THEME
         };
 
         //ensembles des textures d'images a generer

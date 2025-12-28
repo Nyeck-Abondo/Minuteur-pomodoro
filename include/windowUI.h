@@ -30,20 +30,9 @@ namespace App {
             bool isInitialise;
             backEnd::sizeTexture settings, chrono, profile
                 , rest, sound, statistic, work;
-            const char* items[] = { "AAAA", "BBBB", "CCCC", "DDDD", "EEEE", "FFFF", "GGGG", "HHHH", "IIII", "JJJJ", "KKKK", "LLLLLLL", "MMMM", "OOOOOOO" };
+            const char* usefullTheme[20] = { "Purple Theme", "Dark Theme", "Blue theme", "AOT Wallpaper"};
             
             public:
-            
-            //booleen de l'UI
-            bool show_interface = true;
-            bool activate_sound = false;
-            bool show_stats = false;
-            bool show_profile = false;
-            bool show_parameters = false;
-            bool next_session = false;
-            bool getStarted = false;
-            bool helper = false;
-            bool show_demo = true;
             //constructeur && destructeur
             windowUi (float width, float height, float fontsize, ImGuiIO& io);
             ~windowUi();
@@ -62,8 +51,7 @@ namespace App {
             void InitializeUi(SDL_Renderer* renderer, SDL_Window* window);
             void ShutdownUI();
             //rendu
-            void Uistyle();
-            void ParameterUi(int session_mumber, int workingTime, int short_breakTime, int long_BreakTime, int long_BreakInterval, int volume, backEnd::OfficialTheme theme);
+            int igThemeV3(int hue07, int alt07, int nav07, int lit01 = 0, int compact01 = 0, int border01 = 1, int shape0123 = 1);
             SDL_Texture* Load_imageTexture(SDL_Renderer* renderer, const char* fileLocation);
             void CreateUITexture(SDL_Renderer* renderer);
         };

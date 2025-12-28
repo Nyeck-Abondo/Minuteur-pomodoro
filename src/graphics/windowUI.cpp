@@ -6,6 +6,15 @@
 
 namespace App{
     namespace Uigraphics{
+        /**
+         * @name constructeur
+         * @brief constructeur de la classe windowUi.
+         * @param width represente la largeur de la fenetre ImGui
+         * @param height represente la hquteur de la fenetre ImGui.
+         * @param fontsize represente la taille de la police utilisee
+         * par la fenetre ImGui pour l'ecriture du texte.
+         * @param io represente l'objet.
+         */
         windowUi::windowUi(float width, float height, float fontsize, ImGuiIO& io)
                 : Uifont(nullptr), mio(io), mStyle(ImGui::GetStyle()), isInitialise(false),
                 mtools({nullptr, nullptr, nullptr, nullptr, nullptr}) {
@@ -26,7 +35,7 @@ namespace App{
         void windowUi::InitializeUi(SDL_Renderer* renderer, SDL_Window* window) {
             mio.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
             mtoggleConfig.Flags |= ImGuiToggleFlags_Animated;
-            Uifont = mio.Fonts->AddFontFromFileTTF("police/Roboto/static/Roboto_Condensed-Black.ttf");
+            Uifont = mio.Fonts->AddFontFromFileTTF("police/Montserrat/static/Montserrat-Black.ttf");
             //initialisation des paquet imgui
             ImGui_ImplSDL3_InitForSDLRenderer(window, renderer);
             ImGui_ImplSDLRenderer3_Init(renderer);
@@ -49,52 +58,16 @@ namespace App{
         }
 
         /**
-         * @name parameterUi
-         * @brief cette fontion est chargée d'afficher les options de parametrage de
-         * l'application. elle comprend les reglages de volumes, les reglages des 
-         * sessions de temps de travail et de repos, le nombre d'intervalle de repos
-         * long
-         * 
-         * @param session_number -cette variable gere le  nombre de session pomodoro
-         * ou encore connu sous le nom de session de concentration
-         * @param workinTime -cette variable est en charge de la regulation du temps
-         * de travail de l'utilisateur. elle varien entre 5 et 60 minutes pour assurer
-         * une concentration optimale
-         * @param short_breakTime Cette variable gère la durée des session de pause courtes.
-         * elle varie entre 5 et 30 minutes, selon la convenance de l'utilisateur.
-         * @param long_BreakTime Ce paramètre s'occupe de la définition de la durée des longues
-         * sessions de pause. Elle s'étend de 20 à 60 minutes selon les préférences de lùutilisateur
-         * @param long_BreakInterval defini une constente d'apparition des longues pauses.
-         * elle peut varier entre 5 et 10. ces chiffres représentant le nombre de session pomodoro
-         * repos court.
-         * @param volume permet la gestion du vokume du minuteur
-         * @param theme permet de changer le theme en arriere plan de la'application
-         * @return nothing
+         * @name Load_imageTexture
+         * @brief Permet la copie des pixels des images dans des textures a l'aide de la 
+         * bibliotheque stb_image. elle est utilisée pour creer des texture pour les icones
+         * de l'application.
+         * @param renderer c'est le moteur de rendu de l'application, en charge d'appliquer 
+         * les textures dans le decor de fond de la fenetre SDL
+         * @param fileLocation chemin d'acces vers le fichier image  a charger dans la texture.
+         * @return texture de type SDL_Texture* , c'est la textuer a afficher dans la fenetre de
+         * rendu. 
          */
-        void windowUi::ParameterUi(int session_mumber, int workingTime, int short_breakTime, int long_BreakTime, int long_BreakInterval, int volume, backEnd::OfficialTheme theme) {
-            ImGui::SetNextWindowPos(ImVec2(251.0f, 400.0f), 0, ImVec2(0, 0.75f));
-            ImGui::BeginChild("##parameter", ImVec2(500, 600), 0, ImGuiWindowFlags_Modal);
-
-            //gestion du son de l'application
-            ImGui::SeparatorText("Son");
-            ImGui::Text("Volume");
-            ImGui::SameLine(0.0f, 2.0f);
-            ImGui::SliderInt(" ", &volume, 0, 100);
-            ImGui::Text("Son actif");
-            ImGui::SameLine(0.0f, 2.0f);
-            ImGui::Toggle(" ", &activate_sound, ImGuiToggleFlags_Animated);
-
-            //changement des themes dans le parametrage
-            int current_item = -1;
-            ImGui::SeparatorText("Theme de lapplication");
-            ImGui::BeginCombo("Theme", usefullTheme);
-            
-            ImGui::SetCursorPos(ImVec2(250.0f - 100, 300.0f - 100.0f));
-            ImGui::Image((ImTextureID)(intptr_t)mtools.profilTexture, ImVec2(200, 200));    
-
-            ImGui::EndChild();
-        }
-
         SDL_Texture* windowUi::Load_imageTexture(SDL_Renderer* renderer, const char* fileLocation) {
             int width, height, channels;
             unsigned char* image_data = stbi_load(fileLocation, &width, &height, &channels, 4);
@@ -119,6 +92,13 @@ namespace App{
             return texture;
         }
         
+        /**
+         * @name CreateUITexture
+         * @brief elle charge les differentes textures des icones dans le moteur de rendu pour 
+         * l'affichage final.
+         * @param renderer correspond au moteur de rendu a qui on passera les textures prealablement
+         * crees.
+         */
         void windowUi::CreateUITexture(SDL_Renderer* Renderer) {
             mtools.settingsTexture = Load_imageTexture(Renderer, "assets/tools/icons8-slider-100.png");
             mtools.chronoTexture = Load_imageTexture(Renderer, "assets/tools/timer_15553848.png");
@@ -138,70 +118,217 @@ namespace App{
         }
 
         //style de UI
-        void windowUi::Uistyle() {
-            mStyle = ImGui::GetStyle();
-            mStyle.GrabRounding = 4.0f;
-            mStyle.WindowRounding = 4.0f;
-            mStyle.FrameRounding = 4.0f;
-            mStyle.ChildRounding = 4.0f;
-            mStyle.PopupRounding = 4.0f;
-            //padding
-            mStyle.WindowPadding = ImVec2(20, 20);
-            mStyle.WindowBorderHoverPadding = 10.0f;
-            mStyle.WindowPadding = ImVec2(8, 5);
-            mStyle.FramePadding = ImVec2(6, 5);
-            //spacing
-            mStyle.ItemSpacing = ImVec2(10, 1);
-            mStyle.ItemInnerSpacing = ImVec2(20, 5);
-            mStyle.IndentSpacing = 20.0f;
-            mStyle.GrabMinSize = 16.0f;
-            //size
-            mStyle.WindowBorderSize = 1.0f;
-            //scrollbar
-            mStyle.ScrollbarSize = 13.0f;
-            mStyle.ScrollbarRounding = 4.0f;
-            mStyle.ScrollbarPadding = 2.0f;
-            //tab
-            mStyle.TabRounding = 4.0f;
-            mStyle.TabBorderSize = 4.0f;
-            //window
-            mStyle.WindowTitleAlign = ImVec2(0.5f, 0.5f);
-            mStyle.WindowBorderHoverPadding = 6.0f;
-            mStyle.WindowMenuButtonPosition = ImGuiDir_None;
-            //button
-            mStyle.ButtonTextAlign = ImVec2(0.5f, 0.5f);
-            mStyle.SelectableTextAlign = ImVec2(0.5, 0.5);
-            mStyle.SeparatorTextAlign = ImVec2(1.0f, 0.5f);
-            mStyle.SeparatorTextBorderSize = 2.0f;
-            mStyle.DisplayWindowPadding = ImVec2(30, 20);
+        // V3 theme v1.1
+// - rlyeh, public domain
+int windowUi::igThemeV3(int hue07, int alt07, int nav07, int lit01, int compact01, int border01, int shape0123) {
+    bool rounded = shape0123 == 2;
 
-            ImVec4* color = mStyle.Colors;
-            color[ImGuiCol_Text] = ImVec4(230.0f/255, 230.0f/255, 1.0f, 1.0f);
-            color[ImGuiCol_TextDisabled] = ImVec4(135.0f/255.0f, 135.0f/255.0f, 135.0f/255.0f, 1.0f);
-            color[ImGuiCol_WindowBg] = ImVec4(24.0f/255.0f, 25.0f/255.0f, 26.0f/255.0f, 1.0f);
-            color[ImGuiCol_ChildBg] = ImVec4(85.0f/255.0f, 88.0f/255.0f, 89.0f/255.0f, 0.75f);
-            color[ImGuiCol_PopupBg] = ImVec4(207.0f/ 255.0f, 204.0f/255.0f, 58.0f/255.0f, 0.5f);
-            color[ImGuiCol_Border] = ImVec4(237.0f/255.0f, 230.0f/255.0f, 60.0f/255.0f, 0.5f);
-            color[ImGuiCol_BorderShadow] = ImVec4(112.0f/255.0f, 109.0f/255.0f, 29.0f/255.0f, 0.5f);
-            color[ImGuiCol_FrameBg] = ImVec4(224.0f/255.0f, 202.0f/255.0f, 17.0f/255.0f, 0.75f);
-            color[ImGuiCol_FrameBgHovered] = ImVec4(250.0f/255.0f, 225.0f/255.0f, 19.0f/255.0f, 0.5);
-            color[ImGuiCol_FrameBgActive] = ImVec4(250.0f/255.0f, 225.0f/255.0f, 19.0f/255.0f, 0.5);
-            color[ImGuiCol_TitleBg] = ImVec4(224.0f/255.0f, 202.0f/255.0f, 17.0f/255.0f, 0.75f);
-            color[ImGuiCol_TitleBgActive] = ImVec4(224.0f/255.0f, 202.0f/255.0f, 17.0f/255.0f, 0.75f);
-            color[ImGuiCol_TitleBgCollapsed] = ImVec4(41.0f/255.0f, 40.0f/255.0f, 39.0f/255.0f, 0.75f);
-            color[ImGuiCol_MenuBarBg] = ImVec4(59.0f/255.0f, 57.0f/255.0f , 55.0f/255.0f, 0.75f);
-            color[ImGuiCol_ScrollbarBg] = ImVec4(245.0f/255.0f, 233.0f/255.0f, 60.0f/255.0f, 0.75f);
-            color[ImGuiCol_ScrollbarGrab] = ImVec4(250.0f/255.0f, 225.0f/255.0f, 19.0f/255.0f, 0.5);
-            color[ImGuiCol_ScrollbarGrabHovered] = ImVec4(245.0f/255.0f, 213.0f/255.0f, 40.0f/255.0f, 0.75f);
-            color[ImGuiCol_ScrollbarGrabActive] = ImVec4(250.0f/255.0f, 225.0f/255.0f, 19.0f/255.0f, 0.5);
-            color[ImGuiCol_CheckMark] = ImVec4(250.0f/255.0f, 225.0f/255.0f, 19.0f/255.0f, 0.5);
-            color[ImGuiCol_SliderGrab] = ImVec4(250.0f/255.0f, 225.0f/255.0f, 19.0f/255.0f, 0.5);
-            color[ImGuiCol_SliderGrabActive] =ImVec4(250.0f/255.0f, 225.0f/255.0f, 19.0f/255.0f, 0.5);
-            color[ImGuiCol_Button] = ImVec4(131.0/255.0f, 133.0f/255.0f, 126.0f, 0.70f); 
-            color[ImGuiCol_ButtonHovered] = ImVec4(250.0f/255.0f, 225.0f/255.0f, 19.0f/255.0f, 0.5);
-            color[ImGuiCol_ButtonActive] = ImVec4(222.0f/255.0f, 195.0f/255.0f, 50.0f/255.0f, 0.70f);
-            color[ImGuiCol_TextSelectedBg] = ImVec4(218.0f/255.0f, 218.0f/255.0f, 71.0f/255.0f, 0.70f);
+    // V3 style from ImThemes
+    ImGuiStyle& style = ImGui::GetStyle();
+    
+    const float _8 = compact01 ? 4 : 8;
+    const float _4 = compact01 ? 2 : 4;
+    const float _2 = compact01 ? 0.5 : 1;
 
+    style.Alpha = 1.0f;
+    style.DisabledAlpha = 0.3f;
+
+    style.WindowPadding = ImVec2(4, _8);
+    style.FramePadding = ImVec2(4, _4);
+    style.ItemSpacing = ImVec2(_8, _2 + _2);
+    style.ItemInnerSpacing = ImVec2(4, 4);
+    style.IndentSpacing = 16;
+    style.ScrollbarSize = compact01 ? 12 : 18;
+    style.GrabMinSize = compact01 ? 16 : 20;
+
+    style.WindowBorderSize = border01;
+    style.ChildBorderSize = border01;
+    style.PopupBorderSize = border01;
+    style.FrameBorderSize = 0;
+
+    style.WindowRounding = 4;
+    style.ChildRounding = 6;
+    style.FrameRounding = shape0123 == 0 ? 0 : shape0123 == 1 ? 4 : 12;
+    style.PopupRounding = 4;
+    style.ScrollbarRounding = rounded * 8 + 4;
+    style.GrabRounding = style.FrameRounding;
+
+    style.TabBorderSize = 0;
+    style.TabBarBorderSize = 2;
+    style.TabBarOverlineSize = 2;
+    style.TabCloseButtonMinWidthSelected = -1; // -1:always visible, 0:visible when hovered, >0:visible when hovered if minimum width
+    style.TabCloseButtonMinWidthUnselected = -1;
+    style.TabRounding = rounded;
+
+    style.CellPadding = ImVec2(8.0f, 4.0f);
+
+    style.WindowTitleAlign = ImVec2(0.5f, 0.5f);
+    style.WindowMenuButtonPosition = ImGuiDir_Right;
+
+    style.ColorButtonPosition = ImGuiDir_Right;
+    style.ButtonTextAlign = ImVec2(0.5f, 0.5f);
+    style.SelectableTextAlign = ImVec2(0.5f, 0.5f);
+    style.SeparatorTextAlign.x = 1.00f;
+    style.SeparatorTextBorderSize = 1;
+    style.SeparatorTextPadding = ImVec2(0,0);
+
+    style.WindowMinSize = ImVec2(32.0f, 16.0f);
+    style.ColumnsMinSpacing = 6.0f;
+
+    // diamond sliders
+    style.CircleTessellationMaxError = shape0123 == 3 ? 4.00f : 0.30f; 
+
+    auto lit = [&](ImVec4 hi) {
+        float h,s,v; ImGui::ColorConvertRGBtoHSV(hi.x,hi.y,hi.z, h,s,v);
+        ImVec4 lit = ImColor::HSV(h,s*0.80,v*1.00, hi.w).Value;
+        return lit;
+    };
+    auto dim = [&](ImVec4 hi) {
+        float h,s,v; ImGui::ColorConvertRGBtoHSV(hi.x,hi.y,hi.z, h,s,v);
+        ImVec4 dim = ImColor::HSV(h,s,lit01 ? v*0.65:v*0.65, hi.w).Value;
+        if( hi.z > hi.x && hi.z > hi.y ) return ImVec4(dim.x,dim.y,hi.z,dim.w);
+        return dim;
+    };
+
+    const ImVec4 cyan    = ImVec4(000/255.f, 192/255.f, 255/255.f, 1.00f);
+    const ImVec4 red     = ImVec4(230/255.f, 000/255.f, 000/255.f, 1.00f);
+    const ImVec4 yellow  = ImVec4(240/255.f, 210/255.f, 000/255.f, 1.00f);
+    const ImVec4 orange  = ImVec4(255/255.f, 144/255.f, 000/255.f, 1.00f);
+    const ImVec4 lime    = ImVec4(192/255.f, 255/255.f, 000/255.f, 1.00f);
+    const ImVec4 aqua    = ImVec4(000/255.f, 255/255.f, 192/255.f, 1.00f);
+    const ImVec4 magenta = ImVec4(255/255.f, 000/255.f,  88/255.f, 1.00f);
+    const ImVec4 purple  = ImVec4(192/255.f, 000/255.f, 255/255.f, 1.00f);
+
+    ImVec4 alt = cyan;
+    /**/ if( alt07 == 0 || alt07 == 'C' ) alt = cyan;
+    else if( alt07 == 1 || alt07 == 'R' ) alt = red;
+    else if( alt07 == 2 || alt07 == 'Y' ) alt = yellow;
+    else if( alt07 == 3 || alt07 == 'O' ) alt = orange;
+    else if( alt07 == 4 || alt07 == 'L' ) alt = lime;
+    else if( alt07 == 5 || alt07 == 'A' ) alt = aqua;
+    else if( alt07 == 6 || alt07 == 'M' ) alt = magenta;
+    else if( alt07 == 7 || alt07 == 'P' ) alt = purple;
+    if( lit01 ) alt = dim(alt);
+
+    ImVec4 hi = cyan, lo = dim(cyan);
+    /**/ if( hue07 == 0 || hue07 == 'C' ) lo = dim( hi = cyan );
+    else if( hue07 == 1 || hue07 == 'R' ) lo = dim( hi = red );
+    else if( hue07 == 2 || hue07 == 'Y' ) lo = dim( hi = yellow );
+    else if( hue07 == 3 || hue07 == 'O' ) lo = dim( hi = orange );
+    else if( hue07 == 4 || hue07 == 'L' ) lo = dim( hi = lime );
+    else if( hue07 == 5 || hue07 == 'A' ) lo = dim( hi = aqua );
+    else if( hue07 == 6 || hue07 == 'M' ) lo = dim( hi = magenta );
+    else if( hue07 == 7 || hue07 == 'P' ) lo = dim( hi = purple );
+//    if( lit01 ) { ImVec4 tmp = hi; hi = lo; lo = lit(tmp); }
+
+    ImVec4 nav = orange;
+    /**/ if( nav07 == 0 || nav07 == 'C' ) nav = cyan;
+    else if( nav07 == 1 || nav07 == 'R' ) nav = red;
+    else if( nav07 == 2 || nav07 == 'Y' ) nav = yellow;
+    else if( nav07 == 3 || nav07 == 'O' ) nav = orange;
+    else if( nav07 == 4 || nav07 == 'L' ) nav = lime;
+    else if( nav07 == 5 || nav07 == 'A' ) nav = aqua;
+    else if( nav07 == 6 || nav07 == 'M' ) nav = magenta;
+    else if( nav07 == 7 || nav07 == 'P' ) nav = purple;
+    if( lit01 ) nav = dim(nav);
+
+    const ImVec4
+    link  = ImVec4(0.26f, 0.59f, 0.98f, 1.00f),
+    grey0 = ImVec4(0.04f, 0.05f, 0.07f, 1.00f),
+    grey1 = ImVec4(0.08f, 0.09f, 0.11f, 1.00f),
+    grey2 = ImVec4(0.10f, 0.11f, 0.13f, 1.00f),
+    grey3 = ImVec4(0.12f, 0.13f, 0.15f, 1.00f),
+    grey4 = ImVec4(0.16f, 0.17f, 0.19f, 1.00f),
+    grey5 = ImVec4(0.18f, 0.19f, 0.21f, 1.00f);
+
+    #define Luma(v,a) ImVec4((v)/100.f,(v)/100.f,(v)/100.f,(a)/100.f)
+
+    style.Colors[ImGuiCol_Text]                      = Luma(100,100);
+    style.Colors[ImGuiCol_TextDisabled]              = Luma(39,100);
+    style.Colors[ImGuiCol_WindowBg]                  = grey1;
+    style.Colors[ImGuiCol_ChildBg]                   = ImVec4(0.09f, 0.10f, 0.12f, 1.00f);
+    style.Colors[ImGuiCol_PopupBg]                   = grey1;
+    style.Colors[ImGuiCol_Border]                    = grey4;
+    style.Colors[ImGuiCol_BorderShadow]              = grey1;
+    style.Colors[ImGuiCol_FrameBg]                   = ImVec4(0.11f, 0.13f, 0.15f, 1.00f);
+    style.Colors[ImGuiCol_FrameBgHovered]            = grey4;
+    style.Colors[ImGuiCol_FrameBgActive]             = grey4;
+    style.Colors[ImGuiCol_TitleBg]                   = grey0;
+    style.Colors[ImGuiCol_TitleBgActive]             = grey0;
+    style.Colors[ImGuiCol_TitleBgCollapsed]          = grey1;
+    style.Colors[ImGuiCol_MenuBarBg]                 = grey2;
+    style.Colors[ImGuiCol_ScrollbarBg]               = grey0;
+    style.Colors[ImGuiCol_ScrollbarGrab]             = grey3;
+    style.Colors[ImGuiCol_ScrollbarGrabHovered]      = lo;
+    style.Colors[ImGuiCol_ScrollbarGrabActive]       = hi;
+    style.Colors[ImGuiCol_CheckMark]                 = alt;
+    style.Colors[ImGuiCol_SliderGrab]                = lo;
+    style.Colors[ImGuiCol_SliderGrabActive]          = hi;
+    style.Colors[ImGuiCol_Button]                    = ImVec4(0.10f, 0.11f, 0.14f, 1.00f);
+    style.Colors[ImGuiCol_ButtonHovered]             = lo;
+    style.Colors[ImGuiCol_ButtonActive]              = grey5;
+    style.Colors[ImGuiCol_Header]                    = grey3;
+    style.Colors[ImGuiCol_HeaderHovered]             = lo;
+    style.Colors[ImGuiCol_HeaderActive]              = hi;
+    style.Colors[ImGuiCol_Separator]                 = ImVec4(0.13f, 0.15f, 0.19f, 1.00f);
+    style.Colors[ImGuiCol_SeparatorHovered]          = lo;
+    style.Colors[ImGuiCol_SeparatorActive]           = hi;
+    style.Colors[ImGuiCol_ResizeGrip]                = Luma(15,100);
+    style.Colors[ImGuiCol_ResizeGripHovered]         = lo;
+    style.Colors[ImGuiCol_ResizeGripActive]          = hi;
+    style.Colors[ImGuiCol_InputTextCursor]           = Luma(100,100);
+    style.Colors[ImGuiCol_TabHovered]                = grey3;
+    style.Colors[ImGuiCol_Tab]                       = grey1;
+    style.Colors[ImGuiCol_TabSelected]               = grey3;
+    style.Colors[ImGuiCol_TabSelectedOverline]       = hi;
+    style.Colors[ImGuiCol_TabDimmed]                 = grey1;
+    style.Colors[ImGuiCol_TabDimmedSelected]         = grey1;
+    style.Colors[ImGuiCol_TabDimmedSelectedOverline] = lo;
+    style.Colors[ImGuiCol_PlotLines]                 = grey5;
+    style.Colors[ImGuiCol_PlotLinesHovered]          = lo;
+    style.Colors[ImGuiCol_PlotHistogram]             = grey5;
+    style.Colors[ImGuiCol_PlotHistogramHovered]      = lo;
+    style.Colors[ImGuiCol_TableHeaderBg]             = grey0;
+    style.Colors[ImGuiCol_TableBorderStrong]         = grey0;
+    style.Colors[ImGuiCol_TableBorderLight]          = grey0;
+    style.Colors[ImGuiCol_TableRowBg]                = grey3;
+    style.Colors[ImGuiCol_TableRowBgAlt]             = grey2;
+    style.Colors[ImGuiCol_TextLink]                  = link;
+    style.Colors[ImGuiCol_TextSelectedBg]            = Luma(39,100);
+    style.Colors[ImGuiCol_TreeLines]                 = Luma(39,100);
+    style.Colors[ImGuiCol_DragDropTarget]            = nav;
+    style.Colors[ImGuiCol_NavCursor]                 = nav;
+    style.Colors[ImGuiCol_NavWindowingHighlight]     = lo;
+    style.Colors[ImGuiCol_NavWindowingDimBg]         = Luma(0,63);
+    style.Colors[ImGuiCol_ModalWindowDimBg]          = Luma(0,63);
+
+    if( lit01 ) {
+        for(int i = 0; i < ImGuiCol_COUNT; i++) {
+            float H, S, V;
+            ImVec4& col = style.Colors[i];
+            ImGui::ColorConvertRGBtoHSV( col.x, col.y, col.z, H, S, V );
+            if( S < 0.5 ) V = 1.0 - V, S *= 0.15;
+            ImGui::ColorConvertHSVtoRGB( H, S, V, col.x, col.y, col.z );
         }
+    }
+
+    #undef Luma
+    return 0;
+}
+
+#if 0
+// demo
+int theme = 0;
+static int hue = 0, alt = 0, nav = 0, shape = 1;
+static bool light = 0, compact = 0, borders = 0;
+theme |= ImGui::SliderInt("Hue", &hue, 0, 7);
+theme |= ImGui::SliderInt("Alt", &alt, 0, 7);
+theme |= ImGui::SliderInt("Nav", &nav, 0, 7);
+theme |= ImGui::SliderInt("Shape", &shape, 0, 3);
+theme |= ImGui::Checkbox("Light", &light);
+theme |= ImGui::Checkbox("Compact", &compact);
+theme |= ImGui::Checkbox("Borders", &borders);
+if(theme) igThemeV3(hue["CRYOLAMP"], alt["CRYOLAMP"], nav["CRYOLAMP"], light, compact, borders, shape);
+#endif
     }
 }

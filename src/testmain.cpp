@@ -51,13 +51,7 @@ int main() {
             ImGui::SetNextWindowSize(ImVec2(1600, 900.f));
             ImGui::Begin("chrono", &custom, ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoTitleBar);
 
-            if (ImGui::Button("Purpule theme")) {
-                //changement de la valeur du theme et retour a l'etiquette
-                window.mCurrenTheme = App::backEnd::OfficialTheme::PURPLE_THEME;
-                SDL_DestroyTexture(window.GetWindowTexture());
-                window.ChangePrincipalTheme(window.mCurrenTheme);
-            }
-            windowui.ParameterUi(4, 25, 4, 8, 5);
+            windowui.ParameterUi(4, 25, 4, 8, 5, 50);
             ImGui::End();
         }
         ImGui::Render();

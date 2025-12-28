@@ -2,6 +2,7 @@
 
 #include "window.h"
 #include "windowUI.h"
+#include "statistic.h"
 
 namespace App {
     namespace core {
@@ -9,38 +10,47 @@ namespace App {
         private:
             Graphics::window mwindow;
             Uigraphics::windowUi mwindowUi;
+            Statistic::stats mstatistics;
             backEnd::Timer mworkSession;
             backEnd::Timer mshortBreak;
             backEnd::Timer mLongbreak;
-            //buffers
-            const char mUserName[250];
-            const char mObjectives[250];
+
             int mSessionNumber;
             int mLong_breakInterval;
-
+            int mvolume;
+            bool mrunning = true;
+            bool Get_started = false;
+            bool show_statistics = false;
+            bool show_parameters = false;
+            bool show_interface = true;
+            bool activate_sound = false;
+            bool next_session = false;
+            bool helper = false;
         public:
-            bool Get_started;
-            bool show_statistics;
-            bool show_parameters;
+            
 
             //cpnstructeur et destructeur
-            AppCore(float width, float height, std::string title);
+            AppCore(float width, float height, std::string title, ImGuiIO& io);
             ~AppCore();
 
-            //Lancement
+            //Lancement, initialisation , recuperation des events, presentation
+
             bool AppInitialised();
             void AppRun();
+            void handleEvent();
+            void AppSutdown();
+            void AppPresent();
 
             //utilitaire
+
             void ParameterUi(int session_mumber, backEnd::Timer work, backEnd::Timer short_breakTime, backEnd::Timer long_BreakTime, int long_BreakInterval, int volume);
-            void ProfileUi();
-            void statisticsUi();
-            void HelpUi();
+            void statisticsUi(bool& show);
             void SessionChange();
 
             //sous instances des fenetres secondaires
             void ThemeSettings();
             void TimeSettings();
+            void SoundSettings();
         };
     }//namespace core
 } //namespace App

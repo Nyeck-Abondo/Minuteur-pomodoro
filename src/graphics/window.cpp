@@ -5,8 +5,7 @@ namespace App {
         window::window (float height, float width, const std::string& title) 
             : mwinHeight(height), mwinWidth(width), mwinTitle(title), mappWindow(nullptr)
             , mAppRenderer(nullptr), mfont(TTF_OpenFont("police/Montserrat/static/Montserrat-BoldItalic.ttf", 25.0f))
-            , ImgTexture(nullptr), winIsinitialise(false), textTexture(nullptr)
-            , mrandongenerator(std::random_device{} ()) {
+            , ImgTexture(nullptr), winIsinitialise(false), textTexture(nullptr) {
                 std::cout << "✅ initialisation de la fenetre avec succes !!"<< std::endl;
             }
             window::~window(){
@@ -29,6 +28,9 @@ namespace App {
                 std::cerr<<"Erreur d'initialisation du moteur de rendu : "<<SDL_GetError()<<std::endl;
                 return false;
             }
+            //fond par defaut
+            mCurrenTheme = App::backEnd::OfficialTheme::DARK_THEME;
+
             winIsinitialise = true;
             return winIsinitialise;
         }
@@ -81,10 +83,20 @@ namespace App {
                     SDL_DestroySurface(surface);
                 break;
 
-                case backEnd::OfficialTheme::DARK_THEME :
-                surface = IMG_Load("../assets/backgrounds/dark_theme.jpg");
+                case backEnd::OfficialTheme::DARK_LIGHT_THEME :
+                surface = IMG_Load("assets/backgrounds/dark_theme.jpg");
                 ImgTexture = SDL_CreateTextureFromSurface(mAppRenderer, surface);
                 SDL_DestroySurface(surface);
+                break;
+
+                case backEnd::OfficialTheme::DARK_THEME :
+                surface = IMG_Load("assets/backgrounds/broken-dark.png");
+                if (!surface) {
+                    std::cerr << "Erreur de chargement de la surface: "<< SDL_GetError() << std::endl;
+                }
+                ImgTexture = SDL_CreateTextureFromSurface(mAppRenderer, surface);
+                SDL_DestroySurface(surface);
+                break;
             }
         }
 

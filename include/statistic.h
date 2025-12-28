@@ -41,6 +41,7 @@ namespace App {
                     current_time = minutes;
                     work_time++;
                 }
+                
             }
 
             void WorkSessionComplete(int minutes, bool finished) {

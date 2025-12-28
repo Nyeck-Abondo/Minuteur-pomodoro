@@ -1,11 +1,86 @@
 #include "../include/AppCore.h"
-#include "libs/fmod/fmod.h"
 namespace App {
     namespace core {
         //constructeur
-        AppCore::AppCore(float width, float height, std::string title): mwindow(height, width, title), mwindowUi(width, height, 28.0f, ImGui::GetIO())
-                        , mworkSession(20, 0.0f), mshortBreak(5, 0), mLongbreak(15, 0.0f), mSessionNumber(5), mLong_breakInterval(2), mUserName("Nom")
-                        , mObjectives("Objectifs") {}
+        AppCore::AppCore(float width, float height, std::string title, ImGuiIO& io): mwindow(height, width, title), mwindowUi(width, height, 28.0f, io)
+        , mworkSession(20, 0.0f), mshortBreak(5, 0), mLongbreak(15, 0.0f), mSessionNumber(5), mLong_breakInterval(2), mstatistics(), mvolume(50) {
+            std::cout << "🧰 Creation du coeur de l'application reussie avec succes !!" << std::endl;
+        }
+
+        AppCore::~AppCore() { 
+            std::cout << "🏗️ Destruction du coeur de l'application." <<std::endl;
+        }
+
+        void AppCore::AppRun() {
+            while (mrunning) {
+                handleEvent();
+                ImGui_ImplSDLRenderer3_NewFrame();
+                ImGui_ImplSDL3_NewFrame();
+                ImGui::NewFrame();
+
+                ImGui::SetNextWindowSize(ImVec2(mwindowUi.GetUIwidth(), mwindowUi.GetUIheight()));
+                ImGui::Begin("Minuteur Pomodoro", &show_interface, ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
+
+                ImGui::BeginChild("##Tools barr", ImVec2(250.0f, mwindowUi.GetUIheight()));
+
+                ImGui::Selectable("Parametre", &show_parameters, 0, ImVec2(250.0f, 30.0f));
+
+                ImGui::EndChild();
+
+                ImGui::End();
+                //presentation du rendu de l'application
+                AppPresent();
+            }
+        }
+
+        void AppCore::handleEvent() {
+            SDL_Event event;
+            while (SDL_PollEvent(&event)) {
+                ImGui_ImplSDL3_ProcessEvent(&event);
+                if(event.type == SDL_EVENT_QUIT) {
+                    mrunning = false;
+                }
+            }
+        }
+
+        void AppCore::AppPresent() {
+            ImGui::Render();
+            SDL_RenderTexture(mwindow.GetRenderer(), mwindow.GetWindowTexture(), nullptr, nullptr);
+            ImGui_ImplSDLRenderer3_RenderDrawData(ImGui::GetDrawData(), mwindow.GetRenderer());
+            mwindow.PresentWindow();
+            SDL_Delay(15);
+        }
+
+        bool AppCore::AppInitialised() {
+            if (!mwindow.InitialiseWindow()) {
+                std::cout << "❌ Erreur de creation de la fentre de l'application." <<std::endl;
+                return false;
+            }
+            std::cout <<"✅ creation de la fentre de l'application reussie !!" <<std::endl;
+
+            mwindowUi.InitializeUi(mwindow.GetRenderer(), mwindow.GetWindowSDL());
+            std::cout <<"✅ creation de la fenetre ImGui de l' application !" <<std::endl;
+
+            mwindowUi.igThemeV3(7, 7, 7, 0, 0, 1, 1);
+
+            //statistiques a zero
+            mstatistics.work_time = 0;
+            mstatistics.period.completed = 0;
+            mstatistics.period.skiped = 0;
+            mstatistics.rest.long_paused = 0;
+            mstatistics.rest.short_paused = 0;
+
+            mwindow.ChangePrincipalTheme(mwindow.mCurrenTheme);
+            std::cout << "initialisation des statistiques a 0" <<std::endl;
+
+            return true;
+        }
+
+        void AppCore::AppSutdown() {
+            mwindowUi.ShutdownUI();
+            if(mwindow.Initialised()) mwindow.ShutdownWindow();
+            std::cout << "🛠️ Arret du moteur de l'application !!" <<std::endl;
+        }
 
         /**
          * @name parameterUi
@@ -35,21 +110,25 @@ namespace App {
             ImGui::BeginChild("##parameter", ImVec2(500, 600), 0, ImGuiWindowFlags_Modal);
 
             //gestion du son de l'application
-            ImGui::SeparatorText("Son");
-            ImGui::Text("Volume");
-            ImGui::SameLine(0.0f, 2.0f);
-            ImGui::SliderInt(" ", &volume, 0, 100);
-            ImGui::Text("Son actif");
-            ImGui::SameLine(0.0f, 2.0f);
-            ImGui::Toggle(" ", &mwindowUi.activate_sound, ImGuiToggleFlags_Animated);
+            SoundSettings();
             //parametre de choix de theme d'arriere plan
             ThemeSettings();
-            
+            //parametrage du temps des sessions
             
             ImGui::SetCursorPos(ImVec2(250.0f - 100, 300.0f - 100.0f));
             ImGui::Image((ImTextureID)(intptr_t)mwindowUi.GettextureUI().settingsTexture, ImVec2(200, 200));    
 
             ImGui::EndChild();
+        }
+
+        void  AppCore::SoundSettings() {
+            ImGui::SeparatorText("Son");
+            ImGui::Text("Volume");
+            ImGui::SameLine(0.0f, 2.0f);
+            ImGui::SliderInt(" ", &mvolume, 0, 100);
+            ImGui::Text("Son actif");
+            ImGui::SameLine(0.0f, 2.0f);
+            ImGui::Toggle(" ", &activate_sound, ImGuiToggleFlags_Animated);
         }
 
         /**
@@ -96,9 +175,27 @@ namespace App {
                         mwindow.ChangePrincipalTheme(mwindow.mCurrenTheme);
                     }
                 }
-                
+
                 ImGui::EndCombo();
             }
+        }
+
+        void AppCore::statisticsUi(bool& show) {
+            ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+
+            //section des sessions teminees
+            ImGui::SetNextWindowPos(ImVec2(center.x - 250.0f, center.y), 0, ImVec2(0.5f, 0.5f));
+            ImGui::BeginChild("##SessionDone", ImVec2(200, 300), ImGuiChildFlags_AlwaysAutoResize);
+            ImGui::Text("Sessions Complétées");
+            ImGui::Text("%s",std::to_string(mstatistics.work_time).c_str());
+            ImGui::EndChild();
+
+            //section des sessions sautees
+            ImGui::SetNextWindowPos(center, 0, ImVec2(0.5f, 0.5f));
+            ImGui::BeginChild("##periodSKiped", ImVec2(200.0f, 300.0f), ImGuiChildFlags_AlwaysAutoResize);
+            ImGui::Text("sessions Sautées");
+            ImGui::Text("%s",std::to_string(mstatistics.period.skiped).c_str());
+            ImGui::EndChild();
         }
     } // namespace AppCore
 } //namespace App
