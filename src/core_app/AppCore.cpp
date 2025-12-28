@@ -3,7 +3,7 @@ namespace App {
     namespace core {
         //constructeur
         AppCore::AppCore(float width, float height, std::string title, ImGuiIO& io): mwindow(height, width, title), mwindowUi(25.0f, io)
-        , mworkSession(1, 2.0f), mshortBreak(1, 5), mLongbreak(15, 0.0f), mSessionNumber(5), mLong_breakInterval(2), mstatistics(), mvolume(50) {
+        , mworkSession(2, 2.0f), mshortBreak(5, 0.0f), mLongbreak(15, 0.0f), mSessionNumber(5), mLong_breakInterval(2), mstatistics(), mvolume(50) {
             std::cout << "🧰 Creation du coeur de l'application reussie avec succes !!" << std::endl;
         }
 
@@ -103,7 +103,7 @@ namespace App {
             mwindow.ChangePrincipalTheme(mwindow.mCurrenTheme);
             std::cout << "initialisation des statistiques a 0" <<std::endl;
 
-            //chargement des textures
+            //chargement des textures des icones
             mwindowUi.CreateUITexture(mwindow.GetRenderer());
 
             return true;
@@ -223,17 +223,17 @@ namespace App {
             ImGui::BeginChild("##SessionDone", ImVec2(200, 300));
             ImGui::Text("Sessions Complétées");
             //calcul des sessions completes
-            mstatistics.WorkSessionComplete(mworkSession.minutes, Get_started);
+            mstatistics.WorkSessionComplete(mworkSession.minutes, mworkSession.secondes);
             ImGui::Text("%s",std::to_string(mstatistics.period.completed).c_str());
             ImGui::EndChild();
 
             //section des sessions sautees
             ImGui::SetNextWindowPos(center, 0, ImVec2(0.5f, 0.5f));
             ImGui::BeginChild("##periodSKiped", ImVec2(200.0f, 300.0f));
-            ImGui::Text("sessions Sautées");
+            ImGui::Text("Temps tptal de concentration");
             //calcul des statistiques
-            mstatistics.WorkSessionComplete(mworkSession.minutes, Get_started);
-            ImGui::Text("%s",std::to_string(mstatistics.period.skiped).c_str());
+            mstatistics.workingTime(mworkSession.minutes, Get_started);
+            ImGui::Text("%s",std::to_string(mstatistics.work_time).c_str());
             ImGui::EndChild();
         }
     } // namespace AppCore

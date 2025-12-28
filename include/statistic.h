@@ -35,7 +35,7 @@ namespace App {
             stats(): work_time(0), period({5 , 5}), rest({0, 0}) {}
 
             void workingTime(int minutes, bool work) {
-                int current_time = minutes;
+                static int current_time = minutes;
 
                 if (minutes < current_time && work) {
                     current_time = minutes;
@@ -43,21 +43,21 @@ namespace App {
                 }
             }
 
-            void WorkSessionComplete(int minutes, bool finished) {
-                if (minutes == 0) {
+            void WorkSessionComplete(int minutes, float seconde) {
+                if(minutes == 0 && seconde > 0.0f && seconde < 0.02f) {
                     period.completed++;
                 }
                 
             }
 
-            void ShortRestSessionDone(int minutes, bool done) {
-                if (minutes < 0 && done) {
+            void ShortRestSessionDone(int minutes, float seconde) {
+                if (minutes == 0 && seconde > 0.0f && seconde < 0.02f) {
                     rest.short_paused++;
                 }
             }
 
-            void LongRestSessionDonse(int minutes, bool done) {
-                if (minutes < 0 && done) {
+            void LongRestSessionDonse(int minutes, float seconde) {
+                if (minutes == 0 && seconde > 0.0f && seconde < 0.02f) {
                     rest.long_paused++;
                 }
             }
