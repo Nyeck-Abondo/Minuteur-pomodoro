@@ -44,7 +44,7 @@ namespace App{
         //Cette enumeration permet le choix du theme de fond en local de la fenetre
         enum class OfficialTheme {
             BLUE_THEME,
-            PURPLE_THEME,
+            WITHE_THEME,
             DARK_LIGHT_THEME,
             AOT_THEME,
             DARK_THEME

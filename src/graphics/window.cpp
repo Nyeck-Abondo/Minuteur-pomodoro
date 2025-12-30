@@ -29,7 +29,7 @@ namespace App {
                 return false;
             }
             //fond par defaut
-            mCurrenTheme = App::backEnd::OfficialTheme::PURPLE_THEME;
+            mCurrenTheme = App::backEnd::OfficialTheme::WITHE_THEME;
 
             winIsinitialise = true;
             return winIsinitialise;
@@ -71,8 +71,8 @@ namespace App {
                     SDL_DestroySurface(surface);
                 break;
 
-                case backEnd::OfficialTheme::PURPLE_THEME :
-                    surface = IMG_Load("assets/backgrounds/liquid_purple.jpg");
+                case backEnd::OfficialTheme::WITHE_THEME :
+                    surface = IMG_Load("assets/backgrounds/white-theme.png");
                     ImgTexture = SDL_CreateTextureFromSurface(mAppRenderer, surface);
                     SDL_DestroySurface(surface);
                 break;
