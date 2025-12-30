@@ -79,11 +79,11 @@ namespace App{
                 return nullptr;
             }
             std::cout << "image : "<< fileLocation << " taille : " << width << " x " << height << std::endl;
-            std::cout << "image : " << fileLocation << "chargee avec succes!" << std::endl; 
+            std::cout << "😁 image : " << fileLocation << " chargée avec succes!" << std::endl; 
             //creation de la texutre
             SDL_Texture* texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_STATIC, width, height);
             if (!texture) {
-                std::cerr << "Erreur de creation de la texture: " << SDL_GetError() << std::endl;
+                std::cerr << "❌Erreur de creation de la texture: " << SDL_GetError() << std::endl;
                 stbi_image_free(image_data);
                 return nullptr;
             }
@@ -108,7 +108,7 @@ namespace App{
             mtools.restTexture = Load_imageTexture(Renderer, "assets/tools/person_17580600.png");
             mtools.soundTexture = Load_imageTexture(Renderer, "assets/tools/icons8-musical-note-100.png");
             mtools.statistics =Load_imageTexture(Renderer, "assets/tools/icons8-analytique-100 (1).png");
-            mtools.work = Load_imageTexture(Renderer, "assets/tools/icons8-travaux-de-jardinage-100 (1).png");
+            mtools.work = Load_imageTexture(Renderer, "assets/tools/work_6190606.png");
             //recuperation des dimensions
             SDL_GetTextureSize(mtools.settingsTexture, &settings.w, &settings.w);
             SDL_GetTextureSize(mtools.chronoTexture, &chrono.w, &chrono.h);

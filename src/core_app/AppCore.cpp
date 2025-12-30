@@ -44,18 +44,20 @@ namespace App {
 
                 if (Get_started) {
                     //calcul du temps restant
-                    mworkSession.timeleft();
-                    if (mworkSession.minutes == 0 && mworkSession.secondes > 0.0f && mworkSession.secondes < 0.02f) {
-                        next_session =true;
-                    }
+                    chrono.WorkChronometer(chrono.GetIsWorkingSession());
+                    ImGui::Text("%s", std::to_string(chrono.GetCounterSession()).c_str());
+                    chrono.LongRestChronometer(chrono.GetIsLongRestSession());
+                    chrono.RestChronometer(chrono.GetIsRestSession());
                 }
-                if (next_session) {
-                    SessionChange(next_session);
-                }
+                
+                chrono.SessionChange(mwindowUi.GettextureUI());
+
                 ImGui::PushFont(mwindowUi.GetFontUi(), 150.0f);
-                ImGui::Text("%s", mworkSession.chrono);
+                if (chrono.GetIsLongRestSession()) { ImGui::Text("%s", chrono.GetLongChrono().chrono); }
+                if (chrono.GetIsRestSession()) { ImGui::Text("%s", chrono.GetRestChrono().chrono); }
+                if (chrono.GetIsWorkingSession()) { ImGui::Text("%s", chrono.GetWorkingChrono().chrono); }
                 ImGui::PopFont();
-                SessionProgression();
+                //progression des sessions
 
                 ImGui::EndChild();
 
@@ -146,22 +148,14 @@ namespace App {
             ImGui::BeginChild("##parameter", ImVec2(500, 600), 0, ImGuiWindowFlags_Modal);
 
             //gestion du son de l'application
-            SoundSettings();
+            chrono.SoundSettings();
+            //parametre de temps
+            chrono.TimeSettings();
             //parametre de choix de theme d'arriere plan
             ThemeSettings();
             //parametrage du temps des sessions
             
             ImGui::EndChild();
-        }
-
-        void  AppCore::SoundSettings() {
-            ImGui::SeparatorText("Son");
-            ImGui::Text("Volume");
-            ImGui::SameLine(0.0f, 2.0f);
-            ImGui::SliderInt(" ", &mvolume, 0, 100);
-            ImGui::Text("Son actif");
-            ImGui::SameLine(0.0f, 2.0f);
-            ImGui::Toggle("##sound", &activate_sound, ImGuiToggleFlags_Animated);
         }
 
         /**
@@ -261,35 +255,7 @@ namespace App {
             ImGui::EndChild();
         }
 
-        void AppCore::SessionChange(bool& change) {
-            if (counter_session <= 5) {
-                counter_session++;
-                if (counter_session % 2 == 0 && counter_session % 4 != 0) {
-                    mworkSession.minutes = 5;
-                    mworkSession.secondes = 0.0;
-                    change = false;
-                }
-                else if (counter_session % 2 != 0 && counter_session % 4 == 0) {
-                    mworkSession.minutes = 15;
-                    mworkSession.secondes = 0.0f;
-                    change = false;
-                }
-                else {
-                    mworkSession.minutes = 25;
-                    mworkSession.secondes = 0.0f;
-                    change = false;
-                }
-            }
-        }
 
-        //barre de progression
-
-        void AppCore::SessionProgression() {
-            static float factor = 0;
-            factor = counter_session / 5;
-            float progress = IM_CLAMP( counter_session / 5, 0.0f, 1.0f);
-            ImGui::ProgressBar(progress, ImVec2(0.0f, 0.0f));
-        }
     } // namespace AppCore
 } //namespace App
 

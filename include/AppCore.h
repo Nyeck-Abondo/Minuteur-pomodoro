@@ -3,6 +3,7 @@
 #include "window.h"
 #include "windowUI.h"
 #include "statistic.h"
+#include "pomodoro.h"
 
 #define IM_CLAMP(V, MN, MX)     ((V) < (MN) ? (MN) : (V) > (MX) ? (MX) : (V))
 
@@ -13,6 +14,7 @@ namespace App {
             Graphics::window mwindow;
             Uigraphics::windowUi mwindowUi;
             Statistic::stats mstatistics;
+            pomodoro chrono;
             backEnd::Timer mworkSession;
             backEnd::Timer mshortBreak;
             backEnd::Timer mLongbreak;
@@ -28,12 +30,9 @@ namespace App {
             bool show_statistics = false;
             bool show_parameters = false;
             bool show_interface = true;
-            bool activate_sound = false;
-            bool next_session = false;
-            bool helper = false;
 
             //booleens de compteur pour les stats
-            bool is_work_complete = false;
+            bool is_work_complete = true;
             bool is_short_pause_done = false;
             bool is_long_pause_done = false;
 
@@ -58,13 +57,9 @@ namespace App {
 
             void ParameterUi(int session_mumber, backEnd::Timer work, backEnd::Timer short_breakTime, backEnd::Timer long_BreakTime, int long_BreakInterval, int volume);
             void statisticsUi();
-            void SessionChange(bool& change);
 
             //sous instances des fenetres secondaires
             void ThemeSettings();
-            void TimeSettings();
-            void SoundSettings();
-            void SessionProgression();
         };
     }//namespace core
 } //namespace App

@@ -3,7 +3,7 @@
 namespace App {
     namespace core {
         
-        pomodoro::pomodoro(): m_WorkChrono({20, 0.0f}), m_RestChrono({5, 0.0f}),
+        pomodoro::pomodoro(): m_WorkChrono({0, 5.0f}), m_RestChrono({5, 0.0f}),
                 m_LongRestChrono({15, 0.0f}),m_statisitcs(), m_CounterSession(0),
                 m_Activate_Sound(true), m_NExt_Session(false), m_Is_restSession(false),
                 m_Is_workSession(true), m_Is_LongRestSession(false) {
@@ -32,7 +32,7 @@ namespace App {
             ImGui::Toggle("##sound", &m_Activate_Sound, ImGuiToggleFlags_Animated);
         }
 
-        void pomodoro::WorkSessionPresentation(backEnd::textureUi texture) {
+        void pomodoro::WorkSessionPresentation(SDL_Texture* texture) {
             ImGuiWindowFlags flag = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
             ImGui::OpenPopup("Session de concentration");
             ImGui::SetNextWindowSize(ImVec2(500, 400));
@@ -41,7 +41,7 @@ namespace App {
 
             if (ImGui::BeginPopupModal("Session de concentration", &m_Is_workSession, flag)) {
                 ImGui::SetCursorPos(ImGui::GetMainViewport()->GetCenter());
-                ImGui::Image((ImTextureID)(intptr_t)texture.work, ImVec2(250.0f, 250.0f));
+                ImGui::Image((ImTextureID)(intptr_t)texture, ImVec2(250.0f, 250.0f));
                 ImGui::Separator();
                 ImGui::Text("Souhaitez vous commencer la Session de concentraion?");
                 ImGui::SetCursorPos(ImVec2(ImGui::GetMainViewport()->GetCenter().x , 70.0f));
@@ -55,7 +55,7 @@ namespace App {
             }
         }
         
-        void pomodoro::RestSessionPresentation(backEnd::textureUi texture) {
+        void pomodoro::RestSessionPresentation(SDL_Texture* texture) {
             ImGuiWindowFlags flag = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
             ImGui::OpenPopup("Session de Repos");
             ImGui::SetNextWindowSize(ImVec2(500, 400));
@@ -64,7 +64,7 @@ namespace App {
 
             if (ImGui::BeginPopupModal("Session de concentration", &m_Is_workSession, flag)) {
                 ImGui::SetCursorPos(ImGui::GetMainViewport()->GetCenter());
-                ImGui::Image((ImTextureID)(intptr_t)texture.work, ImVec2(250.0f, 250.0f));
+                ImGui::Image((ImTextureID)(intptr_t)texture, ImVec2(250.0f, 250.0f));
                 ImGui::Separator();
                 ImGui::Text("Souhaitez vous commencer la Session de concentraion?");
                 ImGui::SetCursorPos(ImVec2(ImGui::GetMainViewport()->GetCenter().x , 70.0f));
@@ -78,7 +78,7 @@ namespace App {
             }
         }
 
-        void pomodoro::LongRestsessionPresentation(backEnd::textureUi texture) {
+        void pomodoro::LongRestsessionPresentation(SDL_Texture* texture) {
             ImGuiWindowFlags flag = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
             ImGui::OpenPopup("Session de concentration");
             ImGui::SetNextWindowSize(ImVec2(500, 400));
@@ -87,7 +87,7 @@ namespace App {
 
             if (ImGui::BeginPopupModal("Session de concentration", &m_Is_workSession, flag)) {
                 ImGui::SetCursorPos(ImGui::GetMainViewport()->GetCenter());
-                ImGui::Image((ImTextureID)(intptr_t)texture.work, ImVec2(250.0f, 250.0f));
+                ImGui::Image((ImTextureID)(intptr_t)texture, ImVec2(250.0f, 250.0f));
                 ImGui::Separator();
                 ImGui::Text("Souhaitez vous commencer la Session de concentraion?");
                 ImGui::SetCursorPos(ImVec2(ImGui::GetMainViewport()->GetCenter().x , 70.0f));
@@ -95,24 +95,67 @@ namespace App {
                     m_Is_restSession = false;
                     m_Is_workSession = false;
                     m_Is_LongRestSession = true;
+                    if (m_LongRestChrono.minutes == 0 && m_LongRestChrono.secondes == 0) {
+                        m_LongRestChrono.minutes = 15;
+                        m_LongRestChrono.secondes = 0.0f;
+                    }
                     ImGui::CloseCurrentPopup();
                 }
                 ImGui::EndPopup();
             }
         }
 
-        void pomodoro::Chronometer(backEnd::Timer chrono, bool is_session) {
-            ImVec2 center = ImGui::GetMainViewport()->GetCenter();
-                ImGui::SetNextWindowPos(ImVec2(center.x + 90.0f, center.y), 0, ImVec2(0.5, 0.55));
-                ImGui::BeginChild("##chrono01", ImVec2(650.0f, 500.0f), ImGuiChildFlags_None, ImGuiWindowFlags_NoBackground);
+        void pomodoro::WorkChronometer(bool is_session) {
 
-                if (is_session) {
-                    //calcul du temps restant
-                    chrono.timeleft();
-                    if (chrono.minutes == 0 && chrono.secondes > 0.0f && chrono.secondes < 0.02f) {
-                        m_NExt_Session =true;
+            if (is_session) {
+                //calcul du temps restant
+                m_WorkChrono.timeleft();
+                if (m_WorkChrono.minutes == 0 && m_WorkChrono.secondes == 0.0f) {
+                    m_NExt_Session =true;
+                }
+            }
+        }
+
+        void pomodoro::RestChronometer(bool is_session) {
+            if (is_session) {
+                //calcul du temps restant
+                m_WorkChrono.timeleft();
+                if (m_RestChrono.minutes == 0 && m_RestChrono.secondes > 0.0f && m_RestChrono.secondes < 0.02f) {
+                    m_NExt_Session =true;
+                }
+            }
+        }
+
+        void pomodoro::LongRestChronometer(bool is_session) {
+            if (is_session) {
+                //calcul du temps restant
+                m_WorkChrono.timeleft();
+                if (m_LongRestChrono.minutes == 0 && m_LongRestChrono.secondes > 0.0f && m_LongRestChrono.secondes < 0.02f) {
+                    m_NExt_Session =true;
+                }
+            }
+        }
+
+        void pomodoro::SessionChange(backEnd::textureUi texture) {
+            if (m_NExt_Session) {
+                if (m_CounterSession <= 2) {
+                    m_CounterSession++;
+                    switch (m_CounterSession) {
+                        case 1:
+                            WorkSessionPresentation(texture.work);
+                        break;
+                        case 2:
+                            RestSessionPresentation(texture.restTexture);
+                        break;
+                        case 3:
+                            WorkSessionPresentation(texture.work);
+                        break;
+                        case 4:
+                            LongRestsessionPresentation(texture.restTexture);
+                        break;
                     }
                 }
+            }
         }
 
     } // namespace core  
