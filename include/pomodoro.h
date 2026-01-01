@@ -12,51 +12,47 @@ namespace App {
         
         class pomodoro {
             private:
-            backEnd::Timer m_WorkChrono;
-            backEnd::Timer m_RestChrono;
-            backEnd::Timer m_LongRestChrono;
+            
             Statistic::stats m_statisitcs;
             ImGuiToggleConfig config;
 
             //gestions des sessions
-            int m_CounterSession;
+            int m_Workminuttes;
+            int m_WorkSecondes;
+            int m_RestMinutes;
+            int m_RestSeconeds;
+            int m_LongRest_Minutes;
+            int m_LongRest_Secondes;
             int m_Volume;
 
             //booleens d'affichage
             bool m_Activate_Sound;
-            bool m_NExt_Session;
             bool m_Is_restSession;
             bool m_Is_workSession;
             bool m_Is_LongRestSession;
             
             public:
-
+            backEnd::Timer m_WorkChrono;
             //constructeur et destructeur
             pomodoro();
             ~pomodoro();
 
             //GETTERS
-            backEnd::Timer GetWorkingChrono() const { return m_WorkChrono; }
-            backEnd::Timer GetRestChrono() const { return m_RestChrono; }
-            backEnd::Timer GetLongChrono() const { return m_LongRestChrono; }
             bool GetIsWorkingSession() { return m_Is_workSession; }
             bool GetIsRestSession() { return m_Is_restSession;}
             bool GetIsLongRestSession() { return m_Is_LongRestSession; }
-            int GetCounterSession() { return m_CounterSession;}
 
             //METHODES
             //parametre
-            void TimeSettings();
+            void TimeSettings(backEnd::Timer chrono);
             void SoundSettings();
-            void SessionProgression();
+            void SessionProgression(backEnd::textureUi texture, backEnd::Timer chrono);
 
             //presentation de l'evolution du chrono et effets visuels
-            void WorkChronometer(bool is_session);
-            void RestChronometer(bool is_session);
-            void LongRestChronometer(bool is_session);
-            void WorkSessionPresentation(SDL_Texture* texture);
-            void RestSessionPresentation(SDL_Texture* texture);
-            void LongRestsessionPresentation(SDL_Texture* texture);
+            void Chronometer(bool is_session);
+            void WorkPresentation(SDL_Texture* texture, backEnd::Timer chrono);
+            void restPresentation(SDL_Texture* texture, backEnd::Timer chrono);
+            void LongRestPresentation(SDL_Texture* texture, backEnd::Timer chrono);
 
             //transition de session
             void SessionChange(backEnd::textureUi texture);            

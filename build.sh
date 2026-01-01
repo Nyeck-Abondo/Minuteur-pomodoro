@@ -52,7 +52,7 @@ SRC="src"
     for files in $(ls $SRC/*.cpp)
     do
         echo -e "🔃 ${BLEU}${GRAS} collecte des chemins d'acces des fichiers .cpp de :${NC} $files"
-        sleep 0.75
+        sleep 0.35
         echo
         echo -e "fichier trouvé : ${ORANGE}$files${NC}"
         MODULE_DIR="$MODULE_DIR$files$VOID"
@@ -62,7 +62,7 @@ SRC="src"
     for folder in $(find "src" -mindepth 1 -maxdepth 2 -type d -print)
     do
         echo -e "🔃 ${BLEU}${GRAS} collecte des chemins d'acces des fichiers .cpp de :${NC} $folder"
-        sleep 0.75
+        sleep 0.35
         #affichage des modules objets et des fichiers trouvés dans le dossier
         for file in $(ls $folder/*.cpp)
         do
@@ -85,7 +85,7 @@ then
     for folder in $(find "libs" -mindepth 1 -maxdepth 2 -type d -print)
     do
         echo -e "🔃 ${BLEU}${GRAS}collecte des chemins d'acces des fichiers .cpp de :${NC} $folder"
-        sleep 0.75
+        sleep 0.35
         if [ $folder = "libs/ImGui_Arc_ProgressBar" ]
         then
             ARC=" libs/ImGui_Arc_ProgressBar/arc_progress_bar.cpp "
@@ -113,27 +113,22 @@ echo
 
 echo "VERIFICATION DE LA PRESENCE DE LA SDL3"
 echo
-sleep 1
 verification_folder "libs/SDL3" "SDL3"
 
 echo "==========VERIFICATION DE LA PRESENCE DE IMGUI============="
 echo
-sleep 1
 verification_folder "libs/imgui" "imgui"
 
 echo "==========VERIFICATION DE LA PRESENCE DE IMGUI_TOGGLE============"
 echo
-sleep 1
 verification_folder "libs/imgui_toggle" "imgui_toggle"
 
 echo "===========VERIFICATION DE LA PRESENCE DE STB_IMGAGE================="
 echo
-sleep 1
 verification_folder "libs/stb" "stb_image"
 
 echo "==========VERIFICATION DE LA PRESENCE DE IMGUI_ARC_PROGRESS_BAR==============="
 echo
-sleep 1
 verification_folder "libs/ImGui_Arc_ProgressBar" "imgui_arc_progressBar"
 
 echo -e "${VERT}${GRAS}[3/5]-vérification de la presence du dossier build pour l'executables"
@@ -141,7 +136,6 @@ echo -e "${VERT}${GRAS}[3/5]-vérification de la presence du dossier build pour 
 if [ ! -d "build" ]
 then
     echo -e "${ROUGE}ABSCENCE DU DOSSIER ACCEUILLANT LES EXECUTABLES"
-    sleep 0.5
     echo "🧰CREATION DU DOSSIER BUILD"
     mkdir build
 else
@@ -152,7 +146,6 @@ echo -e "${VERT}${GRAS}[4/5]-vérification de la presence du dossier INCLUDE pou
 if [ ! -d "include" ]
 then
     echo -e "${ROUGE}ABSCENCE DU DOSSIER ACCEUILLANT LES HEADERS LOCAUX"
-    sleep 0.5
     echo "⚠️ARRET DU PROGRAMME DE COMPILATION"
     exit 1
 else

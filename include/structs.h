@@ -9,8 +9,9 @@
 namespace App{
     namespace backEnd{
         struct Timer {
-            unsigned int minutes : 6;
+            int minutes;
             float secondes;
+            int timeCounter = 0;
             char chrono[256];
 
             Timer(int min, float second): minutes(min), secondes(second) {
@@ -24,6 +25,7 @@ namespace App{
                 if (secondes < 0.01 && minutes > 0) {
                     minutes -= 1;
                     secondes = 60;
+                    timeCounter++;
                 }
                 if (secondes < 10.0f) {
                     sprintf(chrono,"%d : 0%0.2f", minutes, secondes);
@@ -37,6 +39,29 @@ namespace App{
                 if(secondes <= 0 && minutes <= 0) {
                     secondes = 0;
                     sprintf(chrono, "0%d : 0%0.2f", minutes, secondes);
+                }
+            }
+
+            void InitialiseTimer(int min, float sec) {
+                minutes = min;
+                secondes =sec;
+            }
+            
+            void updateTimer(int countSession) {
+                if (minutes == 0 && secondes == 0) {
+                    if(countSession < 7) {
+                        if (countSession % 3 == 0 || countSession == 0) {
+                            InitialiseTimer(0, 3.0f);
+                        }
+                        if (countSession % 2 == 0 && countSession % 6 != 0 && countSession != 0) {
+                            minutes = 0;
+                            secondes = 10.0f;
+                        }
+                        if (countSession % 2 != 0 && countSession % 6 == 0) {
+                            InitialiseTimer(15, 0);
+                        }
+                    }
+                    
                 }
             }
         };

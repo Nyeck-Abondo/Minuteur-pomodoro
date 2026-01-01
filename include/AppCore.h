@@ -15,9 +15,7 @@ namespace App {
             Uigraphics::windowUi mwindowUi;
             Statistic::stats mstatistics;
             pomodoro chrono;
-            backEnd::Timer mworkSession;
-            backEnd::Timer mshortBreak;
-            backEnd::Timer mLongbreak;
+            backEnd::Timer Session;
 
             int mSessionNumber;
             int mLong_breakInterval;
@@ -55,7 +53,7 @@ namespace App {
 
             //utilitaire
 
-            void ParameterUi(int session_mumber, backEnd::Timer work, backEnd::Timer short_breakTime, backEnd::Timer long_BreakTime, int long_BreakInterval, int volume);
+            void ParameterUi(int session_mumber, backEnd::Timer work, int long_BreakInterval, int volume);
             void statisticsUi();
 
             //sous instances des fenetres secondaires
