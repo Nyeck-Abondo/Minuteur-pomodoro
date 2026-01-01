@@ -23,6 +23,10 @@ namespace App {
             ImGui::SliderInt2("Pause Longue", values3, 0, 60);
         }
 
+        /**
+         * @name SoundSettings
+         * @brief gere les interfaces de modification du son dans les parametre
+         */
         void pomodoro::SoundSettings() {
             ImGui::Text("Volume");
             ImGui::SameLine(0.0f, 2.0f);
@@ -32,6 +36,11 @@ namespace App {
             ImGui::Toggle("##sound", &m_Activate_Sound, ImGuiToggleFlags_Animated);
         }
 
+        /**
+         * @name WorkSessionPresentation
+         * @brief cette fonction gere l'affichafe d;un popupmodal visant
+         * a presenter la session en cours avec une icone personnalisee
+         */
         void pomodoro::WorkSessionPresentation(SDL_Texture* texture) {
             ImGuiWindowFlags flag = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
             ImGui::OpenPopup("Session de concentration");
@@ -49,12 +58,18 @@ namespace App {
                     m_Is_restSession = false;
                     m_Is_workSession = true;
                     m_Is_LongRestSession = false;
+                    m_NExt_Session = false;
                     ImGui::CloseCurrentPopup();
                 }
                 ImGui::EndPopup();
             }
         }
         
+        /**
+         * @name RestSessionPresentation
+         * @brief affiche une fentre popupmodal visant a 
+         * presenter la session de repos court
+         */
         void pomodoro::RestSessionPresentation(SDL_Texture* texture) {
             ImGuiWindowFlags flag = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
             ImGui::OpenPopup("Session de Repos");
@@ -78,6 +93,11 @@ namespace App {
             }
         }
 
+        /**
+         * @name LongRestsessionPresentation
+         * @brief affiche une fentre popupmodal qui vise a presenter
+         * la session de repos long
+         */
         void pomodoro::LongRestsessionPresentation(SDL_Texture* texture) {
             ImGuiWindowFlags flag = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
             ImGui::OpenPopup("Session de concentration");
@@ -86,9 +106,7 @@ namespace App {
             ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 
             if (ImGui::BeginPopupModal("Session de concentration", &m_Is_workSession, flag)) {
-                ImGui::SetCursorPos(ImGui::GetMainViewport()->GetCenter());
                 ImGui::Image((ImTextureID)(intptr_t)texture, ImVec2(250.0f, 250.0f));
-                ImGui::Separator();
                 ImGui::Text("Souhaitez vous commencer la Session de concentraion?");
                 ImGui::SetCursorPos(ImVec2(ImGui::GetMainViewport()->GetCenter().x , 70.0f));
                 if (ImGui::Button(u8"Débuter", ImVec2(250.0f, 50.0f))) {
@@ -105,6 +123,11 @@ namespace App {
             }
         }
 
+        /**
+         * @name WorkChronometer
+         * @brief En charge de la gestion du temps de travail
+         * se lance lors qu'une session de concentration debute
+         */
         void pomodoro::WorkChronometer(bool is_session) {
 
             if (is_session) {
@@ -116,6 +139,14 @@ namespace App {
             }
         }
 
+        /**
+         * @name RestChronometer
+         * @brief Gere le temps de repos court. se lance lorsqu'une
+         * session de repos court debute
+         * @param is_session permet de verifier si la session actuelle
+         * correspond a une session de repos court. si cela est le cas
+         * la fonction se lance automatiquement
+         */
         void pomodoro::RestChronometer(bool is_session) {
             if (is_session) {
                 //calcul du temps restant
@@ -126,6 +157,13 @@ namespace App {
             }
         }
 
+        /**
+         * @name LongRestChronometer
+         * @brief gere le temps de repos long. Se lance lorsqu'une 
+         * session de repos long debute
+         * @param is_session permet de verifier si la session actuelle
+         * correspond a la session de repos long. si oui la fonction est lance
+         */
         void pomodoro::LongRestChronometer(bool is_session) {
             if (is_session) {
                 //calcul du temps restant
@@ -136,6 +174,9 @@ namespace App {
             }
         }
 
+        /**
+         * $
+         */
         void pomodoro::SessionChange(backEnd::textureUi texture) {
             if (m_NExt_Session) {
                 if (m_CounterSession <= 2) {

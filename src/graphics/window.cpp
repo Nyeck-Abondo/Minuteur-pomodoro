@@ -4,8 +4,7 @@ namespace App {
     namespace Graphics {        
         window::window (float height, float width, const std::string& title) 
             : mwinHeight(height), mwinWidth(width), mwinTitle(title), mappWindow(nullptr)
-            , mAppRenderer(nullptr), mfont(TTF_OpenFont("police/Montserrat/static/Montserrat-BoldItalic.ttf", 25.0f))
-            , ImgTexture(nullptr), winIsinitialise(false), textTexture(nullptr) {
+            , mAppRenderer(nullptr), ImgTexture(nullptr), winIsinitialise(false), textTexture(nullptr) {
                 std::cout << "✅ initialisation de la fenetre avec succes !!"<< std::endl;
             }
             window::~window(){
@@ -113,19 +112,6 @@ namespace App {
             //creation de la texture
             ImgTexture = SDL_CreateTextureFromSurface(mAppRenderer, imgsurface);
             SDL_DestroySurface(imgsurface);
-        }
-
-        
-        SDL_Texture* window::TextureText(SDL_Renderer* renderer) {
-            //creation de la surface
-            std::string message = "Welcome To Pomodoro App";
-            SDL_Color colorbg = {0, 0, 0, 200};
-            SDL_Color colorfg = {255, 255, 255, 255};
-
-            SDL_Surface* fontSurface = TTF_RenderText_Shaded(mfont, message.c_str(), SDL_strlen(message.c_str()), colorfg, colorbg);
-            SDL_Texture* fontTexture = SDL_CreateTextureFromSurface(renderer, fontSurface);
-
-            return fontTexture;
         }
     } //namespace backend
 }//namespace app

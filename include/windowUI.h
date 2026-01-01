@@ -2,8 +2,8 @@
 
 #include "../libs/SDL3/SDL.h"
 #include "../libs/imgui/imgui.h"
-#include "../libs/imgui/backends/imgui_impl_sdl3.h"
-#include "../libs/imgui/backends/imgui_impl_sdlrenderer3.h"
+#include "../libs/imgui/imgui_impl_sdl3.h"
+#include "../libs/imgui/imgui_impl_sdlrenderer3.h"
 #include "../libs/imgui_toggle/imgui_toggle.h"
 #include "../libs/imgui_toggle/imgui_toggle_presets.h"
 #include <string>

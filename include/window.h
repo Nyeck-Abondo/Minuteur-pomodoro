@@ -1,8 +1,7 @@
 #pragma once
 
 #include <SDL3/SDL.h>
-#include <SDL3_ttf/SDL_ttf.h>
-#include <SDL3/SDL3_image/SDL_image.h>
+#include "../libs/SDL3/SDL3_image/SDL_image.h"
 #include <string>
 #include <random>
 #include <ctime>
@@ -20,7 +19,6 @@ namespace App {
             SDL_Renderer* mAppRenderer;
             SDL_Texture* textTexture;
             SDL_Texture* ImgTexture;
-            TTF_Font* mfont;
             float mwinHeight;
             float mwinWidth;
             float mfontSize;
@@ -50,7 +48,6 @@ namespace App {
             //chargement des images et du text
 
             void TextureImg(const char* file);
-            SDL_Texture* TextureText(SDL_Renderer* renderer);
 
             //rendu des particules de la fenetre
             
