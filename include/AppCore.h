@@ -4,6 +4,7 @@
 #include "windowUI.h"
 #include "statistic.h"
 #include "pomodoro.h"
+#include "renderStats.h"
 
 #define IM_CLAMP(V, MN, MX)     ((V) < (MN) ? (MN) : (V) > (MX) ? (MX) : (V))
 

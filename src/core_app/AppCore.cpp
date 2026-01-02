@@ -219,73 +219,13 @@ namespace App {
         }
 
         void AppCore::statisticsUi() {
-            ImVec2 center = ImGui::GetMainViewport()->GetCenter();
-
-            //section des sessions teminees
-            ImGui::SetNextWindowPos(ImVec2(center.x - 250.0f, center.y + 250.0f), 0, ImVec2(0.5f, 0.5f));
-            ImGui::BeginChild("##SessionDone", ImVec2(300, 300));
-
-            //positionnement du compteur de sessions
-            float windowWidth = ImGui::GetWindowWidth();
-            float windowHeigth = ImGui::GetWindowHeight();
-            ImVec2 text_size = ImGui::CalcTextSize(std::to_string(mstatistics.GetPeriod().completed).c_str());
-
-            //vecteurs de centre du compteur de sessions
-            ImVec2 count_Center = ImVec2((windowWidth - text_size.x) / 2, (windowHeigth - text_size.y) / 2);
-            
-            ImGui::PushFont(mwindowUi.GetFontUi(), 30.0f);
-            ImGui::Text("Sessions \nComplétées");
-            ImGui::PopFont();
             //calcul des sessions completes
             mstatistics.WorkSessionComplete(Session.minutes, Session.secondes);
-            ImGui::PushFont(mwindowUi.GetFontUi(), 40.0f);
-            //positionnement au centre
-            ImGui::SetCursorPos(count_Center);
-            ImGui::Text("%s",std::to_string(mstatistics.GetPeriod().completed).c_str());
-            ImGui::PopFont();
-            ImGui::EndChild();
-
-            //section du temps de comcentration effectue
-            ImGui::SetNextWindowPos(ImVec2(center.x + 100.0f, center.y + 250.0f), 0, ImVec2(0.5f, 0.5f));
-            ImGui::BeginChild("##periodSKiped", ImVec2(300.0f, 300.0f));
-
-            //calcul de la position centrale
-            ImVec2 time_size = ImGui::CalcTextSize(std::to_string(Session.timeCounter).c_str());
-            
-            //vecteur de centre du compteur de temps
-            ImVec2 time_center = ImVec2((windowWidth - time_size.x) / 2 , (windowHeigth - time_size.y) / 2);
-            //positionnement du compteur
-            
-            ImGui::PushFont(mwindowUi.GetFontUi(), 30.0f);
-            ImGui::Text("Temps total de \nconcentration");
-            ImGui::PopFont();
-            
-            ImGui::PushFont(mwindowUi.GetFontUi(), 40.0f);
-            ImGui::SetCursorPos(time_center);
-            ImGui::Text("%d", Session.timeCounter);
-            ImGui::PopFont();
-            ImGui::EndChild();
-
-            ImGui::SetNextWindowPos(ImVec2(center.x + 450.0f, center.y + 250.0f), 0, ImVec2(0.5f, 0.5f));
-            ImGui::BeginChild("##ShortSessionDone", ImVec2(300.0f, 300.0f));
-
-            //calcul de la position centrale de la fenetre
-            ImVec2 pause_size = ImGui::CalcTextSize(std::to_string(mstatistics.GetPause().short_paused).c_str());
-            ImVec2 pauseText_size = ImGui::CalcTextSize(u8"Nombre de \npauses effectuées");
-            //calcul du vecteur de positionnement central de la fenetre
-            ImVec2 pause_center = ImVec2((windowWidth - pause_size.x) / 2, (windowHeigth - pause_size.y) / 2);
-            ImVec2 pauseText_center = ImVec2 ((windowWidth - pauseText_size.x) / 2, (windowHeigth - pauseText_size.y));
-            ImGui::PushFont(mwindowUi.GetFontUi(), 30.0f);
-            ImGui::Text(u8"Nombre de \npauses effectuées");
-            ImGui::PopFont();
-            ImGui::PushFont(mwindowUi.GetFontUi(), 40.0f);
-            ImGui::SetCursorPos(pause_center);
-            ImGui::Text("%d", mstatistics.GetPause().short_paused);
-            ImGui::PopFont();
-            ImGui::EndChild();
+            Statistic::SessionDoneUi(mwindowUi.GetFontUi(), std::to_string(mstatistics.GetPeriod().completed).c_str());
+            Statistic::ElapsedTimeUi(mwindowUi.GetFontUi(), Session.timeCounter);
+            Statistic::TotalPauseUi(mwindowUi.GetFontUi(), mstatistics.GetPause().short_paused);
 
         }
 
     } // namespace AppCore
 } //namespace App
-
