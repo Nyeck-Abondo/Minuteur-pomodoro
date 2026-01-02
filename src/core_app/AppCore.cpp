@@ -221,20 +221,38 @@ namespace App {
             //section des sessions teminees
             ImGui::SetNextWindowPos(ImVec2(center.x - 250.0f, center.y + 250.0f), 0, ImVec2(0.5f, 0.5f));
             ImGui::BeginChild("##SessionDone", ImVec2(200, 300));
-            ImGui::Text("Sessions Complétées");
+            ImGui::PushFont(mwindowUi.GetFontUi(), 30.0f);
+            ImGui::Text("Sessions \nComplétées");
+            ImGui::PopFont();
             //calcul des sessions completes
             mstatistics.WorkSessionComplete(Session.minutes, Session.secondes);
+            ImGui::PushFont(mwindowUi.GetFontUi(), 40.0f);
             ImGui::Text("%s",std::to_string(mstatistics.period.completed).c_str());
+            ImGui::PopFont();
             ImGui::EndChild();
 
             //section des sessions sautees
             ImGui::SetNextWindowPos(ImVec2(center.x, center.y + 250.0f), 0, ImVec2(0.5f, 0.5f));
             ImGui::BeginChild("##periodSKiped", ImVec2(200.0f, 300.0f));
-            ImGui::Text("Temps total de concentration");
+            ImGui::PushFont(mwindowUi.GetFontUi(), 30.0f);
+            ImGui::Text("Temps total de \nconcentration");
+            ImGui::PopFont();
             //calcul des statistiques
+            ImGui::PushFont(mwindowUi.GetFontUi(), 40.0f);
             ImGui::Text("%d", Session.timeCounter);
-    
+            ImGui::PopFont();
             ImGui::EndChild();
+
+            ImGui::SetNextWindowPos(ImVec2(center.x + 250.0f, center.y + 250.0f), 0, ImVec2(0.5f, 0.5f));
+            ImGui::BeginChild("##ShortSessionDone", ImVec2(200.0f, 300.0f));
+            ImGui::PushFont(mwindowUi.GetFontUi(), 30.0f);
+            ImGui::Text(u8"Nombre de \npauses effectuées");
+            ImGui::PopFont();
+            ImGui::PushFont(mwindowUi.GetFontUi(), 40.0f);
+            ImGui::Text("%d", mstatistics.rest.short_paused);
+            ImGui::PopFont();
+            ImGui::EndChild();
+
         }
 
     } // namespace AppCore

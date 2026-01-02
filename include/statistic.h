@@ -67,7 +67,7 @@ namespace App {
             }
 
             void ShortRestSessionDone(int minutes, float seconde) {
-                if (minutes == 0 && seconde > 0.0f && seconde < 0.02f) {
+                if (period.completed % 2 == 0) {
                     rest.short_paused++;
                 }
             }
