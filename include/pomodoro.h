@@ -55,8 +55,9 @@ namespace App {
             void LongRestPresentation(SDL_Texture* texture, backEnd::Timer chrono);
 
             //transition de session
-            void SessionChange(backEnd::textureUi texture);            
-
+            void Explanations(int counterSession, backEnd::textureUi texture);
+            void SessionChange(int counterSession, backEnd::textureUi texture);          
+            ImVec2 CenterContent();
         };
     } // namespace core
     

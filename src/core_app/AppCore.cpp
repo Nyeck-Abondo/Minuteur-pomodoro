@@ -21,38 +21,45 @@ namespace App {
                 //fenetre imgui principale
                 ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), 0, ImVec2(0.5f, 0.5f));
                 ImGui::SetNextWindowSize(ImVec2(mwindow.GetWindowWidth() + 50, mwindow.GetWindowHeight() + 50));
-                ImGui::Begin("Minuteur Pomodoro", &show_interface, ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar);
+                ImGui::Begin("Minuteur Pomodoro", &show_interface, ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 
                 chrono.SessionProgression(mwindowUi.GettextureUI(), Session);
                 ImGui::PushFont(mwindowUi.GetFontUi(), mwindowUi.GetFontSize());
-                ImGui::BeginChild("##Tools barr", ImVec2(250.0f, 900.0f), 0, ImGuiWindowFlags_NoScrollbar);
-                ImGui::Selectable("Parametre", &show_parameters, 0, ImVec2(250.0f, 100.0f));
-                ImGui::Selectable("Statistique", &show_statistics, 0, ImVec2(250.0f, 100.0f));
-                ImGui::Selectable("Get Started", &Get_started, 0, ImVec2(250.0f, 100.0f));
-                ImGui::Selectable("Restart", &restart, 0, ImVec2(250.0f, 100.0f));
+                ImGui::BeginChild("##Tools barr", ImVec2(350.0f, 900.0f), 0, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollWithMouse);
+                ImGui::SameLine();
+                ImGui::Selectable("Parametre", &show_parameters, 0, ImVec2(350.0f, 100.0f));
+                ImGui::Selectable("Statistique", &show_statistics, 0, ImVec2(350.0f, 100.0f));
+                ImGui::Selectable("Get Started", &Get_started, 0, ImVec2(350.0f, 100.0f));
+                ImGui::Selectable("Restart", &restart, 0, ImVec2(350.0f, 100.0f));
                 chrono.WorkPresentation(mwindowUi.GettextureUI().work, Session);
                 chrono.restPresentation(mwindowUi.GettextureUI().restTexture, Session);
                 chrono.LongRestPresentation(mwindowUi.GettextureUI().chronoTexture, Session);
 
                 ImGui::EndChild();
-
+                //calcul des statistiques
+            mstatistics.ShortRestSessionDone(Session.minutes, Session.secondes, mstatistics.GetPeriod().completed);
+                //explication d'entree de jeu
+                static int count = 0;
+                if (count <= 500) count++;
+                if (count < 500) {
+                    chrono.Explanations(mstatistics.GetPeriod().completed, mwindowUi.GettextureUI());
+                }
+                
                 //fenetre des parametres
                 if (show_parameters) {
                     ParameterUi(mSessionNumber, Session, mLong_breakInterval, mvolume);
                     show_statistics = false;
                 }
-                //fenetre des stats
-                if (show_statistics) {
-                    statisticsUi();
-                    show_parameters = false;
-                }
+                //fenetres des stats
+                statisticsUi();
 
                 //fenetre des chronometres
                 ImVec2 center = ImGui::GetMainViewport()->GetCenter();
                 ImGui::SetNextWindowPos(ImVec2(center.x + 90.0f, center.y), 0, ImVec2(0.5, 0.55));
                 ImGui::BeginChild("##chrono01", ImVec2(650.0f, 500.0f), ImGuiChildFlags_None, ImGuiWindowFlags_NoBackground);
 
-                Session.updateTimer(mstatistics.period.completed);
+                //met a jour l'état du chronometre pour quùil s'adapte en fonction de la session actuelle
+                Session.updateTimer(mstatistics.GetPeriod().completed);
                 if (Get_started) {
                     //calcul du temps restant
                     Session.timeleft();
@@ -102,11 +109,7 @@ namespace App {
             mwindowUi.igThemeV3(7, 7, 7, 0, 0, 1, 1);
 
             //statistiques a zero
-            for (int i = 0; i < 5; i++)mstatistics.work_time[i] = 0;
-            mstatistics.period.completed = 0;
-            mstatistics.period.skiped = 0;
-            mstatistics.rest.long_paused = 0;
-            mstatistics.rest.short_paused = 0;
+            mstatistics.StatisticInitialisation();
 
             mwindow.ChangePrincipalTheme(mwindow.mCurrenTheme);
             std::cout << "initialisation des statistiques a 0" <<std::endl;
@@ -220,36 +223,64 @@ namespace App {
 
             //section des sessions teminees
             ImGui::SetNextWindowPos(ImVec2(center.x - 250.0f, center.y + 250.0f), 0, ImVec2(0.5f, 0.5f));
-            ImGui::BeginChild("##SessionDone", ImVec2(200, 300));
+            ImGui::BeginChild("##SessionDone", ImVec2(300, 300));
+
+            //positionnement du compteur de sessions
+            float windowWidth = ImGui::GetWindowWidth();
+            float windowHeigth = ImGui::GetWindowHeight();
+            ImVec2 text_size = ImGui::CalcTextSize(std::to_string(mstatistics.GetPeriod().completed).c_str());
+
+            //vecteurs de centre du compteur de sessions
+            ImVec2 count_Center = ImVec2((windowWidth - text_size.x) / 2, (windowHeigth - text_size.y) / 2);
+            
             ImGui::PushFont(mwindowUi.GetFontUi(), 30.0f);
             ImGui::Text("Sessions \nComplétées");
             ImGui::PopFont();
             //calcul des sessions completes
             mstatistics.WorkSessionComplete(Session.minutes, Session.secondes);
             ImGui::PushFont(mwindowUi.GetFontUi(), 40.0f);
-            ImGui::Text("%s",std::to_string(mstatistics.period.completed).c_str());
+            //positionnement au centre
+            ImGui::SetCursorPos(count_Center);
+            ImGui::Text("%s",std::to_string(mstatistics.GetPeriod().completed).c_str());
             ImGui::PopFont();
             ImGui::EndChild();
 
-            //section des sessions sautees
-            ImGui::SetNextWindowPos(ImVec2(center.x, center.y + 250.0f), 0, ImVec2(0.5f, 0.5f));
-            ImGui::BeginChild("##periodSKiped", ImVec2(200.0f, 300.0f));
+            //section du temps de comcentration effectue
+            ImGui::SetNextWindowPos(ImVec2(center.x + 100.0f, center.y + 250.0f), 0, ImVec2(0.5f, 0.5f));
+            ImGui::BeginChild("##periodSKiped", ImVec2(300.0f, 300.0f));
+
+            //calcul de la position centrale
+            ImVec2 time_size = ImGui::CalcTextSize(std::to_string(Session.timeCounter).c_str());
+            
+            //vecteur de centre du compteur de temps
+            ImVec2 time_center = ImVec2((windowWidth - time_size.x) / 2 , (windowHeigth - time_size.y) / 2);
+            //positionnement du compteur
+            
             ImGui::PushFont(mwindowUi.GetFontUi(), 30.0f);
             ImGui::Text("Temps total de \nconcentration");
             ImGui::PopFont();
-            //calcul des statistiques
+            
             ImGui::PushFont(mwindowUi.GetFontUi(), 40.0f);
+            ImGui::SetCursorPos(time_center);
             ImGui::Text("%d", Session.timeCounter);
             ImGui::PopFont();
             ImGui::EndChild();
 
-            ImGui::SetNextWindowPos(ImVec2(center.x + 250.0f, center.y + 250.0f), 0, ImVec2(0.5f, 0.5f));
-            ImGui::BeginChild("##ShortSessionDone", ImVec2(200.0f, 300.0f));
+            ImGui::SetNextWindowPos(ImVec2(center.x + 450.0f, center.y + 250.0f), 0, ImVec2(0.5f, 0.5f));
+            ImGui::BeginChild("##ShortSessionDone", ImVec2(300.0f, 300.0f));
+
+            //calcul de la position centrale de la fenetre
+            ImVec2 pause_size = ImGui::CalcTextSize(std::to_string(mstatistics.GetPause().short_paused).c_str());
+            ImVec2 pauseText_size = ImGui::CalcTextSize(u8"Nombre de \npauses effectuées");
+            //calcul du vecteur de positionnement central de la fenetre
+            ImVec2 pause_center = ImVec2((windowWidth - pause_size.x) / 2, (windowHeigth - pause_size.y) / 2);
+            ImVec2 pauseText_center = ImVec2 ((windowWidth - pauseText_size.x) / 2, (windowHeigth - pauseText_size.y));
             ImGui::PushFont(mwindowUi.GetFontUi(), 30.0f);
             ImGui::Text(u8"Nombre de \npauses effectuées");
             ImGui::PopFont();
             ImGui::PushFont(mwindowUi.GetFontUi(), 40.0f);
-            ImGui::Text("%d", mstatistics.rest.short_paused);
+            ImGui::SetCursorPos(pause_center);
+            ImGui::Text("%d", mstatistics.GetPause().short_paused);
             ImGui::PopFont();
             ImGui::EndChild();
 

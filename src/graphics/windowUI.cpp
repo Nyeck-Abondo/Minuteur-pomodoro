@@ -102,7 +102,7 @@ namespace App{
          * crees.
          */
         void windowUi::CreateUITexture(SDL_Renderer* Renderer) {
-            mtools.settingsTexture = Load_imageTexture(Renderer, "assets/tools/icons8-slider-100.png");
+            mtools.settingsTexture = Load_imageTexture(Renderer, "assets/tools/icons8-settings-100.png");
             mtools.chronoTexture = Load_imageTexture(Renderer, "assets/tools/timer_15553848.png");
             mtools.profilTexture = Load_imageTexture(Renderer, "assets/tools/user_8104772.png");
             mtools.restTexture = Load_imageTexture(Renderer, "assets/tools/person_17580600.png");

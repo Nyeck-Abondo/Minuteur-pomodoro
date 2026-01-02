@@ -43,7 +43,7 @@ namespace App {
          */
         void pomodoro::SessionProgression(backEnd::textureUi texture, backEnd::Timer chrono) {
             //Dessin de la barre de menu horizontale
-            ImGui::BeginChild("##progress Session",ImVec2(1600.0f, 75.0f), ImGuiChildFlags_Borders, 0);
+            ImGui::BeginChild("##progress Session",ImVec2(1600.0f, 80.0f), ImGuiChildFlags_Borders, ImGuiWindowFlags_NoScrollWithMouse);
             WorkPresentation(texture.work, chrono);
             ImGui::SameLine();
             restPresentation(texture.restTexture, chrono);
@@ -54,14 +54,18 @@ namespace App {
         }
 
         void pomodoro::WorkPresentation(SDL_Texture* texture, backEnd::Timer chrono) {
-            if (ImGui::Selectable("session de concentration", &m_Is_workSession, 0, ImVec2(450.0f, 75.0f)))
+            if (ImGui::Selectable("concentration", &m_Is_workSession, 0, ImVec2(450.0f, 75.0f)))
             ImGui::OpenPopup("session de concentration");
 
             ImVec2 center = ImGui::GetMainViewport()->GetCenter();
             ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 
             if (ImGui::BeginPopupModal("session de concentration", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
-
+                //calcul de la position centrale de la fenetre
+                float windowWidth = ImGui::GetWindowWidth();
+                float windowHeight = ImGui::GetWindowHeight();
+                ImVec2 img_size = ImVec2(300.0f, 300.0f);
+                ImGui::SetCursorPosX((windowWidth - img_size.x) /2);
                 ImGui::Image((ImTextureID)(intptr_t)texture, ImVec2(300.0f, 300.0f));
                 ImGui::Text("Ceci est la session de travail ou encore de concentration. \nAppuyez sur le bouton commencer pour lancer la session.");
                 ImGui::Separator();
@@ -79,9 +83,14 @@ namespace App {
             ImVec2 center = ImGui::GetMainViewport()->GetCenter();
             ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 
-            if (ImGui::Selectable("session de repos court", &m_Is_restSession, 0, ImVec2(450.0f, 75.0f)))
+            if (ImGui::Selectable("repos court", &m_Is_restSession, 0, ImVec2(450.0f, 75.0f)))
                 ImGui::OpenPopup("session de repos court");
-            if (ImGui::BeginPopup("session de repos court")) {
+            if (ImGui::BeginPopupModal("session de repos court", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+                //calcul de la position centrale de la fenetre
+                float windowWidth = ImGui::GetWindowWidth();
+                float windowHeight = ImGui::GetWindowHeight();
+                ImVec2 img_size = ImVec2(300.0f, 300.0f);
+                ImGui::SetCursorPosX((windowWidth - img_size.x) /2);
                 ImGui::Image((ImTextureID)(intptr_t)texture, ImVec2(300.0f, 300.0f));
                 ImGui::Text("Ceci est la session de repos court suivant \ndirectement celles concentration. appuyez sur commencer \npour lancer la session de repos court.");
                 if (ImGui::Button("commencer", ImVec2(150.0f, 60.0f))) {
@@ -99,9 +108,14 @@ namespace App {
             ImVec2 center = ImGui::GetMainViewport()->GetCenter();
             ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 
-            if (ImGui::Selectable("session de repos long", &m_Is_LongRestSession, 0, ImVec2(450.0f, 75.0f)))
+            if (ImGui::Selectable("repos long", &m_Is_LongRestSession, 0, ImVec2(450.0f, 75.0f)))
                 ImGui::OpenPopup("session de repos long");
-            if (ImGui::BeginPopup("session de repos long")) {
+            if (ImGui::BeginPopupModal("session de repos long", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+                //calcul de la position centrale de la fenetre
+                float windowWidth = ImGui::GetWindowWidth();
+                float windowHeight = ImGui::GetWindowHeight();
+                ImVec2 img_size = ImVec2(300.0f, 300.0f);
+                ImGui::SetCursorPosX((windowWidth - img_size.x) /2);
                 ImGui::Image((ImTextureID)(intptr_t)texture, ImVec2(300.0f, 300.0f));
                 ImGui::Text("Ceci est la session de repos long apparaissant \noccasionnelement après celles concentration. appuyez \nsur commencer pour lancer la session de repos court.");
                 if (ImGui::Button("commencer", ImVec2(150.0f, 60.0f))) {
@@ -116,12 +130,35 @@ namespace App {
         }
 
         /**
-         * @name WorkChronometer
-         * @brief En charge de la gestion du temps de travail
-         * se lance lors qu'une session de concentration debute
+         * @name Sessionchange
+         * @brief Cette methode charge un messsage sous la
+         * foeme d'un popupmodal à chaques variations du 
+         * compteur afin de presenter a l'utilisateur ce que
+         * chaque sessions qu'il aborde
          */
-        void pomodoro::Chronometer(bool is_session) {
-
+        void pomodoro::Explanations(int counterSession, backEnd::textureUi texture) {
+            
+            //centralisation de la fenetre de popup
+            ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+            ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+            if (counterSession == 0) {
+                ImGui::OpenPopup("presentation", ImGuiPopupFlags_NoReopen);
+            }
+            if (ImGui::BeginPopupModal("presentation", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+                //calcul de la position centrale de la fenetre
+                float windowWidth = ImGui::GetWindowWidth();
+                float windowHeight = ImGui::GetWindowHeight();
+                ImVec2 img_size = ImVec2(300.0f, 300.0f);
+                ImGui::SetCursorPosX((windowWidth - img_size.x) /2);
+                ImGui::Image((ImTextureID)(intptr_t)texture.chronoTexture, ImVec2(300.0f, 300.0f));
+                //ecriture des explications concernant le pomodoro
+                ImGui::Text(" ");
+                ImGui::Text("Ce chronomètre est un outil spécial du nom de \nchronomètre pomodoro mettant a la dispositio\nn de lutilisateur "
+                "un ensemble de sept grandes \nsessions se répartisant entre : session de conc\nentration session de repos court et enfin "
+                "une \nsession de repos long pour optimiser le travail \net la concetrarion de l'utilisateur pour fournir le \nmeilleur rendement"
+                "possible.");
+                ImGui::EndPopup();
+            }
         }
 
     } // namespace core  
