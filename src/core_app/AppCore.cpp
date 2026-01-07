@@ -23,9 +23,8 @@ namespace App {
                 ImGui::SetNextWindowSize(ImVec2(mwindow.GetWindowWidth() + 50, mwindow.GetWindowHeight() + 50));
                 ImGui::Begin("Minuteur Pomodoro", &show_interface, ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 
-                chrono.SessionProgression(mwindowUi.GettextureUI(), Session);
                 ImGui::PushFont(mwindowUi.GetFontUi(), mwindowUi.GetFontSize());
-                ImGui::BeginChild("##Tools barr", ImVec2(350.0f, 900.0f), 0, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollWithMouse);
+                ImGui::BeginChild("##Tools barr", ImVec2(350.0f, ImGui::GetWindowHeight()), 0, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollWithMouse);
                 ImGui::SameLine();
                 ImGui::Selectable("Parametre", &show_parameters, 0, ImVec2(350.0f, 100.0f));
                 ImGui::Selectable("Statistique", &show_statistics, 0, ImVec2(350.0f, 100.0f));

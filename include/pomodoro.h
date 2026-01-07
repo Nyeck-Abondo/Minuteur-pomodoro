@@ -46,7 +46,6 @@ namespace App {
             //parametre
             void TimeSettings(backEnd::Timer chrono);
             void SoundSettings();
-            void SessionProgression(backEnd::textureUi texture, backEnd::Timer chrono);
 
             //presentation de l'evolution du chrono et effets visuels
             void Chronometer(bool is_session);

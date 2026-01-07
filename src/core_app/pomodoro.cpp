@@ -35,24 +35,6 @@ namespace App {
             ImGui::Toggle("##sound", &m_Activate_Sound, ImGuiToggleFlags_Animated);
         }
 
-        /**
-         * @name SessionProgression
-         * @brief cette fonction dessine une barre horizontale de menu.
-         * ce menu non clicables est un indicateur de session, faisant 
-         * aparaitre en surbrillance la sesssion dans laquelle on se trouve
-         */
-        void pomodoro::SessionProgression(backEnd::textureUi texture, backEnd::Timer chrono) {
-            //Dessin de la barre de menu horizontale
-            ImGui::BeginChild("##progress Session",ImVec2(1600.0f, 80.0f), ImGuiChildFlags_Borders, ImGuiWindowFlags_NoScrollWithMouse);
-            WorkPresentation(texture.work, chrono);
-            ImGui::SameLine();
-            restPresentation(texture.restTexture, chrono);
-            ImGui::SameLine();
-            LongRestPresentation(texture.chronoTexture, chrono);
-
-            ImGui::EndChild();
-        }
-
         void pomodoro::WorkPresentation(SDL_Texture* texture, backEnd::Timer chrono) {
             if (ImGui::Selectable("concentration", &m_Is_workSession, 0, ImVec2(450.0f, 75.0f)))
             ImGui::OpenPopup("session de concentration");
@@ -60,7 +42,7 @@ namespace App {
             ImVec2 center = ImGui::GetMainViewport()->GetCenter();
             ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 
-            if (ImGui::BeginPopupModal("session de concentration", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+            if (ImGui::BeginPopupModal("session de concentration", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove)) {
                 //calcul de la position centrale de la fenetre
                 float windowWidth = ImGui::GetWindowWidth();
                 float windowHeight = ImGui::GetWindowHeight();
@@ -85,7 +67,7 @@ namespace App {
 
             if (ImGui::Selectable("repos court", &m_Is_restSession, 0, ImVec2(450.0f, 75.0f)))
                 ImGui::OpenPopup("session de repos court");
-            if (ImGui::BeginPopupModal("session de repos court", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+            if (ImGui::BeginPopupModal("session de repos court", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove)) {
                 //calcul de la position centrale de la fenetre
                 float windowWidth = ImGui::GetWindowWidth();
                 float windowHeight = ImGui::GetWindowHeight();
@@ -110,7 +92,7 @@ namespace App {
 
             if (ImGui::Selectable("repos long", &m_Is_LongRestSession, 0, ImVec2(450.0f, 75.0f)))
                 ImGui::OpenPopup("session de repos long");
-            if (ImGui::BeginPopupModal("session de repos long", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+            if (ImGui::BeginPopupModal("session de repos long", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove)) {
                 //calcul de la position centrale de la fenetre
                 float windowWidth = ImGui::GetWindowWidth();
                 float windowHeight = ImGui::GetWindowHeight();
