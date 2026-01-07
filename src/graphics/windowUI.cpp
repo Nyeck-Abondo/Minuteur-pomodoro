@@ -57,6 +57,9 @@ namespace App{
             SDL_DestroyTexture(mtools.soundTexture);
             SDL_DestroyTexture(mtools.statistics);
             SDL_DestroyTexture(mtools.work);
+            SDL_DestroyTexture(mtools.coffee);
+            SDL_DestroyTexture(mtools.pause);
+            SDL_DestroyTexture(mtools.pompe);
         }
 
         /**
@@ -104,19 +107,23 @@ namespace App{
         void windowUi::CreateUITexture(SDL_Renderer* Renderer) {
             mtools.settingsTexture = Load_imageTexture(Renderer, "assets/tools/icons8-settings-100.png");
             mtools.chronoTexture = Load_imageTexture(Renderer, "assets/tools/timer_15553848.png");
-            mtools.profilTexture = Load_imageTexture(Renderer, "assets/tools/user_8104772.png");
             mtools.restTexture = Load_imageTexture(Renderer, "assets/tools/person_17580600.png");
             mtools.soundTexture = Load_imageTexture(Renderer, "assets/tools/icons8-musical-note-100.png");
             mtools.statistics =Load_imageTexture(Renderer, "assets/tools/icons8-analytique-100 (1).png");
             mtools.work = Load_imageTexture(Renderer, "assets/tools/work_6190606.png");
+            mtools.coffee = Load_imageTexture(Renderer, "assets/tools/icons8-coffee-cup-100.png");
+            mtools.pause = Load_imageTexture(Renderer, "assets/tools/icons8-pause-100.png");
+            mtools.pompe = Load_imageTexture(Renderer, "assets/tools/icons8-pompes-100.png");
             //recuperation des dimensions
             SDL_GetTextureSize(mtools.settingsTexture, &settings.w, &settings.w);
             SDL_GetTextureSize(mtools.chronoTexture, &chrono.w, &chrono.h);
-            SDL_GetTextureSize(mtools.profilTexture, &profile.w, &profile.h);
             SDL_GetTextureSize(mtools.restTexture, &rest.w, &rest.h);
             SDL_GetTextureSize(mtools.soundTexture, &sound.w, &sound.h);
             SDL_GetTextureSize(mtools.statistics, &statistic.w, &statistic.h);
             SDL_GetTextureSize(mtools.work, &work.w, &work.h);
+            SDL_GetTextureSize(mtools.coffee, &coffee.w, &coffee.h);
+            SDL_GetTextureSize(mtools.pause, &pause.w, &pause.h);
+            SDL_GetTextureSize(mtools.pompe, &pompe.w, &pompe.h);
         }
 
         //style de UI

@@ -171,7 +171,7 @@ namespace App {
          */
         void AppCore::ThemeSettings() {
             //changement des themes dans le parametrage avec un combo
-            const char* mTheme [] = {"Default Theme", "Blue Theme", "Dark Light", "AOT Theme"};
+            const char* mTheme [] = {"Dark light theme-02", "Dark theme", "Dark light theme"};
             static int current_item_id = 0;
             //ici on verra Blue Theme en ouvrant le combo
             const char* preview_value = mTheme[current_item_id];
@@ -192,22 +192,18 @@ namespace App {
                         }
                         switch (i) {
                             case 0:
-                                mwindow.mCurrenTheme = backEnd::OfficialTheme::WITHE_THEME;
+                                mwindow.mCurrenTheme = backEnd::OfficialTheme::DARK_LIGHT_THEME02;
                                 mwindow.ChangePrincipalTheme(mwindow.mCurrenTheme);
                                 SDL_RenderTexture(mwindow.GetRenderer(),mwindow.GetWindowTexture(), nullptr, nullptr);
                             break;
+
                             case 1:
-                                mwindow.mCurrenTheme = backEnd::OfficialTheme::BLUE_THEME;
-                                mwindow.ChangePrincipalTheme(mwindow.mCurrenTheme);
-                                SDL_RenderTexture(mwindow.GetRenderer(),mwindow.GetWindowTexture(), nullptr, nullptr);
-                            break;
-                            case 2:
                                 mwindow.mCurrenTheme = backEnd::OfficialTheme::DARK_THEME;
                                 mwindow.ChangePrincipalTheme(mwindow.mCurrenTheme);
                                 SDL_RenderTexture(mwindow.GetRenderer(),mwindow.GetWindowTexture(), nullptr, nullptr);
                             break;
-                            case 3:
-                                mwindow.mCurrenTheme = backEnd::OfficialTheme::AOT_THEME;
+                            case 2:
+                                mwindow.mCurrenTheme = backEnd::OfficialTheme::DARK_LIGHT_THEME;
                                 mwindow.ChangePrincipalTheme(mwindow.mCurrenTheme);
                                 SDL_RenderTexture(mwindow.GetRenderer(),mwindow.GetWindowTexture(), nullptr, nullptr);
                             break;

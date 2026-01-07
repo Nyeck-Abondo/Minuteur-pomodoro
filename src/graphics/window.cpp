@@ -28,7 +28,7 @@ namespace App {
                 return false;
             }
             //fond par defaut
-            mCurrenTheme = App::backEnd::OfficialTheme::WITHE_THEME;
+            mCurrenTheme = App::backEnd::OfficialTheme::DARK_LIGHT_THEME02;
 
             winIsinitialise = true;
             return winIsinitialise;
@@ -64,20 +64,8 @@ namespace App {
         void window::ChangePrincipalTheme(backEnd::OfficialTheme theme) {
             SDL_Surface* surface = nullptr;
             switch (theme) {
-                case backEnd::OfficialTheme::BLUE_THEME :
-                    surface = IMG_Load("assets/backgrounds/klaus-andersen-2aWVqmjluIQ-unsplash (2).jpg");
-                    ImgTexture = SDL_CreateTextureFromSurface(mAppRenderer, surface);
-                    SDL_DestroySurface(surface);
-                break;
-
-                case backEnd::OfficialTheme::WITHE_THEME :
-                    surface = IMG_Load("assets/backgrounds/white-theme.png");
-                    ImgTexture = SDL_CreateTextureFromSurface(mAppRenderer, surface);
-                    SDL_DestroySurface(surface);
-                break;
-
-                case backEnd::OfficialTheme::AOT_THEME :
-                    surface = IMG_Load("assets/backgrounds/AOT_theme.jpg");
+                case backEnd::OfficialTheme::DARK_LIGHT_THEME02 :
+                    surface = IMG_Load("assets/backgrounds/dark_02.jpg");
                     ImgTexture = SDL_CreateTextureFromSurface(mAppRenderer, surface);
                     SDL_DestroySurface(surface);
                 break;

@@ -79,10 +79,8 @@ namespace App{
 
         //Cette enumeration permet le choix du theme de fond en local de la fenetre
         enum class OfficialTheme {
-            BLUE_THEME,
-            WITHE_THEME,
+            DARK_LIGHT_THEME02,
             DARK_LIGHT_THEME,
-            AOT_THEME,
             DARK_THEME
         };
 
@@ -95,6 +93,9 @@ namespace App{
             SDL_Texture* settingsTexture;
             SDL_Texture* work;
             SDL_Texture* statistics;
+            SDL_Texture* pause;
+            SDL_Texture* pompe;
+            SDL_Texture* coffee;
         };
 
         //taille des textures
