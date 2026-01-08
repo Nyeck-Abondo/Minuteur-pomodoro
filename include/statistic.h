@@ -43,7 +43,7 @@ namespace App {
             //initialisation
             void StatisticInitialisation();
 
-            void WorkSessionComplete(int& minutes, float& seconde);
+            void WorkSessionComplete(int& minutes, float& seconde, int workminute, int restminute, int longRestMinutes);
             void ShortRestSessionDone(int minutes, float seconde, int countSession);
             void LongRestSessionDonse(int minutes, float seconde);
         };

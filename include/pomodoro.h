@@ -41,10 +41,13 @@ namespace App {
             bool GetIsWorkingSession() { return m_Is_workSession; }
             bool GetIsRestSession() { return m_Is_restSession;}
             bool GetIsLongRestSession() { return m_Is_LongRestSession; }
+            int GetWorkMinutes() { return m_Workminuttes; }
+            int GetRestMinutes() { return m_RestMinutes; }
+            int GetLonRestMinutes() { return m_LongRest_Minutes; }
 
             //METHODES
             //parametre
-            void TimeSettings(backEnd::Timer chrono);
+            void TimeSettings();
             void SoundSettings();
 
             //presentation de l'evolution du chrono et effets visuels

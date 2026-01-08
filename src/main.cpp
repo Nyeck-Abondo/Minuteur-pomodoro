@@ -7,7 +7,7 @@ int main (int arc, char* argv[]) {
     //creation du coeur
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
-    App::core::AppCore Engine(1600.0f, 900.0f, "Minuteur Pomodoro", ImGui::GetIO());
+    App::core::AppCore Engine(1366.0f, 768.0f, "Minuteur Pomodoro", ImGui::GetIO());
 
     //initialia=sation du coeur
     if (!Engine.AppInitialised()) {

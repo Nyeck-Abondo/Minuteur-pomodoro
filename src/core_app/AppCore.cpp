@@ -24,23 +24,24 @@ namespace App {
                 ImGui::Begin("Minuteur Pomodoro", &show_interface, ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 
                 ImGui::PushFont(mwindowUi.GetFontUi(), mwindowUi.GetFontSize());
-                ImGui::BeginChild("##Tools barr", ImVec2(350.0f, ImGui::GetWindowHeight()), 0, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollWithMouse);
-                ImGui::SameLine();
-                ImGui::Selectable("Parametre", &show_parameters, 0, ImVec2(350.0f, 100.0f));
-                ImGui::Selectable("Statistique", &show_statistics, 0, ImVec2(350.0f, 100.0f));
-                ImGui::Selectable("Get Started", &Get_started, 0, ImVec2(350.0f, 100.0f));
-                ImGui::Selectable("Restart", &restart, 0, ImVec2(350.0f, 100.0f));
+                ImGui::SetNextWindowBgAlpha(0.75f);
+                ImGui::BeginChild("##Tools barr", ImVec2(300.0f, ImGui::GetWindowHeight()), 0, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollWithMouse);
+                ImGui::Selectable("Parametre", &show_parameters, 0, ImVec2(300.0f, 100.0f));
+                ImGui::Selectable("Statistique", &show_statistics, 0, ImVec2(300.0f, 100.0f));
+                ImGui::Selectable("Get Started", &Get_started, 0, ImVec2(300.0f, 100.0f));
+                ImGui::Selectable("Restart", &restart, 0, ImVec2(300.0f, 100.0f));
                 chrono.WorkPresentation(mwindowUi.GettextureUI().work, Session);
                 chrono.restPresentation(mwindowUi.GettextureUI().restTexture, Session);
                 chrono.LongRestPresentation(mwindowUi.GettextureUI().chronoTexture, Session);
 
                 ImGui::EndChild();
                 //calcul des statistiques
-            mstatistics.ShortRestSessionDone(Session.minutes, Session.secondes, mstatistics.GetPeriod().completed);
+                mstatistics.ShortRestSessionDone(Session.minutes, Session.secondes, mstatistics.GetPeriod().completed);
+                mstatistics.WorkSessionComplete(Session.minutes, Session.secondes, chrono.GetWorkMinutes(), chrono.GetRestMinutes(), chrono.GetLonRestMinutes());
                 //explication d'entree de jeu
                 static int count = 0;
-                if (count <= 500) count++;
-                if (count < 500) {
+                if (count <= 300) count++;
+                if (count < 300) {
                     chrono.Explanations(mstatistics.GetPeriod().completed, mwindowUi.GettextureUI());
                 }
                 
@@ -50,8 +51,10 @@ namespace App {
                     show_statistics = false;
                 }
                 //fenetres des stats
-                statisticsUi();
-
+                if (show_statistics) {
+                    statisticsUi();
+                }
+                
                 //fenetre des chronometres
                 ImVec2 center = ImGui::GetMainViewport()->GetCenter();
                 ImGui::SetNextWindowPos(ImVec2(center.x + 90.0f, center.y), 0, ImVec2(0.5, 0.55));
@@ -65,7 +68,7 @@ namespace App {
                 }
                 
                 //affichage du chronometre
-                ImGui::PushFont(mwindowUi.GetFontUi(), 150.0f);
+                ImGui::PushFont(mwindowUi.GetFontUi(), 100.0f);
                 ImGui::Text("%s", Session.chrono);
                 ImGui::PopFont();
                 //progression des sessions
@@ -155,7 +158,7 @@ namespace App {
             //gestion du son de l'application
             chrono.SoundSettings();
             //parametre de temps
-            chrono.TimeSettings(Session);
+            chrono.TimeSettings();
             //parametre de choix de theme d'arriere plan
             ThemeSettings();
             //parametrage du temps des sessions
@@ -215,7 +218,7 @@ namespace App {
 
         void AppCore::statisticsUi() {
             //calcul des sessions completes
-            mstatistics.WorkSessionComplete(Session.minutes, Session.secondes);
+            
             Statistic::SessionDoneUi(mwindowUi.GetFontUi(), std::to_string(mstatistics.GetPeriod().completed).c_str());
             Statistic::ElapsedTimeUi(mwindowUi.GetFontUi(), Session.timeCounter);
             Statistic::TotalPauseUi(mwindowUi.GetFontUi(), mstatistics.GetPause().short_paused);

@@ -4,7 +4,7 @@ namespace App {
     namespace core {
         
         pomodoro::pomodoro(): m_WorkChrono({0, 5.0f}),m_statisitcs(), m_Activate_Sound(true), m_Is_restSession(false),
-                m_Is_workSession(false), m_Is_LongRestSession(false), m_Workminuttes(20), m_WorkSecondes(0), m_RestMinutes(5),
+                m_Is_workSession(false), m_Is_LongRestSession(false), m_Workminuttes(25), m_WorkSecondes(0), m_RestMinutes(5),
                 m_RestSeconeds(0), m_LongRest_Minutes(15), m_LongRest_Secondes(0) {
                     std::cout << "⏱️ Creation du pomodoro effectuée avec succès !" <<std::endl;
                 }
@@ -13,13 +13,10 @@ namespace App {
             std::cout <<"🛠️ Destruction du pomodoro effectuée avec succès !!" << std::endl;
         }
 
-        void pomodoro::TimeSettings(backEnd::Timer chrono) {
-            int values1[] = {m_Workminuttes, (int)m_WorkSecondes};
-            int values2[] = {m_RestMinutes, (int)m_RestSeconeds};
-            int values3[] = {m_LongRest_Minutes, (int)m_LongRest_Secondes};
-            ImGui::SliderInt("Travail(m/s)", &chrono.minutes, 0, 60);
-            ImGui::SliderInt2("repos (m/s)", values2, 0, 30);
-            ImGui::SliderInt2("Pause Longue", values3, 0, 60);
+        void pomodoro::TimeSettings() {
+            ImGui::SliderInt("Travail(m/s)", &m_Workminuttes, 0, 60);
+            ImGui::SliderInt("repos (m/s)", &m_RestMinutes, 0, 30);
+            ImGui::SliderInt("Pause Longue", &m_LongRest_Minutes, 0, 60);
         }
 
         /**

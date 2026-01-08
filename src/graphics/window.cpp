@@ -71,7 +71,7 @@ namespace App {
                 break;
 
                 case backEnd::OfficialTheme::DARK_LIGHT_THEME :
-                surface = IMG_Load("assets/backgrounds/dark_theme.jpg");
+                surface = IMG_Load("assets/backgrounds/true-dark.png");
                 ImgTexture = SDL_CreateTextureFromSurface(mAppRenderer, surface);
                 SDL_DestroySurface(surface);
                 break;
