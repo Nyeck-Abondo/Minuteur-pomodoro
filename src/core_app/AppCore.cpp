@@ -2,8 +2,8 @@
 namespace App {
     namespace core {
         //constructeur
-        AppCore::AppCore(float width, float height, std::string title, ImGuiIO& io): mwindow(height, width, title), mwindowUi(25.0f, io), counter_session(1)
-        ,Session(0, 3) , mSessionNumber(5), mLong_breakInterval(2), mstatistics(), mvolume(50) {
+        AppCore::AppCore(float width, float height, std::string title, ImGuiIO& io): mwindow(height, width, title), mwindowUi(25.0f, io)
+        , mSessionNumber(5), mLong_breakInterval(2), mstatistics(), mvolume(50) {
             std::cout << "🧰 Creation du coeur de l'application reussie avec succes !!" << std::endl;
         }
 
@@ -36,13 +36,13 @@ namespace App {
 
                 ImGui::EndChild();
                 //calcul des statistiques
-                mstatistics.ShortRestSessionDone(Session.minutes, Session.secondes, mstatistics.GetPeriod().completed);
+                mstatistics.ShortRestSessionDone(Session.minutes, Session.secondes, mstatistics.GetPeriod());
                 mstatistics.WorkSessionComplete(Session.minutes, Session.secondes, chrono.GetWorkMinutes(), chrono.GetRestMinutes(), chrono.GetLonRestMinutes());
                 //explication d'entree de jeu
                 static int count = 0;
                 if (count <= 100) count++;
                 if (count < 100) {
-                    chrono.Explanations(mstatistics.GetPeriod().completed, mwindowUi.GettextureUI());
+                    chrono.Explanations(mstatistics.GetPeriod(), mwindowUi.GettextureUI());
                 }
                 
                 //fenetre des parametres
@@ -60,16 +60,16 @@ namespace App {
                 ImGui::SetNextWindowPos(ImVec2(center.x + 90.0f, center.y), 0, ImVec2(0.5, 0.55));
                 ImGui::BeginChild("##chrono01", ImVec2(650.0f, 500.0f), ImGuiChildFlags_None, ImGuiWindowFlags_NoBackground);
 
-                //met a jour l'état du chronometre pour quùil s'adapte en fonction de la session actuelle
-                Session.updateTimer(mstatistics.GetPeriod().completed);
                 if (Get_started) {
                     //calcul du temps restant
                     Session.timeleft();
                 }
                 
+                //insrtion de l'image representative de la session
+                SessionRepresentaion(mstatistics.GetPeriod());
                 //affichage du chronometre
                 ImGui::PushFont(mwindowUi.GetFontUi(), 80.0f);
-                ImGui::SetCursorPos(ImVec2(215.0f, 210.0f));
+                ImGui::SetCursorPos(ImVec2(210.0f, 210.0f));
                 ImGui::Text("%s", Session.chrono);
                 ImGui::PopFont();
                 ImGui::SetCursorPos(ImVec2(150.0f, 20.0f));
@@ -224,10 +224,29 @@ namespace App {
         void AppCore::statisticsUi() {
             //calcul des sessions completes
             
-            Statistic::SessionDoneUi(mwindowUi.GetFontUi(), std::to_string(mstatistics.GetPeriod().completed).c_str());
+            Statistic::SessionDoneUi(mwindowUi.GetFontUi(), std::to_string(mstatistics.GetPeriod()).c_str());
             Statistic::ElapsedTimeUi(mwindowUi.GetFontUi(), Session.timeCounter);
-            Statistic::TotalPauseUi(mwindowUi.GetFontUi(), mstatistics.GetPause().short_paused);
+            Statistic::TotalPauseUi(mwindowUi.GetFontUi(), mstatistics.GetPause().total_restDone);
 
+        }
+
+        void AppCore::SessionRepresentaion(int counterSession) {
+            if (counterSession == 0) {
+                ImGui::SetCursorPos(ImVec2(340.0f, 130.0f));
+                ImGui::Image((ImTextureID)(intptr_t) mwindowUi.GettextureUI().chronoTexture, ImVec2(70.0f, 70.0f));
+            }
+            else if (counterSession % 3 == 0 || counterSession == 1) {
+                ImGui::SetCursorPos(ImVec2(340.0f, 130.0f));
+                ImGui::Image((ImTextureID)(intptr_t) mwindowUi.GettextureUI().pompe, ImVec2(70.0f, 70.0f));
+            }
+            else if (counterSession % 2 == 0 && counterSession % 4 != 0) {
+                ImGui::SetCursorPos(ImVec2(340.0f, 130.0f));
+                ImGui::Image((ImTextureID)(intptr_t) mwindowUi.GettextureUI().coffee, ImVec2(70.0f, 70.0f));
+            }
+            else if (counterSession % 4 == 0) {
+                ImGui::SetCursorPos(ImVec2(340.0f, 130.0f));
+                ImGui::Image((ImTextureID)(intptr_t) mwindowUi.GettextureUI().restTexture, ImVec2(70.0f, 70.0f));
+            }
         }
 
     } // namespace AppCore

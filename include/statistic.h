@@ -21,6 +21,7 @@ namespace App {
         struct paused {
             int long_paused;
             int short_paused;
+            int total_restDone;
         };
 
         /**
@@ -29,7 +30,7 @@ namespace App {
          */
         class stats {
             private:
-                session period;
+                int completed;
                 paused rest;
 
             public:
@@ -37,7 +38,7 @@ namespace App {
             ~stats();
 
             //GETTERS
-            session GetPeriod() { return period; }
+            int GetPeriod() { return completed; }
             paused GetPause() { return rest; }
 
             //initialisation

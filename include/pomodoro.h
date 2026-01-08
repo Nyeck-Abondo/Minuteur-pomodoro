@@ -32,7 +32,6 @@ namespace App {
             bool m_Is_LongRestSession;
             
             public:
-            backEnd::Timer m_WorkChrono;
             //constructeur et destructeur
             pomodoro();
             ~pomodoro();

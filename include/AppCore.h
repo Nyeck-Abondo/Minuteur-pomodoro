@@ -6,8 +6,6 @@
 #include "pomodoro.h"
 #include "renderStats.h"
 
-#define IM_CLAMP(V, MN, MX)     ((V) < (MN) ? (MN) : (V) > (MX) ? (MX) : (V))
-
 namespace App {
     namespace core {
         class AppCore {
@@ -21,7 +19,6 @@ namespace App {
             int mSessionNumber;
             int mLong_breakInterval;
             int mvolume;
-            int counter_session;
 
             //booleens  d'affichage
             bool mrunning = true;
@@ -56,6 +53,7 @@ namespace App {
 
             void ParameterUi(int session_mumber, backEnd::Timer work, int long_BreakInterval, int volume);
             void statisticsUi();
+            void SessionRepresentaion(int counterSession);
 
             //sous instances des fenetres secondaires
             void ThemeSettings();

@@ -3,7 +3,7 @@
 namespace App {
     namespace core {
         
-        pomodoro::pomodoro(): m_WorkChrono({0, 5.0f}),m_statisitcs(), m_Activate_Sound(true), m_Is_restSession(false),
+        pomodoro::pomodoro(): m_statisitcs(), m_Activate_Sound(true), m_Is_restSession(false),
                 m_Is_workSession(false), m_Is_LongRestSession(false), m_Workminuttes(25), m_WorkSecondes(0), m_RestMinutes(5),
                 m_RestSeconeds(0), m_LongRest_Minutes(15), m_LongRest_Secondes(0) {
                     std::cout << "⏱️ Creation du pomodoro effectuée avec succès !" <<std::endl;

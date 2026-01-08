@@ -14,7 +14,7 @@ namespace App{
             int timeCounter = 0;
             char chrono[256] = {'0', '0', ' ', ':', ' ', '0', '0', '.', '0', '0'};
 
-            Timer(int min, float second): minutes(min), secondes(second) {
+            Timer() {
                 std::cout << "✅ creation du chronometre reussie !" << std::endl;
             }
 
@@ -46,34 +46,6 @@ namespace App{
             void InitialiseTimer(int min, float sec) {
                 minutes = min;
                 secondes =sec;
-            }
-            
-            /**
-             * @name updateTimer
-             * @brief cete fonction permet le changement adaptatif du temps alloué
-             * par le chronomètre à une session en fonction du numéro fourni par le
-             * compteur de session.
-             * @param  counterSession il représente le compteur de session de l'application
-             * et definit ici le type de la session dans laquelle on se trouve.
-             */
-            void updateTimer(int countSession) {
-                if (minutes == 0 && secondes == 0) {
-                    if(countSession < 7) {
-                        if (countSession % 3 == 0 || countSession == 0) {
-                            InitialiseTimer(0, 5.0f);
-                            countSession++;
-                        }
-                        if (countSession % 2 == 0 && countSession % 6 != 0 && countSession != 0) {
-                            minutes = 3;
-                            secondes = 10.0f;
-                            countSession++;
-                        }
-                        if (countSession % 2 != 0 && countSession % 6 == 0) {
-                            InitialiseTimer(15, 0);
-                        }
-                    }
-                    
-                }
             }
         };
 

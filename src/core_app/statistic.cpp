@@ -2,34 +2,40 @@
 
 namespace App {
     namespace Statistic {
-        stats::stats(): period({1 , 0}), rest({0, 0}) {}
+        stats::stats(): completed(1), rest({0, 0}) {}
         stats::~stats() {}
 
         void stats::StatisticInitialisation() {
-            period.completed = 0;
-            period.skiped = 0;
+            completed = 0;
             rest.long_paused = 0;
             rest.short_paused = 0;
+            rest.total_restDone = 0;
         }
 
         void stats::WorkSessionComplete(int& minutes, float& seconde, int workminute, int restminute, int longRestMinutes) {
             if(minutes == 0 && seconde > 0.0f && seconde < 0.015f) {
-                if (period.completed < 7) {
-                    if (period.completed % 3 == 0 || period.completed == 0 || period.completed == 1) {
+                if (completed < 7) {
+                    completed++;
+                    if (completed == 1) {
+                        minutes = 0;
+                        seconde = 3;
+                        
+                    }
+                    else if (completed % 3 == 0) {
                         minutes = workminute;
                         seconde = 0;
-                        period.completed++;
                     }
-                    else if (period.completed % 2 == 0 && period.completed % 4 != 0) {
+                    else if ((completed % 2 == 0) && (completed % 4 != 0)) {
                         minutes = restminute;
                         seconde = 0;
-                        period.completed++;
+                        rest.short_paused++;
+                        rest.total_restDone++;
                     }
-                    else if (period.completed % 4 == 0) {
+                    else if (completed % 4 == 0) {
                         minutes = longRestMinutes;
                         seconde = 0;
-                        period.completed++;
                         rest.long_paused++;
+                        rest.total_restDone++;
                     }
                 }
             }
@@ -45,7 +51,7 @@ namespace App {
 
         void stats::LongRestSessionDonse(int minutes, float seconde) {
             if (minutes == 0 && seconde > 1.0f && seconde <= 1.015f) {
-                if (period.completed % 4 == 0) {
+                if (completed % 4 == 0) {
                     rest.long_paused++;
                 }
             }
