@@ -40,8 +40,8 @@ namespace App {
                 mstatistics.WorkSessionComplete(Session.minutes, Session.secondes, chrono.GetWorkMinutes(), chrono.GetRestMinutes(), chrono.GetLonRestMinutes());
                 //explication d'entree de jeu
                 static int count = 0;
-                if (count <= 300) count++;
-                if (count < 300) {
+                if (count <= 100) count++;
+                if (count < 100) {
                     chrono.Explanations(mstatistics.GetPeriod().completed, mwindowUi.GettextureUI());
                 }
                 
@@ -68,9 +68,14 @@ namespace App {
                 }
                 
                 //affichage du chronometre
-                ImGui::PushFont(mwindowUi.GetFontUi(), 100.0f);
+                ImGui::PushFont(mwindowUi.GetFontUi(), 80.0f);
+                ImGui::SetCursorPos(ImVec2(215.0f, 210.0f));
                 ImGui::Text("%s", Session.chrono);
                 ImGui::PopFont();
+                ImGui::SetCursorPos(ImVec2(150.0f, 20.0f));
+                ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(252.0f / 255.0f, 1.0f, 254.0f, 1.0f));
+                ImGuiExt::ProgressBarArc(450.0f, 360, ((float)Session.minutes * 60 + Session.secondes) * 100.0f / ((float)chrono.GetWorkMinutes() * 60.0f), 25.0f);
+                ImGui::PopStyleColor();
                 //progression des sessions
                 ImGui::EndChild();
                 ImGui::PopFont();
