@@ -12,28 +12,28 @@ namespace App {
             rest.total_restDone = 0;
         }
 
-        void stats::WorkSessionComplete(int& minutes, float& seconde, int workminute, int restminute, int longRestMinutes) {
+        void stats::WorkSessionComplete(int& minutes, float& seconde, int workminute,int workseconde, int restminute, int restseconde, int longRestMinutes, int longRestSecondes) {
             if(minutes == 0 && seconde > 0.0f && seconde < 0.015f) {
                 if (completed < 7) {
                     completed++;
                     if (completed == 1) {
-                        minutes = 0;
-                        seconde = 3;
+                        minutes = workminute;
+                        seconde = workseconde;
                         
                     }
-                    else if (completed % 3 == 0) {
+                    else if (completed % 2 != 0) {
                         minutes = workminute;
-                        seconde = 0;
+                        seconde = workseconde;
                     }
                     else if ((completed % 2 == 0) && (completed % 4 != 0)) {
                         minutes = restminute;
-                        seconde = 0;
+                        seconde = restseconde;
                         rest.short_paused++;
                         rest.total_restDone++;
                     }
                     else if (completed % 4 == 0) {
                         minutes = longRestMinutes;
-                        seconde = 0;
+                        seconde = longRestSecondes;
                         rest.long_paused++;
                         rest.total_restDone++;
                     }

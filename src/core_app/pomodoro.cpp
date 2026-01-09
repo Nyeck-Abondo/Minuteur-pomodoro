@@ -15,8 +15,11 @@ namespace App {
 
         void pomodoro::TimeSettings() {
             ImGui::SliderInt("Travail(m/s)", &m_Workminuttes, 0, 60);
+            ImGui::SliderInt("travail(s)", &m_WorkSecondes, 0, 60);
             ImGui::SliderInt("repos (m/s)", &m_RestMinutes, 0, 30);
+            ImGui::SliderInt("repos(s)", &m_RestSeconeds, 0, 60);
             ImGui::SliderInt("Pause Longue", &m_LongRest_Minutes, 0, 60);
+            ImGui::SliderInt("Pause Longue (s)", &m_LongRest_Secondes, 0, 60);
         }
 
         /**
@@ -138,6 +141,19 @@ namespace App {
                 "possible.");
                 ImGui::EndPopup();
             }
+        }
+
+        float pomodoro::totalTimeToDo (int counterSession) {
+            if (counterSession % 2 != 0 || counterSession == 1) {
+                return (float)(m_Workminuttes * 60.0f + m_WorkSecondes);
+            }
+            else if (counterSession % 2 == 0 && counterSession % 4 != 0) {
+                return (float)(m_RestMinutes * 60.0f + m_RestSeconeds);
+            }
+            else if (counterSession % 4 == 0) {
+                return (float)(m_LongRest_Minutes * 60.0f + m_LongRest_Secondes);
+            }
+            return 60.0f;
         }
 
     } // namespace core  

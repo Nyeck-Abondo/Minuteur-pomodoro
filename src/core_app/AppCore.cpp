@@ -37,7 +37,8 @@ namespace App {
                 ImGui::EndChild();
                 //calcul des statistiques
                 mstatistics.ShortRestSessionDone(Session.minutes, Session.secondes, mstatistics.GetPeriod());
-                mstatistics.WorkSessionComplete(Session.minutes, Session.secondes, chrono.GetWorkMinutes(), chrono.GetRestMinutes(), chrono.GetLonRestMinutes());
+                mstatistics.WorkSessionComplete(Session.minutes, Session.secondes, chrono.GetWorkMinutes(), chrono.GetWorkSecondes(), chrono.GetRestMinutes(),
+                                                chrono.GetRestSecondes(), chrono.GetLonRestMinutes(), chrono.GetLongRestSecondes());
                 //explication d'entree de jeu
                 static int count = 0;
                 if (count <= 100) count++;
@@ -74,7 +75,7 @@ namespace App {
                 ImGui::PopFont();
                 ImGui::SetCursorPos(ImVec2(150.0f, 20.0f));
                 ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(252.0f / 255.0f, 1.0f, 254.0f, 1.0f));
-                ImGuiExt::ProgressBarArc(450.0f, 360, ((float)Session.minutes * 60 + Session.secondes) * 100.0f / ((float)chrono.GetWorkMinutes() * 60.0f), 25.0f);
+                ImGuiExt::ProgressBarArc(450.0f, 360, ((float)Session.minutes * 60 + Session.secondes) * 100.0f / chrono.totalTimeToDo(mstatistics.GetPeriod()), 25.0f);
                 ImGui::PopStyleColor();
                 //progression des sessions
                 ImGui::EndChild();
@@ -133,29 +134,6 @@ namespace App {
             std::cout << "🛠️ Arret du moteur de l'application !!" <<std::endl;
         }
 
-        /**
-         * @name parameterUi
-         * @brief cette fontion est chargée d'afficher les options de parametrage de
-         * l'application. elle comprend les reglages de volumes, les reglages des 
-         * sessions de temps de travail et de repos, le nombre d'intervalle de repos
-         * long
-         * 
-         * @param session_number nombre de session pomodoro
-         * ou encore connu sous le nom de session de concentration
-         * @param workinTime regulation du temps
-         * de travail de l'utilisateur. elle varien entre 5 et 60 minutes pour assurer
-         * une concentration optimale
-         * @param short_breakTime durée des session de pause courtes.
-         * elle varie entre 5 et 30 minutes, selon la convenance de l'utilisateur.
-         * @param long_BreakTime définition de la durée des longues
-         * sessions de pause. Elle s'étend de 20 à 60 minutes selon les préférences de lùutilisateur
-         * @param long_BreakInterval defini une constente d'apparition des longues pauses.
-         * elle peut varier entre 5 et 10. ces chiffres représentant le nombre de session pomodoro
-         * repos court.
-         * @param volume permet la gestion du vokume du minuteur
-         * @param theme permet de changer le theme en arriere plan de la'application
-         * @return nothing
-         */
         void AppCore::ParameterUi(int session_mumber, backEnd::Timer work, int long_BreakInterval, int volume) {
             ImGui::SetNextWindowPos(ImVec2(251.0f, 400.0f), 0, ImVec2(0, 0.55f));
             ImGui::BeginChild("##parameter", ImVec2(500, 600), 0, ImGuiWindowFlags_Modal);
@@ -235,7 +213,7 @@ namespace App {
                 ImGui::SetCursorPos(ImVec2(340.0f, 130.0f));
                 ImGui::Image((ImTextureID)(intptr_t) mwindowUi.GettextureUI().chronoTexture, ImVec2(70.0f, 70.0f));
             }
-            else if (counterSession % 3 == 0 || counterSession == 1) {
+            else if (counterSession % 2 != 0 || counterSession == 1) {
                 ImGui::SetCursorPos(ImVec2(340.0f, 130.0f));
                 ImGui::Image((ImTextureID)(intptr_t) mwindowUi.GettextureUI().pompe, ImVec2(70.0f, 70.0f));
             }

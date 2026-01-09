@@ -41,16 +41,19 @@ namespace App {
             bool GetIsRestSession() { return m_Is_restSession;}
             bool GetIsLongRestSession() { return m_Is_LongRestSession; }
             int GetWorkMinutes() { return m_Workminuttes; }
+            int GetWorkSecondes() { return m_WorkSecondes; }
             int GetRestMinutes() { return m_RestMinutes; }
+            int GetRestSecondes() { return m_RestSeconeds; }
             int GetLonRestMinutes() { return m_LongRest_Minutes; }
+            int GetLongRestSecondes() { return m_LongRest_Secondes; }
 
             //METHODES
             //parametre
             void TimeSettings();
             void SoundSettings();
+            float totalTimeToDo(int counterSession);
 
             //presentation de l'evolution du chrono et effets visuels
-            void Chronometer(bool is_session);
             void WorkPresentation(SDL_Texture* texture, backEnd::Timer chrono);
             void restPresentation(SDL_Texture* texture, backEnd::Timer chrono);
             void LongRestPresentation(SDL_Texture* texture, backEnd::Timer chrono);
