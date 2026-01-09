@@ -20,6 +20,7 @@ namespace App {
             ImGui::SliderInt("repos(s)", &m_RestSeconeds, 0, 60);
             ImGui::SliderInt("Pause Longue", &m_LongRest_Minutes, 0, 60);
             ImGui::SliderInt("Pause Longue (s)", &m_LongRest_Secondes, 0, 60);
+            ImGui::SliderInt("tours", &m_SessionNumber, 1, 20);
         }
 
         /**
@@ -156,6 +157,6 @@ namespace App {
             return 60.0f;
         }
 
-    } // namespace core  
+    } // namespace core
 } // namespace App
 

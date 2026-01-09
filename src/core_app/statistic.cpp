@@ -2,7 +2,7 @@
 
 namespace App {
     namespace Statistic {
-        stats::stats(): completed(1), rest({0, 0}) {}
+        stats::stats(): completed(0), rest({0, 0}) {}
         stats::~stats() {}
 
         void stats::StatisticInitialisation() {
@@ -12,9 +12,9 @@ namespace App {
             rest.total_restDone = 0;
         }
 
-        void stats::WorkSessionComplete(int& minutes, float& seconde, int workminute,int workseconde, int restminute, int restseconde, int longRestMinutes, int longRestSecondes) {
+        void stats::WorkSessionComplete(int& minutes, float& seconde, int sessionNumber,int workminute,int workseconde, int restminute, int restseconde, int longRestMinutes, int longRestSecondes) {
             if(minutes == 0 && seconde > 0.0f && seconde < 0.015f) {
-                if (completed < 7) {
+                if (completed < sessionNumber) {
                     completed++;
                     if (completed == 1) {
                         minutes = workminute;

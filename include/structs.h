@@ -14,7 +14,7 @@ namespace App{
             int timeCounter = 0;
             char chrono[256] = {'0', '0', ' ', ':', ' ', '0', '0', '.', '0', '0'};
 
-            Timer() {
+            Timer(int min, float sec): minutes(min), secondes(sec) {
                 std::cout << "✅ creation du chronometre reussie !" << std::endl;
             }
 

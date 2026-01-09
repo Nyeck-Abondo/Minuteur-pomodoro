@@ -24,6 +24,7 @@ namespace App {
             int m_LongRest_Minutes;
             int m_LongRest_Secondes;
             int m_Volume;
+            int m_SessionNumber;
 
             //booleens d'affichage
             bool m_Activate_Sound;
@@ -46,6 +47,7 @@ namespace App {
             int GetRestSecondes() { return m_RestSeconeds; }
             int GetLonRestMinutes() { return m_LongRest_Minutes; }
             int GetLongRestSecondes() { return m_LongRest_Secondes; }
+            int GetSessionNumber() { return m_SessionNumber; }
 
             //METHODES
             //parametre

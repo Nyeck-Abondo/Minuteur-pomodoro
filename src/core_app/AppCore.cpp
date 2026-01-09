@@ -3,7 +3,7 @@ namespace App {
     namespace core {
         //constructeur
         AppCore::AppCore(float width, float height, std::string title, ImGuiIO& io): mwindow(height, width, title), mwindowUi(25.0f, io)
-        , mSessionNumber(5), mLong_breakInterval(2), mstatistics(), mvolume(50) {
+        , mLong_breakInterval(2), mstatistics(), mvolume(50), Session(0, 3) {
             std::cout << "🧰 Creation du coeur de l'application reussie avec succes !!" << std::endl;
         }
 
@@ -35,9 +35,17 @@ namespace App {
                 chrono.LongRestPresentation(mwindowUi.GettextureUI().chronoTexture, Session);
 
                 ImGui::EndChild();
+
+                //gestion de la reprise a zero
+                if (restart) {
+                    mstatistics.StatisticInitialisation();
+                    Session.InitialiseTimer(0, 3);
+                    restart = false;
+                }
+
                 //calcul des statistiques
                 mstatistics.ShortRestSessionDone(Session.minutes, Session.secondes, mstatistics.GetPeriod());
-                mstatistics.WorkSessionComplete(Session.minutes, Session.secondes, chrono.GetWorkMinutes(), chrono.GetWorkSecondes(), chrono.GetRestMinutes(),
+                mstatistics.WorkSessionComplete(Session.minutes, Session.secondes, chrono.GetSessionNumber(), chrono.GetWorkMinutes(), chrono.GetWorkSecondes(), chrono.GetRestMinutes(),
                                                 chrono.GetRestSecondes(), chrono.GetLonRestMinutes(), chrono.GetLongRestSecondes());
                 //explication d'entree de jeu
                 static int count = 0;
@@ -48,7 +56,7 @@ namespace App {
                 
                 //fenetre des parametres
                 if (show_parameters) {
-                    ParameterUi(mSessionNumber, Session, mLong_breakInterval, mvolume);
+                    ParameterUi(chrono.GetSessionNumber(), Session, mLong_breakInterval, mvolume);
                     show_statistics = false;
                 }
                 //fenetres des stats
@@ -68,6 +76,12 @@ namespace App {
                 
                 //insrtion de l'image representative de la session
                 SessionRepresentaion(mstatistics.GetPeriod());
+
+                //ajout du bouton de lancement
+                ImGui::SetCursorPos(ImVec2(340.0f, 355.0f));
+                if (ImGui::ImageButton("start", (ImTextureID)(intptr_t) mwindowUi.GettextureUI().pause, ImVec2(70.0f, 70.0f))) {
+                    Get_started = true;
+                }
                 //affichage du chronometre
                 ImGui::PushFont(mwindowUi.GetFontUi(), 80.0f);
                 ImGui::SetCursorPos(ImVec2(210.0f, 210.0f));
