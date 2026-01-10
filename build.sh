@@ -146,7 +146,7 @@ echo -e "${VERT}${GRAS}[4/5]-vérification de la presence du dossier INCLUDE pou
 if [ ! -d "include" ]
 then
     echo -e "${ROUGE}ABSCENCE DU DOSSIER ACCEUILLANT LES HEADERS LOCAUX"
-    echo "⚠️ARRET DU PROGRAMME DE COMPILATION"
+    echo "⚠️ ARRET DU PROGRAMME DE COMPILATION"
     exit 1
 else
     echo "✅ PRESESNCE DU DOSSIER INCLUDE POUR LES HEADERS LOCAUX"
@@ -162,7 +162,7 @@ LINKER="-lSDL3 -lSDL3_image"
 VERSION="-std=c++17"
 
 echo
-echo "LANCEMENT DE LA COMMANDE DE COMPILATION...."
+echo -e "${CLIGNOTANT}LANCEMENT DE LA COMMANDE DE COMPILATION....${NC}"
 $COMPILER $MODULE_DIR -o  $EXECUTABLE $LINK_HEADER $LINKER $VERSION
 
 echo "executez avec: ./build/pomodoro.exe"

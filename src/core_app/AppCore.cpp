@@ -53,6 +53,9 @@ namespace App {
                 if (count < 100) {
                     chrono.Explanations(mstatistics.GetPeriod(), mwindowUi.GettextureUI());
                 }
+                //test fenetre globale de statistics
+                if (mstatistics.GetPeriod() == 2) { Statistic::GlobalStatsWindow(mwindowUi.GettextureUI().statistics, mstatistics.GetPause().total_restDone, mstatistics.GetPause().short_paused,
+                mstatistics.GetPause().long_paused, mstatistics.GetPeriod(), mstatistics.GetPeriod(), mwindowUi.GetFontUi(), Session.timeCounter); }
                 
                 //fenetre des parametres
                 if (show_parameters) {

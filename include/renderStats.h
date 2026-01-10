@@ -9,6 +9,6 @@ namespace App {
         void SessionDoneUi(ImFont* font,const char* counterSession);
         void ElapsedTimeUi(ImFont* font, int counterSession);
         void TotalPauseUi(ImFont* font, int pauseCounter);
-        
+        void GlobalStatsWindow(SDL_Texture* texture, int Totalpause, int restPause, int longPause, int completed, int counter, ImFont* font, int Timecounter);
     } // namespace Statistic
 } // namespace App
