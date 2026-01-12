@@ -54,12 +54,15 @@ namespace App {
                     chrono.Explanations(mstatistics.GetPeriod(), mwindowUi.GettextureUI());
                 }
                 //test fenetre globale de statistics
-                if (mstatistics.GetPeriod() == 2) { Statistic::GlobalStatsWindow(mwindowUi.GettextureUI().statistics, mstatistics.GetPause().total_restDone, mstatistics.GetPause().short_paused,
-                mstatistics.GetPause().long_paused, mstatistics.GetPeriod(), mstatistics.GetPeriod(), mwindowUi.GetFontUi(), Session.timeCounter); }
+                if (mstatistics.GetPeriod() == chrono.GetSessionNumber() && Session.minutes == 0 && Session.secondes <= 0.4f && Session.secondes >= 0.20f) { 
+                    show_statistics = true;
+                }
                 
                 //fenetres des stats
                 if (show_statistics) {
-                    statisticsUi();
+                    Statistic::GlobalStatsWindow(mwindowUi.GettextureUI().statistics, mstatistics.GetPause().total_restDone, mstatistics.GetPause().short_paused,
+                                                mstatistics.GetPause().long_paused, mstatistics.GetPeriod(), mstatistics.GetPeriod(), mwindowUi.GetFontUi(),
+                                                Session.timeCounter, show_statistics);
                 }
                 
                 //fenetre des chronometres

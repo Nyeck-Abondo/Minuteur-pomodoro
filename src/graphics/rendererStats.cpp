@@ -89,7 +89,7 @@ namespace App {
             ImGui::EndChild();
         }
 
-        void GlobalStatsWindow(SDL_Texture* texture, int Totalpause, int restPause, int longPause, int completed, int counter, ImFont* font, int Timecounter) {
+        void GlobalStatsWindow(SDL_Texture* texture, int Totalpause, int restPause, int longPause, int completed, int counter, ImFont* font, int Timecounter, bool& showStats) {
             float stats[] = {(float)Totalpause, (float)restPause, (float)longPause, (float)Timecounter, (float)completed};
 
             ImVec2 center = ImGui::GetMainViewport()->GetCenter();
@@ -112,7 +112,10 @@ namespace App {
                 ElapsedTimeUi(font, Timecounter);
                 TotalPauseUi(font, Totalpause);
                 ImGui::SetCursorPosX(midle.x - 250.0f);
-                if (ImGui::Button("Fermer", ImVec2(250.0f, 65.0f))) { ImGui::CloseCurrentPopup(); }
+                if (ImGui::Button("Fermer", ImVec2(250.0f, 65.0f))) {
+                    showStats = false;
+                    ImGui::CloseCurrentPopup();
+                }
                 ImGui::EndPopup();
             }
 
