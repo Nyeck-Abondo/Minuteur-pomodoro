@@ -5,7 +5,7 @@ namespace App {
         
         pomodoro::pomodoro(): m_statisitcs(), m_Activate_Sound(true), m_Is_restSession(false),
                 m_Is_workSession(false), m_Is_LongRestSession(false), m_Workminuttes(25), m_WorkSecondes(0), m_RestMinutes(5),
-                m_RestSeconeds(0), m_LongRest_Minutes(15), m_LongRest_Secondes(0) {
+                m_RestSeconeds(0), m_LongRest_Minutes(15), m_LongRest_Secondes(0), m_SessionNumber(7) {
                     std::cout << "⏱️ Creation du pomodoro effectuée avec succès !" <<std::endl;
                 }
         
@@ -14,13 +14,21 @@ namespace App {
         }
 
         void pomodoro::TimeSettings() {
+            ImGui::Spacing();
             ImGui::SliderInt("Travail(m/s)", &m_Workminuttes, 0, 60);
+            ImGui::Spacing();
             ImGui::SliderInt("travail(s)", &m_WorkSecondes, 0, 60);
+            ImGui::Spacing();
             ImGui::SliderInt("repos (m/s)", &m_RestMinutes, 0, 30);
+            ImGui::Spacing();
             ImGui::SliderInt("repos(s)", &m_RestSeconeds, 0, 60);
+            ImGui::Spacing();
             ImGui::SliderInt("Pause Longue", &m_LongRest_Minutes, 0, 60);
+            ImGui::Spacing();
             ImGui::SliderInt("Pause Longue (s)", &m_LongRest_Secondes, 0, 60);
+            ImGui::Spacing();
             ImGui::SliderInt("tours", &m_SessionNumber, 1, 20);
+            ImGui::Spacing();
         }
 
         /**
@@ -28,12 +36,15 @@ namespace App {
          * @brief gere les interfaces de modification du son dans les parametre
          */
         void pomodoro::SoundSettings() {
+            ImGui::Spacing();
             ImGui::Text("Volume");
             ImGui::SameLine(0.0f, 2.0f);
             ImGui::SliderInt(" ", &m_Volume, 0, 100);
+            ImGui::Spacing();
             ImGui::Text("Son actif");
             ImGui::SameLine(0.0f, 2.0f);
             ImGui::Toggle("##sound", &m_Activate_Sound, ImGuiToggleFlags_Animated);
+            ImGui::Spacing();
         }
 
         void pomodoro::WorkPresentation(SDL_Texture* texture, backEnd::Timer chrono) {

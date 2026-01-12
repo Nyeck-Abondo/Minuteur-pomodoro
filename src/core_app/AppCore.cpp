@@ -57,11 +57,6 @@ namespace App {
                 if (mstatistics.GetPeriod() == 2) { Statistic::GlobalStatsWindow(mwindowUi.GettextureUI().statistics, mstatistics.GetPause().total_restDone, mstatistics.GetPause().short_paused,
                 mstatistics.GetPause().long_paused, mstatistics.GetPeriod(), mstatistics.GetPeriod(), mwindowUi.GetFontUi(), Session.timeCounter); }
                 
-                //fenetre des parametres
-                if (show_parameters) {
-                    ParameterUi(chrono.GetSessionNumber(), Session, mLong_breakInterval, mvolume);
-                    show_statistics = false;
-                }
                 //fenetres des stats
                 if (show_statistics) {
                     statisticsUi();
@@ -70,7 +65,7 @@ namespace App {
                 //fenetre des chronometres
                 ImVec2 center = ImGui::GetMainViewport()->GetCenter();
                 ImGui::SetNextWindowPos(ImVec2(center.x + 90.0f, center.y), 0, ImVec2(0.5, 0.55));
-                ImGui::BeginChild("##chrono01", ImVec2(650.0f, 500.0f), ImGuiChildFlags_None, ImGuiWindowFlags_NoBackground);
+                ImGui::BeginChild("##chrono01", ImVec2(650.0f, 500.0f), ImGuiChildFlags_None, ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoBringToFrontOnFocus);
 
                 if (Get_started) {
                     //calcul du temps restant
@@ -97,6 +92,12 @@ namespace App {
                 //progression des sessions
                 ImGui::EndChild();
                 ImGui::PopFont();
+
+                //fenetre des parametres
+                if (show_parameters) {
+                    ParameterUi(chrono.GetSessionNumber(), Session, mLong_breakInterval, mvolume);
+                    show_statistics = false;
+                }
                 ImGui::End();
                 //presentation du rendu de l'application
                 AppPresent();
@@ -152,8 +153,8 @@ namespace App {
         }
 
         void AppCore::ParameterUi(int session_mumber, backEnd::Timer work, int long_BreakInterval, int volume) {
-            ImGui::SetNextWindowPos(ImVec2(251.0f, 400.0f), 0, ImVec2(0, 0.55f));
-            ImGui::BeginChild("##parameter", ImVec2(500, 600), 0, ImGuiWindowFlags_Modal);
+            ImGui::SetNextWindowPos(ImVec2(280.0f, 300.0f), 0, ImVec2(0, 0.55f));
+            ImGui::BeginChild("##parameter", ImVec2(500, 600), 0, 0);
 
             //gestion du son de l'application
             chrono.SoundSettings();
@@ -161,7 +162,9 @@ namespace App {
             chrono.TimeSettings();
             //parametre de choix de theme d'arriere plan
             ThemeSettings();
-            //parametrage du temps des sessions
+            //image de parametre
+            ImGui::SetCursorPos(ImVec2(200.0f, 450.0f));
+            ImGui::Image((ImTextureID)(intptr_t)mwindowUi.GettextureUI().settingsTexture, ImVec2(100.0f, 100.0f));
             
             ImGui::EndChild();
         }
