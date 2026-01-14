@@ -3,7 +3,7 @@ namespace App {
     namespace core {
         //constructeur
         AppCore::AppCore(float width, float height, std::string title, ImGuiIO& io): mwindow(height, width, title), mwindowUi(25.0f, io)
-        , mLong_breakInterval(2), mstatistics(), mvolume(50), Session(0, 3) {
+        , mstatistics() , Session(0, 3) {
             std::cout << "🧰 Creation du coeur de l'application reussie avec succes !!" << std::endl;
         }
 
@@ -30,9 +30,9 @@ namespace App {
                 ImGui::Selectable("Statistique", &show_statistics, 0, ImVec2(300.0f, 100.0f));
                 ImGui::Selectable("Get Started", &Get_started, 0, ImVec2(300.0f, 100.0f));
                 ImGui::Selectable("Restart", &restart, 0, ImVec2(300.0f, 100.0f));
-                chrono.WorkPresentation(mwindowUi.GettextureUI().work, Session);
-                chrono.restPresentation(mwindowUi.GettextureUI().restTexture, Session);
-                chrono.LongRestPresentation(mwindowUi.GettextureUI().chronoTexture, Session);
+                chrono.WorkPresentation(mwindowUi.GettextureUI().work);
+                chrono.restPresentation(mwindowUi.GettextureUI().restTexture);
+                chrono.LongRestPresentation(mwindowUi.GettextureUI().chronoTexture);
 
                 ImGui::EndChild();
 
@@ -61,7 +61,7 @@ namespace App {
                 //fenetres des stats
                 if (show_statistics) {
                     Statistic::GlobalStatsWindow(mwindowUi.GettextureUI().statistics, mstatistics.GetPause().total_restDone, mstatistics.GetPause().short_paused,
-                                                mstatistics.GetPause().long_paused, mstatistics.GetPeriod(), mstatistics.GetPeriod(), mwindowUi.GetFontUi(),
+                                                mstatistics.GetPause().long_paused, mstatistics.GetPeriod(), mwindowUi.GetFontUi(),
                                                 Session.timeCounter, show_statistics);
                 }
                 
@@ -98,7 +98,7 @@ namespace App {
 
                 //fenetre des parametres
                 if (show_parameters) {
-                    ParameterUi(chrono.GetSessionNumber(), Session, mLong_breakInterval, mvolume);
+                    ParameterUi();
                     show_statistics = false;
                 }
                 ImGui::End();
@@ -155,7 +155,7 @@ namespace App {
             std::cout << "🛠️ Arret du moteur de l'application !!" <<std::endl;
         }
 
-        void AppCore::ParameterUi(int session_mumber, backEnd::Timer work, int long_BreakInterval, int volume) {
+        void AppCore::ParameterUi() {
             ImGui::SetNextWindowPos(ImVec2(280.0f, 300.0f), 0, ImVec2(0, 0.55f));
             ImGui::BeginChild("##parameter", ImVec2(500, 600), 0, 0);
 

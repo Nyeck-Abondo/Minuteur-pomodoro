@@ -62,7 +62,6 @@ ImGuiToggleConfig ImGuiTogglePresets::iOSStyle(const float _size_scale /*= 1.0f*
     const ImVec4 frame_on_hover(0.0f, 1.0f, 0.57f, 1.0f);
     const ImVec4 dark_mode_frame_off(0.22f, 0.22f, 0.24f, 1.0f);
     const ImVec4 light_mode_frame_off(0.91f, 0.91f, 0.92f, 1.0f);
-    const ImVec4 dark_mode_frame_off_hover(0.4f, 0.4f, 0.4f, 1.0f);
     const ImVec4 light_mode_frame_off_hover(0.7f, 0.7f, 0.7f, 1.0f);
     const ImVec4 light_gray(0.89f, 0.89f, 0.89f, 1.0f);
     const ImVec4 a11y_glyph_on(1.0f, 1.0f, 1.0f, 1.0f);
@@ -150,8 +149,6 @@ ImGuiToggleConfig ImGuiTogglePresets::MinecraftStyle(float _size_scale /*= 1.0f*
 {
     float size_scale = DpiFactor() * _size_scale;
 
-    const ImVec4 gray(0.35f, 0.35f, 0.35f, 1.0f);
-    const ImVec4 dark_gray(0.12f, 0.12f, 0.12f, 1.0f);
     const ImVec4 frame_border_off(0.6f, 0.6f, 0.61f, 1.0f);
     const ImVec4 toggle_frame_off(0.55f, 0.55f, 0.56f, 1.0f);
     const ImVec4 gray_knob(0.82f, 0.82f, 0.83f, 1.0f);

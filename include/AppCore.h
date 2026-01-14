@@ -16,20 +16,12 @@ namespace App {
             pomodoro chrono;
             backEnd::Timer Session;
 
-            int mLong_breakInterval;
-            int mvolume;
-
             //booleens  d'affichage
             bool mrunning = true;
             bool Get_started = false;
             bool show_statistics = false;
             bool show_parameters = false;
             bool show_interface = true;
-
-            //booleens de compteur pour les stats
-            bool is_work_complete = true;
-            bool is_short_pause_done = false;
-            bool is_long_pause_done = false;
 
             //booleens de gestion de l'app
             bool restart = false;
@@ -71,7 +63,7 @@ namespace App {
             * @param theme permet de changer le theme en arriere plan de la'application
             * @return nothing
             */
-            void ParameterUi(int session_mumber, backEnd::Timer work, int long_BreakInterval, int volume);
+            void ParameterUi();
 
             /**
              * @name statisticsUi

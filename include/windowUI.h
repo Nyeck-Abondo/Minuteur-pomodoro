@@ -26,10 +26,9 @@ namespace App {
             
             //window state
             bool isInitialise;
-            backEnd::sizeTexture settings, chrono, profile
-                , rest, sound, statistic, work, pause, coffee
+            backEnd::sizeTexture settings, chrono, rest
+                , sound, statistic, work, pause, coffee
                 , pompe;
-            const char* usefullTheme[20] = { "Purple Theme", "Dark Theme", "Blue theme", "AOT Wallpaper"};
             
             public:
             //constructeur && destructeur

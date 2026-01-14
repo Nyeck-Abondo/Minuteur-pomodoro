@@ -89,7 +89,7 @@ namespace App {
             ImGui::EndChild();
         }
 
-        void GlobalStatsWindow(SDL_Texture* texture, int Totalpause, int restPause, int longPause, int completed, int counter, ImFont* font, int Timecounter, bool& showStats) {
+        void GlobalStatsWindow(SDL_Texture* texture, int Totalpause, int restPause, int longPause, int completed, ImFont* font, int Timecounter, bool& showStats) {
             float stats[] = {(float)Totalpause, (float)restPause, (float)longPause, (float)Timecounter, (float)completed};
 
             ImVec2 center = ImGui::GetMainViewport()->GetCenter();

@@ -3,9 +3,9 @@
 namespace App {
     namespace core {
         
-        pomodoro::pomodoro(): m_statisitcs(), m_Activate_Sound(true), m_Is_restSession(false),
-                m_Is_workSession(false), m_Is_LongRestSession(false), m_Workminuttes(25), m_WorkSecondes(0), m_RestMinutes(5),
-                m_RestSeconeds(0), m_LongRest_Minutes(15), m_LongRest_Secondes(0), m_SessionNumber(7) {
+        pomodoro::pomodoro(): m_statisitcs(), m_Workminuttes(25), m_WorkSecondes(0), m_RestMinutes(5),
+                m_RestSeconeds(0), m_LongRest_Minutes(15), m_LongRest_Secondes(0), m_SessionNumber(7),
+                m_Activate_Sound(true), m_Is_restSession(false),m_Is_workSession(false), m_Is_LongRestSession(false) {
                     std::cout << "⏱️ Creation du pomodoro effectuée avec succès !" <<std::endl;
                 }
         
@@ -47,7 +47,7 @@ namespace App {
             ImGui::Spacing();
         }
 
-        void pomodoro::WorkPresentation(SDL_Texture* texture, backEnd::Timer chrono) {
+        void pomodoro::WorkPresentation(SDL_Texture* texture) {
             if (ImGui::Selectable("concentration", &m_Is_workSession, 0, ImVec2(450.0f, 75.0f)))
             ImGui::OpenPopup("session de concentration");
 
@@ -57,7 +57,6 @@ namespace App {
             if (ImGui::BeginPopupModal("session de concentration", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove)) {
                 //calcul de la position centrale de la fenetre
                 float windowWidth = ImGui::GetWindowWidth();
-                float windowHeight = ImGui::GetWindowHeight();
                 ImVec2 img_size = ImVec2(300.0f, 300.0f);
                 ImGui::SetCursorPosX((windowWidth - img_size.x) /2);
                 ImGui::Image((ImTextureID)(intptr_t)texture, ImVec2(300.0f, 300.0f));
@@ -73,7 +72,7 @@ namespace App {
             }
         }
 
-        void pomodoro::restPresentation(SDL_Texture* texture, backEnd::Timer chrono) {
+        void pomodoro::restPresentation(SDL_Texture* texture) {
             ImVec2 center = ImGui::GetMainViewport()->GetCenter();
             ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 
@@ -82,7 +81,6 @@ namespace App {
             if (ImGui::BeginPopupModal("session de repos court", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove)) {
                 //calcul de la position centrale de la fenetre
                 float windowWidth = ImGui::GetWindowWidth();
-                float windowHeight = ImGui::GetWindowHeight();
                 ImVec2 img_size = ImVec2(300.0f, 300.0f);
                 ImGui::SetCursorPosX((windowWidth - img_size.x) /2);
                 ImGui::Image((ImTextureID)(intptr_t)texture, ImVec2(300.0f, 300.0f));
@@ -98,7 +96,7 @@ namespace App {
             }
         }
 
-        void pomodoro::LongRestPresentation(SDL_Texture* texture, backEnd::Timer chrono) {
+        void pomodoro::LongRestPresentation(SDL_Texture* texture) {
             ImVec2 center = ImGui::GetMainViewport()->GetCenter();
             ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 
@@ -107,7 +105,6 @@ namespace App {
             if (ImGui::BeginPopupModal("session de repos long", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove)) {
                 //calcul de la position centrale de la fenetre
                 float windowWidth = ImGui::GetWindowWidth();
-                float windowHeight = ImGui::GetWindowHeight();
                 ImVec2 img_size = ImVec2(300.0f, 300.0f);
                 ImGui::SetCursorPosX((windowWidth - img_size.x) /2);
                 ImGui::Image((ImTextureID)(intptr_t)texture, ImVec2(300.0f, 300.0f));
@@ -141,7 +138,6 @@ namespace App {
             if (ImGui::BeginPopupModal("presentation", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
                 //calcul de la position centrale de la fenetre
                 float windowWidth = ImGui::GetWindowWidth();
-                float windowHeight = ImGui::GetWindowHeight();
                 ImVec2 img_size = ImVec2(300.0f, 300.0f);
                 ImGui::SetCursorPosX((windowWidth - img_size.x) /2);
                 ImGui::Image((ImTextureID)(intptr_t)texture.chronoTexture, ImVec2(300.0f, 300.0f));

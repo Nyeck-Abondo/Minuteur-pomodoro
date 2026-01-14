@@ -16,8 +16,9 @@ namespace App{
          * @param io represente l'objet.
          */
         windowUi::windowUi(float fontsize, ImGuiIO& io)
-                : Uifont(nullptr), mio(io), mStyle(ImGui::GetStyle()), isInitialise(false),
-                mtools({nullptr, nullptr, nullptr, nullptr, nullptr}), mfontSize(fontsize) {
+                : mStyle(ImGui::GetStyle()), Uifont(nullptr), mio(io),
+                mtools({nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr})
+                , mfontSize(fontsize), isInitialise(false) {
                     std::cout << "🛠️ cration de la fenetre imgui reussi !!"<<std::endl;
         }
          windowUi::~windowUi() {
@@ -187,11 +188,7 @@ int windowUi::igThemeV3(int hue07, int alt07, int nav07, int lit01, int compact0
     // diamond sliders
     style.CircleTessellationMaxError = shape0123 == 3 ? 4.00f : 0.30f; 
 
-    auto lit = [&](ImVec4 hi) {
-        float h,s,v; ImGui::ColorConvertRGBtoHSV(hi.x,hi.y,hi.z, h,s,v);
-        ImVec4 lit = ImColor::HSV(h,s*0.80,v*1.00, hi.w).Value;
-        return lit;
-    };
+    
     auto dim = [&](ImVec4 hi) {
         float h,s,v; ImGui::ColorConvertRGBtoHSV(hi.x,hi.y,hi.z, h,s,v);
         ImVec4 dim = ImColor::HSV(h,s,lit01 ? v*0.65:v*0.65, hi.w).Value;

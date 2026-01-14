@@ -159,11 +159,12 @@ echo -e "${JAUNE}${GRAS}[5/5] COMPILATION DES ELEMENTS DU PROJET${NC}"
 COMPILER="clang++"
 EXECUTABLE="build/pomodoro.exe"
 LINKER="-lSDL3 -lSDL3_image"
-VERSION="-std=c++17"
+VERSION="-std=c++17 -O2"
+WARNING="-Wall -Wextra"
 
 echo
 echo -e "${CLIGNOTANT}LANCEMENT DE LA COMMANDE DE COMPILATION....${NC}"
-$COMPILER $MODULE_DIR -o  $EXECUTABLE $LINK_HEADER $LINKER $VERSION
+$COMPILER $MODULE_DIR $LINK_HEADER $LINKER $WARNING $VERSION -o  $EXECUTABLE
 
 echo "executez avec: ./build/pomodoro.exe"
 #fin du programme en appuant sur une touche specifique

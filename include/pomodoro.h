@@ -56,9 +56,9 @@ namespace App {
             float totalTimeToDo(int counterSession);
 
             //presentation de l'evolution du chrono et effets visuels
-            void WorkPresentation(SDL_Texture* texture, backEnd::Timer chrono);
-            void restPresentation(SDL_Texture* texture, backEnd::Timer chrono);
-            void LongRestPresentation(SDL_Texture* texture, backEnd::Timer chrono);
+            void WorkPresentation(SDL_Texture* texture);
+            void restPresentation(SDL_Texture* texture);
+            void LongRestPresentation(SDL_Texture* texture);
 
             //transition de session
             void Explanations(int counterSession, backEnd::textureUi texture);

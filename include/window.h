@@ -17,11 +17,9 @@ namespace App {
             //RESSOURCES DE LA FENETRE
             SDL_Window* mappWindow;
             SDL_Renderer* mAppRenderer;
-            SDL_Texture* textTexture;
             SDL_Texture* ImgTexture;
             float mwinHeight;
             float mwinWidth;
-            float mfontSize;
             bool winIsinitialise;
             std::string mwinTitle;
 

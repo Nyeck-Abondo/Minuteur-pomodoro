@@ -1,7 +1,9 @@
 #include "../include/AppCore.h"
 #include <windows.h>
 
-int main (int arc, char* argv[]) {
+int main (int argc, char* argv[]) {
+    (void)argc;
+    (void)argv;
     SetConsoleOutputCP(CP_UTF8);
     
     //creation du coeur

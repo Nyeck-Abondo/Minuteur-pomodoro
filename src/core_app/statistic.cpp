@@ -2,7 +2,7 @@
 
 namespace App {
     namespace Statistic {
-        stats::stats(): completed(0), rest({0, 0}) {}
+        stats::stats(): completed(0), rest({0, 0, 0}) {}
         stats::~stats() {}
 
         void stats::StatisticInitialisation() {

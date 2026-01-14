@@ -3,8 +3,9 @@
 namespace App {
     namespace Graphics {        
         window::window (float height, float width, const std::string& title) 
-            : mwinHeight(height), mwinWidth(width), mwinTitle(title), mappWindow(nullptr)
-            , mAppRenderer(nullptr), ImgTexture(nullptr), winIsinitialise(false), textTexture(nullptr) {
+            : mappWindow(nullptr), mAppRenderer(nullptr), ImgTexture(nullptr)
+            , mwinHeight(height), mwinWidth(width), winIsinitialise(false)
+            , mwinTitle(title) {
                 std::cout << "✅ initialisation de la fenetre avec succes !!"<< std::endl;
             }
             window::~window(){
