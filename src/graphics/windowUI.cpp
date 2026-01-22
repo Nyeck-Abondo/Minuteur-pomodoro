@@ -48,6 +48,42 @@ namespace App{
          * @brief -Ferme proprement la fentre imgui elle ne prend aucun parametre
          */
         void windowUi::ShutdownUI() {
+            //liberation de la texture d'execution
+            for (int i = 0; i <= manimPicture.animationEXE->count; i++) {
+                SDL_DestroyTexture(manimation.execution[i]);
+            }
+            delete [] manimation.execution;
+
+            //liberation de la texture de graphique
+            for (int i = 0; i <= manimPicture.animationGraph->count; i++) {
+                SDL_DestroyTexture(manimation.graphics[i]);
+            }
+            delete [] manimation.graphics;
+
+            //liberation de la texture d'animation de succes violette
+            for (int i = 0; i <= manimPicture.animationSP->count; i++) {
+                SDL_DestroyTexture(manimation.successPurple[i]);
+            }
+            delete [] manimation.successPurple;
+
+            //liberation de la texture d'animation de succes jaune
+            for (int i = 0; i <= manimPicture.animationSY->count; i++) {
+                SDL_DestroyTexture(manimation.successYellow[i]);
+            }
+            delete [] manimation.successYellow;
+
+            //liberation de la texture d'animation de chrono noire
+            for (int i = 0; i <= manimPicture.animationTB->count; i++) {
+                SDL_DestroyTexture(manimation.timerBlack[i]);
+            }
+            delete [] manimation.timerBlack;
+
+            //liberation de la texture de l'animation de chrono jaune
+            for (int i = 0; i <= manimPicture.animationTY->count; i++) {
+                SDL_DestroyTexture(manimation.TimerYellow[i]);
+            }
+            delete [] manimation.TimerYellow;
+
             ImGui_ImplSDLRenderer3_Shutdown();
             ImGui_ImplSDL3_Shutdown();
             ImGui::DestroyContext();
@@ -99,7 +135,7 @@ namespace App{
             return texture;
         }
 
-        void windowUi::Load_animatedTexture(SDL_Renderer* renderer) {
+        bool windowUi::Load_animatedTexture(SDL_Renderer* renderer) {
             //chargement des animations (sont toutes des tableaux de surfaces)
             manimPicture.animationSP = IMG_LoadAnimation("assets/tools/Success (1).gif");
             manimPicture.animationSY = IMG_LoadAnimation("assets/tools/Success (2).gif");
@@ -112,28 +148,33 @@ namespace App{
             manimation.successPurple = new SDL_Texture* [manimPicture.animationSP->count];
             if (manimation.successPurple == nullptr) {
                 std::cout << "❌ Echec de la creation de la texture de succes violette !!" << std::endl;
+                return false;
             }
-            std::cout << "✅ creation de la texture de succes violette !!" << std::endl;
+            
             //convertion en texture
             for (int i = 0; i < manimPicture.animationSP->count; i++) {
                 manimation.successPurple[i] = SDL_CreateTextureFromSurface(renderer, manimPicture.animationSP->frames[i]);
             }
+            std::cout << "✅ creation de la texture de succes violette !!" << std::endl;
 
             //animation de succes du theme jaune
             manimation.successYellow = new SDL_Texture* [manimPicture.animationSP->count];
             if (manimation.successYellow == nullptr) {
                 std::cout << "❌ Echec de la creation de la texture de succes jaune !!" << std::endl;
+                return false;
+            }
+            
+            //concvertion en texture
+            for (int i = 0; i < manimPicture.animationSY->count; i++) {
+                manimation.successYellow[i] = SDL_CreateTextureFromSurface(renderer, manimPicture.animationSY->frames[i]);
             }
             std::cout << "✅ creation de la texture de succes jaune !!" << std::endl;
-            //concvertion en texture
-            for (int j = 0; j < manimPicture.animationSP->count; j++) {
-                manimation.successYellow[j] = SDL_CreateTextureFromSurface(renderer, manimPicture.animationSY->frames[j]);
-            }
 
             //animation du timer theme blanc
             manimation.timerBlack = new SDL_Texture* [manimPicture.animationTB->count];
             if (manimation.timerBlack == nullptr) {
                 std::cout << "❌ Echec de la creation de la texture de chrnometre noir !!" << std::endl;
+                return false;
             }
             std::cout << "✅ creation de la texture de chrnometre noir !!" << std::endl;
             for (int k = 0; k < manimPicture.animationTB->count; k++) {
@@ -144,6 +185,7 @@ namespace App{
             manimation.TimerYellow = new SDL_Texture* [manimPicture.animationTY->count];
             if (manimation.TimerYellow == nullptr) {
                 std::cout << "❌ Echec de la creation de la texture de chronometre jaune !!" << std::endl;
+                return false;
             }
             std::cout << "✅ creation de la texture de chronometre jaune !!" << std::endl;
             for (int l = 0; l < manimPicture.animationTY->count; l++) {
@@ -154,6 +196,7 @@ namespace App{
             manimation.execution = new SDL_Texture* [manimPicture.animationEXE->count];
             if (manimation.execution == nullptr) {
                 std::cout << "❌ Echec de la creation de la texture d'execution !!" << std::endl;
+                return false;
             }
             std::cout << "✅ creation de la texture d'execution !!" << std::endl;
             for (int p = 0; p < manimPicture.animationEXE->count; p++) {
@@ -164,11 +207,14 @@ namespace App{
             manimation.graphics = new SDL_Texture* [manimPicture.animationGraph->count];
             if (manimation.graphics == nullptr) {
                 std::cout << "❌ Echec de la creation de la texture de graphe !!" << std::endl;
+                return false;
             }
             std::cout << "✅ creation de la texture de graphe !!" << std::endl;
             for (int g = 0; g < manimPicture.animationGraph->count; g++) {
                 manimation.graphics[g] = SDL_CreateTextureFromSurface(renderer, manimPicture.animationGraph->frames[g]);
             }
+
+            return true;
         }
 
         void windowUi::PlayAnimation(backEnd::animType animation, Uint64 lastTime) {

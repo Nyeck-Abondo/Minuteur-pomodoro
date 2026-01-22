@@ -8,7 +8,6 @@
 #include "../libs/imgui_toggle/imgui_toggle_presets.h"
 #include <string>
 #include <iostream>
-#include <SDL3/SDL3_image/SDL_image.h>
 #include "structs.h"
 
 namespace App {
@@ -57,7 +56,7 @@ namespace App {
             //rendu
             int igThemeV3(int hue07, int alt07, int nav07, int lit01 = 0, int compact01 = 0, int border01 = 1, int shape0123 = 1);
             SDL_Texture* Load_imageTexture(SDL_Renderer* renderer, const char* fileLocation);
-            void Load_animatedTexture(SDL_Renderer* renderer);
+            bool Load_animatedTexture(SDL_Renderer* renderer);
             void PlayAnimation(backEnd::animType animation, Uint64 lastTime);
             void CreateUITexture(SDL_Renderer* renderer);
         };

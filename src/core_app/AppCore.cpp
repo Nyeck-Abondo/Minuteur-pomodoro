@@ -145,7 +145,9 @@ namespace App {
 
             //chargement des textures des icones
             mwindowUi.CreateUITexture(mwindow.GetRenderer());
-
+            if (!mwindowUi.Load_animatedTexture(mwindow.GetRenderer())) {
+                std::cout << "❌ Echec de chargement des Gifs animés" << std::endl;
+            }
             return true;
         }
 
