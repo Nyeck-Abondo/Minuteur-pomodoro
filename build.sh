@@ -157,8 +157,8 @@ fi
 echo -e "${JAUNE}${GRAS}[5/5] COMPILATION DES ELEMENTS DU PROJET${NC}"
 
 COMPILER="clang++"
-EXECUTABLE="build/pomodoro.exe"
-LINKER="-lSDL3 -lSDL3_image"
+EXECUTABLE="pomodoro.exe"
+LINKER="-L./libs -lSDL3 -lSDL3_image"
 VERSION="-std=c++17 -O2"
 WARNING="-Wall -Wextra"
 

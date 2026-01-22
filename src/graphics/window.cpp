@@ -66,7 +66,7 @@ namespace App {
             SDL_Surface* surface = nullptr;
             switch (theme) {
                 case backEnd::OfficialTheme::DARK_LIGHT_THEME02 :
-                    surface = IMG_Load("assets/backgrounds/dark_02.jpg");
+                    surface = IMG_Load("assets/backgrounds/light-theme.png");
                     ImgTexture = SDL_CreateTextureFromSurface(mAppRenderer, surface);
                     SDL_DestroySurface(surface);
                 break;
@@ -79,6 +79,15 @@ namespace App {
 
                 case backEnd::OfficialTheme::DARK_THEME :
                 surface = IMG_Load("assets/backgrounds/broken-dark.png");
+                if (!surface) {
+                    std::cerr << "Erreur de chargement de la surface: "<< SDL_GetError() << std::endl;
+                }
+                ImgTexture = SDL_CreateTextureFromSurface(mAppRenderer, surface);
+                SDL_DestroySurface(surface);
+                break;
+
+                case backEnd::OfficialTheme::ORANGE_THEME :
+                surface = IMG_Load("assets/backgrounds/orange_theme.jpg");
                 if (!surface) {
                     std::cerr << "Erreur de chargement de la surface: "<< SDL_GetError() << std::endl;
                 }

@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <iostream>
 #include "../libs/SDL3/SDL.h"
+#include "../libs/SDL3/SDL3_image/SDL_image.h"
 
 namespace App{
     namespace backEnd{
@@ -53,7 +54,8 @@ namespace App{
         enum class OfficialTheme {
             DARK_LIGHT_THEME02,
             DARK_LIGHT_THEME,
-            DARK_THEME
+            DARK_THEME,
+            ORANGE_THEME
         };
 
         //ensembles des textures d'images a generer
@@ -68,6 +70,34 @@ namespace App{
             SDL_Texture* pause;
             SDL_Texture* pompe;
             SDL_Texture* coffee;
+        };
+
+        struct animTexureUi {
+            SDL_Texture** successPurple;
+            SDL_Texture** successYellow;
+            SDL_Texture** TimerYellow;
+            SDL_Texture** timerBlack;
+            SDL_Texture** execution;
+            SDL_Texture** graphics;
+        };
+
+        struct animPicture {
+            IMG_Animation* animationSP;
+            IMG_Animation* animationSY;
+            IMG_Animation* animationTY;
+            IMG_Animation* animationTB;
+            IMG_Animation* animationEXE;
+            IMG_Animation* animationGraph;
+        };
+        
+        
+        enum class animType {
+            SUCCESSPURPLE,
+            SUCCESSYELLOW,
+            TIMERBLACK,
+            TIMERYELLOW,
+            EXECUTION,
+            GRAPH
         };
 
         //taille des textures

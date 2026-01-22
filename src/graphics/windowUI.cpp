@@ -17,8 +17,9 @@ namespace App{
          */
         windowUi::windowUi(float fontsize, ImGuiIO& io)
                 : mStyle(ImGui::GetStyle()), Uifont(nullptr), mio(io),
-                mtools({nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr})
-                , mfontSize(fontsize), isInitialise(false) {
+                mtools({nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr}),
+                manimation({nullptr, nullptr, nullptr, nullptr, nullptr, nullptr}), manimPicture({nullptr, nullptr,
+                nullptr, nullptr, nullptr, nullptr}), mfontSize(fontsize), isInitialise(false) {
                     std::cout << "🛠️ cration de la fenetre imgui reussi !!"<<std::endl;
         }
          windowUi::~windowUi() {
@@ -96,6 +97,143 @@ namespace App{
             //liberation de la memeoire
             stbi_image_free(image_data);
             return texture;
+        }
+
+        void windowUi::Load_animatedTexture(SDL_Renderer* renderer) {
+            //chargement des animations (sont toutes des tableaux de surfaces)
+            manimPicture.animationSP = IMG_LoadAnimation("assets/tools/Success (1).gif");
+            manimPicture.animationSY = IMG_LoadAnimation("assets/tools/Success (2).gif");
+            manimPicture.animationTY = IMG_LoadAnimation("assets/tools/Timer (1).gif");
+            manimPicture.animationTB = IMG_LoadAnimation("assets/tools/Timer.gif");
+            manimPicture.animationEXE = IMG_LoadAnimation("assets/tools/en-cours-dexecution.gif");
+            manimPicture.animationGraph = IMG_LoadAnimation("assets/tools/analytique.gif");
+            
+            //annimation de success violette
+            manimation.successPurple = new SDL_Texture* [manimPicture.animationSP->count];
+            if (manimation.successPurple == nullptr) {
+                std::cout << "❌ Echec de la creation de la texture de succes violette !!" << std::endl;
+            }
+            std::cout << "✅ creation de la texture de succes violette !!" << std::endl;
+            //convertion en texture
+            for (int i = 0; i < manimPicture.animationSP->count; i++) {
+                manimation.successPurple[i] = SDL_CreateTextureFromSurface(renderer, manimPicture.animationSP->frames[i]);
+            }
+
+            //animation de succes du theme jaune
+            manimation.successYellow = new SDL_Texture* [manimPicture.animationSP->count];
+            if (manimation.successYellow == nullptr) {
+                std::cout << "❌ Echec de la creation de la texture de succes jaune !!" << std::endl;
+            }
+            std::cout << "✅ creation de la texture de succes jaune !!" << std::endl;
+            //concvertion en texture
+            for (int j = 0; j < manimPicture.animationSP->count; j++) {
+                manimation.successYellow[j] = SDL_CreateTextureFromSurface(renderer, manimPicture.animationSY->frames[j]);
+            }
+
+            //animation du timer theme blanc
+            manimation.timerBlack = new SDL_Texture* [manimPicture.animationTB->count];
+            if (manimation.timerBlack == nullptr) {
+                std::cout << "❌ Echec de la creation de la texture de chrnometre noir !!" << std::endl;
+            }
+            std::cout << "✅ creation de la texture de chrnometre noir !!" << std::endl;
+            for (int k = 0; k < manimPicture.animationTB->count; k++) {
+                manimation.timerBlack[k] = SDL_CreateTextureFromSurface(renderer, manimPicture.animationTB->frames[k]);
+            }
+
+            //animation du timer pour le theme jaune
+            manimation.TimerYellow = new SDL_Texture* [manimPicture.animationTY->count];
+            if (manimation.TimerYellow == nullptr) {
+                std::cout << "❌ Echec de la creation de la texture de chronometre jaune !!" << std::endl;
+            }
+            std::cout << "✅ creation de la texture de chronometre jaune !!" << std::endl;
+            for (int l = 0; l < manimPicture.animationTY->count; l++) {
+                manimation.TimerYellow[l] = SDL_CreateTextureFromSurface(renderer, manimPicture.animationTY->frames[l]);
+            }
+
+            //animation de l'execution de la session de travail
+            manimation.execution = new SDL_Texture* [manimPicture.animationEXE->count];
+            if (manimation.execution == nullptr) {
+                std::cout << "❌ Echec de la creation de la texture d'execution !!" << std::endl;
+            }
+            std::cout << "✅ creation de la texture d'execution !!" << std::endl;
+            for (int p = 0; p < manimPicture.animationEXE->count; p++) {
+                manimation.execution[p] = SDL_CreateTextureFromSurface(renderer, manimPicture.animationEXE->frames[p]);
+            }
+
+            //animation des l'augmentation des statistiques par notifications
+            manimation.graphics = new SDL_Texture* [manimPicture.animationGraph->count];
+            if (manimation.graphics == nullptr) {
+                std::cout << "❌ Echec de la creation de la texture de graphe !!" << std::endl;
+            }
+            std::cout << "✅ creation de la texture de graphe !!" << std::endl;
+            for (int g = 0; g < manimPicture.animationGraph->count; g++) {
+                manimation.graphics[g] = SDL_CreateTextureFromSurface(renderer, manimPicture.animationGraph->frames[g]);
+            }
+        }
+
+        void windowUi::PlayAnimation(backEnd::animType animation, Uint64 lastTime) {
+            //temps actuel lors de l'appel de la fenetre de notification
+            Uint64 currentTime = SDL_GetTicks();
+            //frame actuelle
+            static int currentFrame = 0;
+            //choix de l'animation a jouer en fonction de la notification passé vers
+            //l'utilisateur
+            switch (animation) {
+                case backEnd::animType::SUCCESSPURPLE :
+                    if (static_cast<int>(currentTime - lastTime) >= manimPicture.animationSP->delays[currentFrame]) {
+                        currentFrame++;
+                        if (currentFrame >= manimPicture.animationSP->count) {
+                            currentFrame = 0;
+                        }
+                    }
+                break;
+
+                case backEnd::animType::SUCCESSYELLOW :
+
+                    if (static_cast<int>(currentTime - lastTime) >= manimPicture.animationSY->delays[currentFrame]) {
+                        currentFrame++;
+                        if (currentFrame >= manimPicture.animationSY->count) {
+                            currentFrame = 0;
+                        }
+                    }
+                break;
+
+                case backEnd::animType::TIMERBLACK :
+                    if (static_cast<int>(currentTime - lastTime) >= manimPicture.animationTB->delays[currentFrame]) {
+                        currentFrame++;
+                        if (currentFrame >= manimPicture.animationTB->count) {
+                            currentFrame = 0;
+                        }
+                    }
+                break;
+
+                case backEnd::animType::TIMERYELLOW :
+                    if (static_cast<int>(currentTime - lastTime) >= manimPicture.animationTY->delays[currentFrame]) {
+                        currentFrame++;
+                        if (currentFrame >= manimPicture.animationTY->count) {
+                            currentFrame = 0;
+                        }
+                    }
+                break;
+
+                case backEnd::animType::EXECUTION :
+                    if (static_cast<int>(currentTime - lastTime) >= manimPicture.animationEXE->delays[currentFrame]) {
+                        currentFrame++;
+                        if (currentFrame >= manimPicture.animationEXE->count) {
+                            currentFrame = 0;
+                        }
+                    }
+                break;
+
+                case backEnd::animType::GRAPH :
+                    if (static_cast<int>(currentTime - lastTime) >= manimPicture.animationGraph->delays[currentFrame]) {
+                        currentFrame++;
+                        if (currentFrame >= manimPicture.animationGraph->count) {
+                            currentFrame = 0;
+                        }
+                    }
+                break;
+            }
         }
         
         /**
