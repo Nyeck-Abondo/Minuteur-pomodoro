@@ -80,7 +80,7 @@ namespace App {
              * courante. ideal pour identifier la sesion dans laquelle se trouve l'utilisateur
              * et donc choisir l'icone appropriee.
              */
-            void SessionRepresentaion(int counterSession);
+            void SessionRepresentaion(int counterSession, Uint64 deltaTime);
 
             //sous instances des fenetres secondaires
             /**

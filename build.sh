@@ -52,7 +52,6 @@ SRC="src"
     for files in $(ls $SRC/*.cpp)
     do
         echo -e "🔃 ${BLEU}${GRAS} collecte des chemins d'acces des fichiers .cpp de :${NC} $files"
-        sleep 0.35
         echo
         echo -e "fichier trouvé : ${ORANGE}$files${NC}"
         MODULE_DIR="$MODULE_DIR$files$VOID"
@@ -62,7 +61,6 @@ SRC="src"
     for folder in $(find "src" -mindepth 1 -maxdepth 2 -type d -print)
     do
         echo -e "🔃 ${BLEU}${GRAS} collecte des chemins d'acces des fichiers .cpp de :${NC} $folder"
-        sleep 0.35
         #affichage des modules objets et des fichiers trouvés dans le dossier
         for file in $(ls $folder/*.cpp)
         do
@@ -85,7 +83,6 @@ then
     for folder in $(find "libs" -mindepth 1 -maxdepth 2 -type d -print)
     do
         echo -e "🔃 ${BLEU}${GRAS}collecte des chemins d'acces des fichiers .cpp de :${NC} $folder"
-        sleep 0.35
         if [ $folder = "libs/ImGui_Arc_ProgressBar" ]
         then
             ARC=" libs/ImGui_Arc_ProgressBar/arc_progress_bar.cpp "

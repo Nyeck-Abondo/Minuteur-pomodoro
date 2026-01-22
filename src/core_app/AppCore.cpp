@@ -55,7 +55,7 @@ namespace App {
                 static int count = 0;
                 if (count <= 500) count++;
                 if (count < 500) {
-                    chrono.Explanations(mstatistics.GetPeriod(), deltaTime);
+                    chrono.Explanations(mstatistics.GetPeriod(), deltaTime, mwindow.mCurrenTheme);
                 }
                 //test fenetre globale de statistics
                 if (mstatistics.GetPeriod() == chrono.GetSessionNumber() && Session.minutes == 0 && Session.secondes <= 0.4f && Session.secondes >= 0.20f) { 
@@ -80,7 +80,7 @@ namespace App {
                 }
                 
                 //insrtion de l'image representative de la session
-                SessionRepresentaion(mstatistics.GetPeriod());
+                SessionRepresentaion(mstatistics.GetPeriod(), deltaTime);
 
                 //ajout du bouton de lancement
                 ImGui::SetCursorPos(ImVec2(340.0f, 355.0f));
@@ -251,10 +251,10 @@ namespace App {
 
         }
 
-        void AppCore::SessionRepresentaion(int counterSession) {
+        void AppCore::SessionRepresentaion(int counterSession, Uint64 deltaTime) {
             if (counterSession == 0) {
                 ImGui::SetCursorPos(ImVec2(340.0f, 130.0f));
-                ImGui::Image((ImTextureID)(intptr_t) mwindowUi.GettextureUI().chronoTexture, ImVec2(70.0f, 70.0f));
+                chrono.PlayAnimation(deltaTime, ImVec2(70.0f, 70.0f), mwindow.mCurrenTheme);
             }
             else if (counterSession % 2 != 0 || counterSession == 1) {
                 ImGui::SetCursorPos(ImVec2(340.0f, 130.0f));

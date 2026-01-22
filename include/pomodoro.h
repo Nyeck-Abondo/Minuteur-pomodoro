@@ -16,7 +16,9 @@ namespace App {
             Statistic::stats m_statisitcs;
             ImGuiToggleConfig config;
             IMG_Animation* mPresentation_Animation;
+            IMG_Animation* mBlackPresentation_Animation;
             SDL_Texture** mPresentationTexture;
+            SDL_Texture** mBlackPresentationTexture;
             //compteur de frames
             int mcounterFrame;
 
@@ -57,7 +59,7 @@ namespace App {
             //methodes relatives aux animations
             bool AnimationInitialised(SDL_Renderer* renderer);
             void AnimationShutdown();
-            void PlayAnimation(Uint64 deltaTime);
+            void PlayAnimation(Uint64 deltaTime, ImVec2 size, backEnd::OfficialTheme currentTeme);
 
             //parametre
             void TimeSettings();
@@ -70,7 +72,7 @@ namespace App {
             void LongRestPresentation(SDL_Texture* texture);
 
             //transition de session
-            void Explanations(int counterSession, Uint64 deltaTime);
+            void Explanations(int counterSession, Uint64 deltaTime, backEnd::OfficialTheme currentTeme);
             void SessionChange(int counterSession, backEnd::textureUi texture);          
             ImVec2 CenterContent();
         };
