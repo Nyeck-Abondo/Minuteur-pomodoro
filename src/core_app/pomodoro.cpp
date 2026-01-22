@@ -3,14 +3,50 @@
 namespace App {
     namespace core {
         
-        pomodoro::pomodoro(): m_statisitcs(), m_Workminuttes(25), m_WorkSecondes(0), m_RestMinutes(5),
-                m_RestSeconeds(0), m_LongRest_Minutes(15), m_LongRest_Secondes(0), m_SessionNumber(7),
-                m_Activate_Sound(true), m_Is_restSession(false),m_Is_workSession(false), m_Is_LongRestSession(false) {
+        pomodoro::pomodoro(): m_statisitcs(),mPresentation_Animation(nullptr), mPresentationTexture(nullptr),
+                mcounterFrame(0), m_Workminuttes(25), m_WorkSecondes(0), m_RestMinutes(5),m_RestSeconeds(0),
+                m_LongRest_Minutes(15), m_LongRest_Secondes(0), m_SessionNumber(7),m_Activate_Sound(true),
+                m_Is_restSession(false), m_Is_workSession(false), m_Is_LongRestSession(false) {
                     std::cout << "⏱️ Creation du pomodoro effectuée avec succès !" <<std::endl;
                 }
         
         pomodoro::~pomodoro() {
             std::cout <<"🛠️ Destruction du pomodoro effectuée avec succès !!" << std::endl;
+        }
+
+        bool pomodoro::AnimationInitialised(SDL_Renderer* renderer) {
+            mPresentation_Animation = IMG_LoadAnimation("assets/tools/Timer (1).gif");
+            //allocation de la texture
+            mPresentationTexture = new SDL_Texture* [mPresentation_Animation->count];
+            //verification de l'allocation dynamique
+            if (mPresentationTexture == nullptr) {
+                std::cout << "❌ Echec de l'allocation dynamique de la texture" << std::endl;
+                return false;
+            }
+            //transformation des frames en textures
+            for (int i = 0; i < mPresentation_Animation->count; i++) {
+                mPresentationTexture[i] = SDL_CreateTextureFromSurface(renderer, mPresentation_Animation->frames[i]);
+            }
+            std::cout << "✅ texture animée de presentation chargée avec succes !" << std::endl;
+            return true;
+        }
+
+        void pomodoro::AnimationShutdown() {
+            for (int i = 0; i < mPresentation_Animation->count; i++) {
+                SDL_DestroyTexture(mPresentationTexture[i]);
+            }
+            delete [] mPresentationTexture;
+            IMG_FreeAnimation(mPresentation_Animation);
+        }
+
+        void pomodoro::PlayAnimation(Uint64 deltaTime) {
+            if (static_cast<int> (deltaTime) >= mPresentation_Animation->delays[mcounterFrame]) {
+                mcounterFrame++;
+                if (mcounterFrame >= mPresentation_Animation->count) {
+                    mcounterFrame = 0;
+                }
+            }
+            ImGui::Image((ImTextureID)(intptr_t) mPresentationTexture[mcounterFrame], ImVec2(300.0f, 300.0f));
         }
 
         void pomodoro::TimeSettings() {
@@ -127,7 +163,7 @@ namespace App {
          * compteur afin de presenter a l'utilisateur ce que
          * chaque sessions qu'il aborde
          */
-        void pomodoro::Explanations(int counterSession, backEnd::textureUi texture) {
+        void pomodoro::Explanations(int counterSession, Uint64 deltaTime) {
             
             //centralisation de la fenetre de popup
             ImVec2 center = ImGui::GetMainViewport()->GetCenter();
@@ -140,7 +176,7 @@ namespace App {
                 float windowWidth = ImGui::GetWindowWidth();
                 ImVec2 img_size = ImVec2(300.0f, 300.0f);
                 ImGui::SetCursorPosX((windowWidth - img_size.x) /2);
-                ImGui::Image((ImTextureID)(intptr_t)texture.chronoTexture, ImVec2(300.0f, 300.0f));
+                PlayAnimation(deltaTime);
                 //ecriture des explications concernant le pomodoro
                 ImGui::Text(" ");
                 ImGui::Text("Ce chronomètre est un outil spécial du nom de \nchronomètre pomodoro mettant a la dispositio\nn de lutilisateur "

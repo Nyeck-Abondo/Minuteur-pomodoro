@@ -84,6 +84,13 @@ namespace App{
             }
             delete [] manimation.TimerYellow;
 
+            IMG_FreeAnimation(manimPicture.animationEXE);
+            IMG_FreeAnimation(manimPicture.animationGraph);
+            IMG_FreeAnimation(manimPicture.animationSP);
+            IMG_FreeAnimation(manimPicture.animationSY);
+            IMG_FreeAnimation(manimPicture.animationTB);
+            IMG_FreeAnimation(manimPicture.animationTY);
+
             ImGui_ImplSDLRenderer3_Shutdown();
             ImGui_ImplSDL3_Shutdown();
             ImGui::DestroyContext();
@@ -232,6 +239,7 @@ namespace App{
                             currentFrame = 0;
                         }
                     }
+                    ImGui::Image((ImTextureID)(intptr_t) manimation.successPurple[currentFrame], ImVec2(300.0f, 300.0f));
                 break;
 
                 case backEnd::animType::SUCCESSYELLOW :
@@ -242,6 +250,7 @@ namespace App{
                             currentFrame = 0;
                         }
                     }
+                    ImGui::Image((ImTextureID)(intptr_t) manimation.successYellow[currentFrame], ImVec2(300.0f, 300.0f));
                 break;
 
                 case backEnd::animType::TIMERBLACK :
@@ -251,6 +260,7 @@ namespace App{
                             currentFrame = 0;
                         }
                     }
+                    ImGui::Image((ImTextureID)(intptr_t) manimation.timerBlack[currentFrame], ImVec2(300.0f, 300.0f));
                 break;
 
                 case backEnd::animType::TIMERYELLOW :
@@ -260,6 +270,7 @@ namespace App{
                             currentFrame = 0;
                         }
                     }
+                    ImGui::Image((ImTextureID)(intptr_t) manimation.TimerYellow[currentFrame], ImVec2(300.0f, 300.0f));
                 break;
 
                 case backEnd::animType::EXECUTION :
@@ -269,6 +280,7 @@ namespace App{
                             currentFrame = 0;
                         }
                     }
+                    ImGui::Image((ImTextureID)(intptr_t) manimation.execution[currentFrame], ImVec2(300.0f, 300.0f));
                 break;
 
                 case backEnd::animType::GRAPH :
@@ -278,6 +290,7 @@ namespace App{
                             currentFrame = 0;
                         }
                     }
+                    ImGui::Image((ImTextureID)(intptr_t) manimation.graphics[currentFrame], ImVec2(300.0f, 300.0f));
                 break;
             }
         }

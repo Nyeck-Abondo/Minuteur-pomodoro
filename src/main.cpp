@@ -16,9 +16,9 @@ int main (int argc, char* argv[]) {
         std::cerr << "❌Echec de la creation du coeur de l'application" << std::endl;
         return 1;
     }
-
+    Uint64 lastTime = SDL_GetTicks();
     //lancement du coeur de l'application
-    Engine.AppRun();
+    Engine.AppRun(lastTime);
 
     //Arret propre de l'application
     Engine.AppSutdown();

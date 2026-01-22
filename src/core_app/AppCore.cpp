@@ -11,9 +11,13 @@ namespace App {
             std::cout << "🏗️ Destruction du coeur de l'application." <<std::endl;
         }
 
-        void AppCore::AppRun() {
+        void AppCore::AppRun(Uint64 lastTime) {
             while (mrunning) {
                 handleEvent();
+                //recuperationd e l'instant present
+                Uint64 now = SDL_GetTicks();
+                //calcul de la variation
+                Uint64 deltaTime = now - lastTime;
                 ImGui_ImplSDLRenderer3_NewFrame();
                 ImGui_ImplSDL3_NewFrame();
                 ImGui::NewFrame();
@@ -49,9 +53,9 @@ namespace App {
                                                 chrono.GetRestSecondes(), chrono.GetLonRestMinutes(), chrono.GetLongRestSecondes());
                 //explication d'entree de jeu
                 static int count = 0;
-                if (count <= 100) count++;
-                if (count < 100) {
-                    chrono.Explanations(mstatistics.GetPeriod(), mwindowUi.GettextureUI());
+                if (count <= 500) count++;
+                if (count < 500) {
+                    chrono.Explanations(mstatistics.GetPeriod(), deltaTime);
                 }
                 //test fenetre globale de statistics
                 if (mstatistics.GetPeriod() == chrono.GetSessionNumber() && Session.minutes == 0 && Session.secondes <= 0.4f && Session.secondes >= 0.20f) { 
@@ -143,15 +147,23 @@ namespace App {
             mwindow.ChangePrincipalTheme(mwindow.mCurrenTheme);
             std::cout << "initialisation des statistiques a 0" <<std::endl;
 
+            if (!chrono.AnimationInitialised(mwindow.GetRenderer())) {
+                std::cout << "❌ Echec de chargement des Gifs de presentation" << std::endl;
+                return false;
+            }
+
             //chargement des textures des icones
             mwindowUi.CreateUITexture(mwindow.GetRenderer());
             if (!mwindowUi.Load_animatedTexture(mwindow.GetRenderer())) {
                 std::cout << "❌ Echec de chargement des Gifs animés" << std::endl;
+                return false;
             }
+
             return true;
         }
 
         void AppCore::AppSutdown() {
+            chrono.AnimationShutdown();
             mwindowUi.ShutdownUI();
             if(mwindow.Initialised()) mwindow.ShutdownWindow();
             std::cout << "🛠️ Arret du moteur de l'application !!" <<std::endl;

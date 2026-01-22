@@ -15,6 +15,10 @@ namespace App {
             
             Statistic::stats m_statisitcs;
             ImGuiToggleConfig config;
+            IMG_Animation* mPresentation_Animation;
+            SDL_Texture** mPresentationTexture;
+            //compteur de frames
+            int mcounterFrame;
 
             //gestions des sessions
             int m_Workminuttes;
@@ -50,6 +54,11 @@ namespace App {
             int GetSessionNumber() { return m_SessionNumber; }
 
             //METHODES
+            //methodes relatives aux animations
+            bool AnimationInitialised(SDL_Renderer* renderer);
+            void AnimationShutdown();
+            void PlayAnimation(Uint64 deltaTime);
+
             //parametre
             void TimeSettings();
             void SoundSettings();
@@ -61,7 +70,7 @@ namespace App {
             void LongRestPresentation(SDL_Texture* texture);
 
             //transition de session
-            void Explanations(int counterSession, backEnd::textureUi texture);
+            void Explanations(int counterSession, Uint64 deltaTime);
             void SessionChange(int counterSession, backEnd::textureUi texture);          
             ImVec2 CenterContent();
         };

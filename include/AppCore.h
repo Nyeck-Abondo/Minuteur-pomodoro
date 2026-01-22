@@ -35,7 +35,7 @@ namespace App {
             //Lancement, initialisation , recuperation des events, presentation
 
             bool AppInitialised();
-            void AppRun();
+            void AppRun(Uint64 lastTime);
             void handleEvent();
             void AppSutdown();
             void AppPresent();
