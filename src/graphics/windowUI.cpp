@@ -304,7 +304,6 @@ namespace App{
          */
         void windowUi::CreateUITexture(SDL_Renderer* Renderer) {
             mtools.settingsTexture = Load_imageTexture(Renderer, "assets/tools/icons8-settings-100.png");
-            mtools.chronoTexture = Load_imageTexture(Renderer, "assets/tools/timer_15553848.png");
             mtools.restTexture = Load_imageTexture(Renderer, "assets/tools/person_17580600.png");
             mtools.soundTexture = Load_imageTexture(Renderer, "assets/tools/icons8-musical-note-100.png");
             mtools.statistics =Load_imageTexture(Renderer, "assets/tools/icons8-analytique-100 (1).png");
@@ -314,7 +313,6 @@ namespace App{
             mtools.pompe = Load_imageTexture(Renderer, "assets/tools/icons8-pompes-100.png");
             //recuperation des dimensions
             SDL_GetTextureSize(mtools.settingsTexture, &settings.w, &settings.w);
-            SDL_GetTextureSize(mtools.chronoTexture, &chrono.w, &chrono.h);
             SDL_GetTextureSize(mtools.restTexture, &rest.w, &rest.h);
             SDL_GetTextureSize(mtools.soundTexture, &sound.w, &sound.h);
             SDL_GetTextureSize(mtools.statistics, &statistic.w, &statistic.h);

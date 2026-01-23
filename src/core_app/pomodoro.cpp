@@ -172,7 +172,7 @@ namespace App {
                 ImVec2 img_size = ImVec2(300.0f, 300.0f);
                 ImGui::SetCursorPosX((windowWidth - img_size.x) /2);
                 ImGui::Image((ImTextureID)(intptr_t)texture, ImVec2(300.0f, 300.0f));
-                ImGui::Text("Ceci est la session de repos long apparaissant \noccasionnelement après celles concentration. appuyez \nsur commencer pour lancer la session de repos court.");
+                ImGui::TextWrapped("Ceci est la session de repos long apparaissant occasionnelement après celles concentration. appuyez sur commencer pour lancer la session de repos court.");
                 if (ImGui::Button("commencer", ImVec2(150.0f, 60.0f))) {
                     ImGui::CloseCurrentPopup();
                 }
@@ -227,6 +227,26 @@ namespace App {
             }
             return 60.0f;
         }
+/*
+        void pomodoro::SessionNotification(int minutes, int secondes, backEnd::OfficialTheme currentTheme) {
+            switch (currentTheme) {
+                case backEnd::OfficialTheme::DARK_LIGHT_THEME02 :
+                    ImGui::BeginChild("##notification", ImVec2(700.0f, 100.0f));
+                break;
 
+                case backEnd::OfficialTheme::DARK_LIGHT_THEME :
+
+                break;
+
+                case backEnd::OfficialTheme::DARK_THEME :
+
+                break;
+
+                case backEnd::OfficialTheme::ORANGE_THEME :
+
+                break;
+            }
+        }
+*/
     } // namespace core
 } // namespace App

@@ -242,15 +242,6 @@ namespace App {
             }
         }
 
-        void AppCore::statisticsUi() {
-            //calcul des sessions completes
-            
-            Statistic::SessionDoneUi(mwindowUi.GetFontUi(), std::to_string(mstatistics.GetPeriod()).c_str());
-            Statistic::ElapsedTimeUi(mwindowUi.GetFontUi(), Session.timeCounter);
-            Statistic::TotalPauseUi(mwindowUi.GetFontUi(), mstatistics.GetPause().total_restDone);
-
-        }
-
         void AppCore::SessionRepresentaion(int counterSession, Uint64 deltaTime) {
             if (counterSession == 0) {
                 ImGui::SetCursorPos(ImVec2(340.0f, 130.0f));

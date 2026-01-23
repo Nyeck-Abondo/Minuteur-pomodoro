@@ -6,7 +6,7 @@ namespace App {
             ImVec2 center = ImGui::GetMainViewport()->GetCenter();
 
             //section des sessions teminees
-            ImGui::SetNextWindowPos(ImVec2(center.x - 350.0f, center.y + 150.0f), 0, ImVec2(0.5f, 0.5f));
+            ImGui::SetNextWindowPos(ImVec2(center.x - 220.0f, center.y + 150.0f), 0, ImVec2(0.5f, 0.5f));
             ImGui::BeginChild("##SessionDone", ImVec2(300, 200));
 
             //positionnement du compteur de sessions
@@ -36,7 +36,7 @@ namespace App {
             
 
             //section du temps de comcentration effectue
-            ImGui::SetNextWindowPos(ImVec2(center.x, center.y + 150.0f), 0, ImVec2(0.5f, 0.5f));
+            ImGui::SetNextWindowPos(ImVec2(center.x + 130.0f, center.y + 150.0f), 0, ImVec2(0.5f, 0.5f));
             ImGui::BeginChild("##ElapsedTime", ImVec2(300.0f, 200.0f));
 
             //positionnement du compteur de sessions
@@ -66,7 +66,7 @@ namespace App {
             ImVec2 center = ImGui::GetMainViewport()->GetCenter();
 
             //section des session de decompte du temps
-            ImGui::SetNextWindowPos(ImVec2(center.x + 350.0f, center.y + 150.0f), 0, ImVec2(0.5f, 0.5f));
+            ImGui::SetNextWindowPos(ImVec2(center.x + 490.0f, center.y + 150.0f), 0, ImVec2(0.5f, 0.5f));
             ImGui::BeginChild("##ShortSessionDone", ImVec2(300.0f, 200.0f));
 
             //positionnement du compteur de sessions
@@ -93,7 +93,7 @@ namespace App {
             float stats[] = {(float)Totalpause, (float)restPause, (float)longPause, (float)Timecounter, (float)completed};
 
             ImVec2 center = ImGui::GetMainViewport()->GetCenter();
-            ImGui::SetNextWindowPos(ImVec2(center.x - 558.0f, center.y - 384.0f));
+            ImGui::SetNextWindowPos(ImVec2(center.x - 420.0f, center.y - 384.0f));
             ImGui::SetNextWindowSize(ImVec2(1116.0f, 768.0f), ImGuiCond_Appearing);
             ImGui::OpenPopup("Global stats");
             if (ImGui::BeginPopupModal("Global stats", NULL, ImGuiWindowFlags_NoMove)) {
@@ -112,6 +112,7 @@ namespace App {
                 ElapsedTimeUi(font, Timecounter);
                 TotalPauseUi(font, Totalpause);
                 ImGui::SetCursorPosX(midle.x - 250.0f);
+                ImGui::SetCursorPosY(690.0f);
                 if (ImGui::Button("Fermer", ImVec2(250.0f, 65.0f))) {
                     showStats = false;
                     ImGui::CloseCurrentPopup();

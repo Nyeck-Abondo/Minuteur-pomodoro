@@ -4,8 +4,7 @@
 #include "../libs/imgui_toggle/imgui_toggle.h"
 #include "../libs/ImGui_Arc_ProgressBar/arc_progress_bar.hpp"
 #include "../libs/SDL3/SDL.h"
-
-#define IM_CLAMP(V, MN, MX)     ((V) < (MN) ? (MN) : (V) > (MX) ? (MX) : (V))
+#include <cmath>
 
 namespace App {
     namespace core {
@@ -21,6 +20,9 @@ namespace App {
             SDL_Texture** mBlackPresentationTexture;
             //compteur de frames
             int mcounterFrame;
+
+            //facteurs de translation(angle)
+            float angle;         
 
             //gestions des sessions
             int m_Workminuttes;
@@ -73,8 +75,7 @@ namespace App {
 
             //transition de session
             void Explanations(int counterSession, Uint64 deltaTime, backEnd::OfficialTheme currentTeme);
-            void SessionChange(int counterSession, backEnd::textureUi texture);          
-            ImVec2 CenterContent();
+            void SessionNotification(int minutes, int secondes, backEnd::OfficialTheme currentTheme);
         };
     } // namespace core
     

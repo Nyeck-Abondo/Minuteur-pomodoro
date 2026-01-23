@@ -66,13 +66,6 @@ namespace App {
             void ParameterUi();
 
             /**
-             * @name statisticsUi
-             * @brief Affichage de la fenetre des statistiques. ne prens aucun parametre
-             * mais est cinstues de nombreuses methodes segmentant l'affichage de la stat 
-             */
-            void statisticsUi();
-
-            /**
              * @name SessionRepresentaion
              * @brief affiche des minis icones representatives des sessions en cours
              * pour une meilleure comprehension de l'utilisateur
