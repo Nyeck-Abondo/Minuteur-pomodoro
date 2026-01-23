@@ -96,9 +96,12 @@ namespace App {
                 ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(252.0f / 255.0f, 1.0f, 254.0f, 1.0f));
                 ImGuiExt::ProgressBarArc(450.0f, 360, ((float)Session.minutes * 60 + Session.secondes) * 100.0f / chrono.totalTimeToDo(mstatistics.GetPeriod()), 25.0f);
                 ImGui::PopStyleColor();
+
                 //progression des sessions
                 ImGui::EndChild();
                 ImGui::PopFont();
+
+                chrono.SessionNotification(Session.minutes, Session.secondes, mstatistics.GetPeriod(),mwindow.mCurrenTheme, mwindowUi.GettextureUI().yellowNotification, mwindowUi.GetFontUi());
 
                 //fenetre des parametres
                 if (show_parameters) {
@@ -165,7 +168,7 @@ namespace App {
         void AppCore::AppSutdown() {
             chrono.AnimationShutdown();
             mwindowUi.ShutdownUI();
-            if(mwindow.Initialised()) mwindow.ShutdownWindow();
+            mwindow.ShutdownWindow();
             std::cout << "🛠️ Arret du moteur de l'application !!" <<std::endl;
         }
 

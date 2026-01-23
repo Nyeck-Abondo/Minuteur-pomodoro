@@ -6,6 +6,8 @@
 #include "../libs/SDL3/SDL.h"
 #include <cmath>
 
+const double M_Pi =3.14159265358979323846;
+
 namespace App {
     namespace core {
         
@@ -18,11 +20,17 @@ namespace App {
             IMG_Animation* mBlackPresentation_Animation;
             SDL_Texture** mPresentationTexture;
             SDL_Texture** mBlackPresentationTexture;
+
+            //animation de point montant et descendant
+            /*Uint64 frequenceWork;
+            Uint64 frequenceRest;
+            Uint64 frequenceLongRest;*/
+            
             //compteur de frames
             int mcounterFrame;
 
             //facteurs de translation(angle)
-            float angle;         
+            float angle;
 
             //gestions des sessions
             int m_Workminuttes;
@@ -39,7 +47,10 @@ namespace App {
             bool m_Is_restSession;
             bool m_Is_workSession;
             bool m_Is_LongRestSession;
-            
+
+            //booleen de deplacement de la notification
+            bool m_IsNotificationUp;
+
             public:
             //constructeur et destructeur
             pomodoro();
@@ -62,7 +73,6 @@ namespace App {
             bool AnimationInitialised(SDL_Renderer* renderer);
             void AnimationShutdown();
             void PlayAnimation(Uint64 deltaTime, ImVec2 size, backEnd::OfficialTheme currentTeme);
-
             //parametre
             void TimeSettings();
             void SoundSettings();
@@ -72,10 +82,12 @@ namespace App {
             void WorkPresentation(SDL_Texture* texture);
             void restPresentation(SDL_Texture* texture);
             void LongRestPresentation(SDL_Texture* texture);
+            //deplacement des fenetres de notification
+            void MoveNotification(int minutes, int secondes);
 
             //transition de session
             void Explanations(int counterSession, Uint64 deltaTime, backEnd::OfficialTheme currentTeme);
-            void SessionNotification(int minutes, int secondes, backEnd::OfficialTheme currentTheme);
+            void SessionNotification(int minutes, int secondes, int counterSession, backEnd::OfficialTheme currentTheme, SDL_Texture* texture, ImFont* font);
         };
     } // namespace core
     

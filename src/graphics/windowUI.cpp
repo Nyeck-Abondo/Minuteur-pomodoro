@@ -17,7 +17,7 @@ namespace App{
          */
         windowUi::windowUi(float fontsize, ImGuiIO& io)
                 : mStyle(ImGui::GetStyle()), Uifont(nullptr), mio(io),
-                mtools({nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr}),
+                mtools({nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr}),
                 manimation({nullptr, nullptr, nullptr, nullptr, nullptr, nullptr}), manimPicture({nullptr, nullptr,
                 nullptr, nullptr, nullptr, nullptr}), mfontSize(fontsize), isInitialise(false) {
                     std::cout << "🛠️ cration de la fenetre imgui reussi !!"<<std::endl;
@@ -105,6 +105,10 @@ namespace App{
             SDL_DestroyTexture(mtools.coffee);
             SDL_DestroyTexture(mtools.pause);
             SDL_DestroyTexture(mtools.pompe);
+            SDL_DestroyTexture(mtools.yellowNotification);
+            SDL_DestroyTexture(mtools.blueNotification);
+            SDL_DestroyTexture(mtools.darkNotification);
+
         }
 
         /**
@@ -311,6 +315,9 @@ namespace App{
             mtools.coffee = Load_imageTexture(Renderer, "assets/tools/icons8-coffee-cup-100.png");
             mtools.pause = Load_imageTexture(Renderer, "assets/tools/icons8-pause-100.png");
             mtools.pompe = Load_imageTexture(Renderer, "assets/tools/icons8-pompes-100.png");
+            mtools.yellowNotification = Load_imageTexture(Renderer, "assets/notification/png/002-actif-1.png");
+            mtools.blueNotification = Load_imageTexture(Renderer, "assets/notification/png/001-actif.png");
+            mtools.darkNotification = Load_imageTexture(Renderer, "assets/notification/png/003-actif-2.png");
             //recuperation des dimensions
             SDL_GetTextureSize(mtools.settingsTexture, &settings.w, &settings.w);
             SDL_GetTextureSize(mtools.restTexture, &rest.w, &rest.h);

@@ -31,7 +31,7 @@ namespace App {
             
             //window state
             bool isInitialise;
-            backEnd::sizeTexture settings, chrono, rest
+            backEnd::sizeTexture settings, rest
                 , sound, statistic, work, pause, coffee
                 , pompe;
             

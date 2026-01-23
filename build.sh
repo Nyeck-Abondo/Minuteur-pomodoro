@@ -116,15 +116,15 @@ echo "==========VERIFICATION DE LA PRESENCE DE IMGUI============="
 echo
 verification_folder "libs/imgui" "imgui"
 
-echo "==========VERIFICATION DE LA PRESENCE DE IMGUI_TOGGLE============"
+echo "VERIFICATION DE LA PRESENCE DE IMGUI_TOGGLE============"
 echo
 verification_folder "libs/imgui_toggle" "imgui_toggle"
 
-echo "===========VERIFICATION DE LA PRESENCE DE STB_IMGAGE================="
+echo "VERIFICATION DE LA PRESENCE DE STB_IMGAGE"
 echo
 verification_folder "libs/stb" "stb_image"
 
-echo "==========VERIFICATION DE LA PRESENCE DE IMGUI_ARC_PROGRESS_BAR==============="
+echo "VERIFICATION DE LA PRESENCE DE IMGUI_ARC_PROGRESS_BAR"
 echo
 verification_folder "libs/ImGui_Arc_ProgressBar" "imgui_arc_progressBar"
 

@@ -70,6 +70,10 @@ namespace App{
             SDL_Texture* pause;
             SDL_Texture* pompe;
             SDL_Texture* coffee;
+            SDL_Texture* darkNotification;
+            SDL_Texture* yellowNotification;
+            SDL_Texture* blueNotification;
+            
         };
 
         struct animTexureUi {

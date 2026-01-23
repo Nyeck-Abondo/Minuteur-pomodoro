@@ -4,10 +4,10 @@ namespace App {
     namespace core {
         
         pomodoro::pomodoro(): m_statisitcs(),mPresentation_Animation(nullptr), mBlackPresentation_Animation(nullptr),
-                mPresentationTexture(nullptr), mBlackPresentationTexture(nullptr),mcounterFrame(0), m_Workminuttes(25),
+                mPresentationTexture(nullptr), mBlackPresentationTexture(nullptr),mcounterFrame(0), angle(0.0f), m_Workminuttes(25),
                 m_WorkSecondes(0), m_RestMinutes(5), m_RestSeconeds(0), m_LongRest_Minutes(15), m_LongRest_Secondes(0),
                 m_SessionNumber(7),m_Activate_Sound(true), m_Is_restSession(false), m_Is_workSession(false),
-                m_Is_LongRestSession(false) {
+                m_Is_LongRestSession(false), m_IsNotificationUp(false) {
                     std::cout << "⏱️ Creation du pomodoro effectuée avec succès !" <<std::endl;
                 }
         
@@ -227,26 +227,93 @@ namespace App {
             }
             return 60.0f;
         }
-/*
-        void pomodoro::SessionNotification(int minutes, int secondes, backEnd::OfficialTheme currentTheme) {
+
+        void pomodoro::SessionNotification(int minutes, int secondes, int counterSession, backEnd::OfficialTheme currentTheme, SDL_Texture* texture, ImFont* font) {
+            //definition de l'angle
+            ImVec2 sizeText = ImGui::CalcTextSize("Session de concentration en cours . . .");
+            
             switch (currentTheme) {
                 case backEnd::OfficialTheme::DARK_LIGHT_THEME02 :
-                    ImGui::BeginChild("##notification", ImVec2(700.0f, 100.0f));
+                
+                    if (counterSession == 1) {
+                        //mouvement de la notification
+                        if (angle <= M_Pi) {
+                            m_IsNotificationUp = false;
+                        }
+                        if (!m_IsNotificationUp) {
+                            angle += 0.01f;
+                        }
+                        }else if (angle >=0 || m_IsNotificationUp){
+                           angle -= 0.01f;
+                        }
+                        if (angle == M_Pi) {
+                            m_IsNotificationUp = true;
+                        }
+                        //definition du moment de la duree de vie de la notification
+                        if ( minutes <= m_Workminuttes - 1 && minutes > 0 && secondes >= 2.0f ) {
+                             
+                            ImGui::SetNextWindowPos(ImVec2(360.0f, 1000.0f - (370.0f * sinf(angle))));
+                            ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 10.0f);
+                            ImGui::BeginChild("##notification", ImVec2(800.0f, 100.0f), ImGuiChildFlags_FrameStyle, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav);
+                            ImGui::Image((ImTextureID)(intptr_t) (texture), ImVec2(75.0f, 75.0f));
+                            ImGui::SameLine();
+                            ImGui::PushFont(font, 30.0f);
+                            ImGui::SetCursorPos(ImVec2(350.0f - sizeText.x / 2.0f, 50.0f - sizeText.y / 2.0f));
+                            ImGui::Text("Session de concentration en cours . . .");
+                            ImGui::SameLine();
+                            ImGui::SetCursorPos(ImVec2(0.0f, 0.0f));
+                            ImGui::Text(" . ");
+                            ImGui::PopFont();
+                        
+                            ImGui::EndChild();
+                            ImGui::PopStyleVar();
+                        }
+                        if (m_Workminuttes == 0 && m_WorkSecondes <= 0.5f) {
+                            angle = 0.0f;
+                        }
+
+                    if (counterSession % 2 != 0 || counterSession == 1) {
+
+                    }
+
+                    else if (counterSession % 2 == 0 && counterSession % 4 != 0) {
+
+                    }
+
+                    else if (counterSession % 4 == 0) {
+
+                    }
+
                 break;
 
                 case backEnd::OfficialTheme::DARK_LIGHT_THEME :
+                    ImGui::SetNextWindowPos(ImVec2(350.0f, 640.0f));
+                    ImGui::BeginChild("##notification", ImVec2(700.0f, 100.0f), ImGuiChildFlags_FrameStyle, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav);
 
+                    ImGui::Image((ImTextureID)(intptr_t) (texture), ImVec2(75.0f, 75.0f));
+
+                    ImGui::EndChild();
                 break;
 
                 case backEnd::OfficialTheme::DARK_THEME :
+                    ImGui::SetNextWindowPos(ImVec2(350.0f, 640.0f));
+                    ImGui::BeginChild("##notification", ImVec2(700.0f, 100.0f), ImGuiChildFlags_FrameStyle, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav);
 
+                    ImGui::Image((ImTextureID)(intptr_t) (texture), ImVec2(75.0f, 75.0f));
+
+                    ImGui::EndChild();
                 break;
 
                 case backEnd::OfficialTheme::ORANGE_THEME :
+                    ImGui::SetNextWindowPos(ImVec2(350.0f, 640.0f));
+                    ImGui::BeginChild("##notification", ImVec2(700.0f, 100.0f), ImGuiChildFlags_FrameStyle, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav);
 
+                    ImGui::Image((ImTextureID)(intptr_t) (texture), ImVec2(75.0f, 75.0f));
+
+                    ImGui::EndChild();
                 break;
             }
         }
-*/
+
     } // namespace core
 } // namespace App

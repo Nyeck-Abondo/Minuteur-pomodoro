@@ -18,6 +18,10 @@ namespace App {
          * @return nothing
          */
         bool window::InitialiseWindow() {
+            if (!SDL_Init(SDL_INIT_VIDEO)) {
+                std::cerr << "Erreur SDL_Init: " << SDL_GetError() << std::endl;
+                return false;
+            }
             mappWindow = SDL_CreateWindow(mwinTitle.c_str(), mwinWidth, mwinHeight, 0);
             if (!mappWindow) {
                 std::cerr<<"Erreur d'initialisation de la fenetre : "<<SDL_GetError()<< std::endl;
