@@ -5,9 +5,10 @@ namespace App {
         
         pomodoro::pomodoro(): m_statisitcs(),mPresentation_Animation(nullptr), mBlackPresentation_Animation(nullptr),
                 mPresentationTexture(nullptr), mBlackPresentationTexture(nullptr),mcounterFrame(0.0f), m_Angle(0.0f),
-                m_CounterDelay(0), m_notificationUp(false), m_Workminuttes(25), m_WorkSecondes(0), m_RestMinutes(5),
-                m_RestSeconeds(0), m_LongRest_Minutes(15), m_LongRest_Secondes(0), m_SessionNumber(7),m_Activate_Sound(true),
-                m_Is_restSession(false), m_Is_workSession(false), m_Is_LongRestSession(false) {
+                m_Angle02(0.0f), m_CounterDelay(0), m_counterDelay02(0), m_notificationUp(false), m_notificationUp02(false),
+                m_Workminuttes(25), m_WorkSecondes(0), m_RestMinutes(5), m_RestSeconeds(0), m_LongRest_Minutes(15),
+                m_LongRest_Secondes(0), m_SessionNumber(7),m_Activate_Sound(true), m_Is_restSession(false), m_Is_workSession(false),
+                m_Is_LongRestSession(false) {
                     std::cout << "⏱️ Creation du pomodoro effectuée avec succès !" <<std::endl;
                 }
         
@@ -235,194 +236,222 @@ namespace App {
             switch (currentTheme) {
                 case backEnd::OfficialTheme::DARK_LIGHT_THEME02 :
                     //mouvement de la notification
-                    
-                    if (counterSession == 0) {
-                        
-                        //definition du moment de la duree de vie de la notification
-                        if ( minutes <= 0 && secondes >= 5.0f ) {
-                            MoveNotification();
-                            ImGui::SetNextWindowPos(ImVec2(360.0f, 1000.0f - (370.0f * sinf(m_Angle))));
-                            ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 10.0f);
-                            ImGui::BeginChild("##notifications", ImVec2(800.0f, 100.0f), ImGuiChildFlags_FrameStyle, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav);
-                            ImGui::Image((ImTextureID)(intptr_t) (texture), ImVec2(75.0f, 75.0f));
-                            ImGui::SameLine();
-                            ImGui::PushFont(font, 30.0f);
-                            ImGui::SetCursorPos(ImVec2(350.0f - sizeText.x / 2.0f, 50.0f - sizeText.y / 2.0f));
-                            ImGui::Text(u8"Preparez vous à commencer . . .");
-                            ImGui::PopFont();
-                        
-                            ImGui::EndChild();
-                            ImGui::PopStyleVar();
-                        }
-                        if (minutes == 0 && secondes < 0.2f)
-                        ResetMoveNotificationParameters();
-
-                    }
-
-                    if (counterSession % 2 != 0 || counterSession == 1) {
-                        //definition du moment de la duree de vie de la notification
-                        if (minutes > 0 && secondes >= 2.0f ) {
-                            
-                            MoveNotification();
-                            ImGui::SetNextWindowPos(ImVec2(360.0f, 1000.0f - (370.0f * sinf(m_Angle))));
-                            ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 10.0f);
-                            ImGui::BeginChild("##notification02", ImVec2(800.0f, 100.0f), ImGuiChildFlags_FrameStyle, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav);
-                            ImGui::Image((ImTextureID)(intptr_t) (texture), ImVec2(75.0f, 75.0f));
-                            ImGui::SameLine();
-                            ImGui::PushFont(font, 30.0f);
-                            ImGui::SetCursorPos(ImVec2(350.0f - sizeText.x / 2.0f, 50.0f - sizeText.y / 2.0f));
-                            ImGui::Text("Session de concentration en cours . . .");
-                            ImGui::PopFont();
-                        
-                            ImGui::EndChild();
-                            ImGui::PopStyleVar();
-                        }
-                    
-                        if (minutes == 0 && secondes <= 45.0f) {
-                            ResetMoveNotificationParameters();
-                            MoveNotification();
-                            ImGui::SetNextWindowPos(ImVec2(360.0f, 1000.0f - (370.0f * sinf(m_Angle))));
-                            ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 10.0f);
-                            ImGui::BeginChild("##notification03", ImVec2(800.0f, 100.0f), ImGuiChildFlags_FrameStyle, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav);
-                            ImGui::Image((ImTextureID)(intptr_t) (texture), ImVec2(75.0f, 75.0f));
-                            ImGui::SameLine();
-                            ImGui::PushFont(font, 30.0f);
-                            ImGui::SetCursorPos(ImVec2(350.0f - sizeText.x / 2.0f, 50.0f - sizeText.y / 2.0f));
-                            ImGui::Text("Fin de la session de concentration . . .");
-                            ImGui::PopFont();
-                        
-                            ImGui::EndChild();
-                            ImGui::PopStyleVar();
-                        }
-                        if (minutes == 0 && secondes < 0.2f)
-                        ResetMoveNotificationParameters();
-                    }
-
-                    else if (counterSession % 2 == 0 && counterSession % 4 != 0) {
-                        //definition du moment de la duree de vie de la notification
-                        if ( minutes <= m_LongRest_Minutes - 1 && minutes > 0 && secondes >= 2.0f ) {
-                            MoveNotification();
-                            ImGui::SetNextWindowPos(ImVec2(360.0f, 1000.0f - (370.0f * sinf(m_Angle))));
-                            ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 10.0f);
-                            ImGui::BeginChild("##notification04", ImVec2(800.0f, 100.0f), ImGuiChildFlags_FrameStyle, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav);
-                            ImGui::Image((ImTextureID)(intptr_t) (texture), ImVec2(75.0f, 75.0f));
-                            ImGui::SameLine();
-                            ImGui::PushFont(font, 30.0f);
-                            ImGui::SetCursorPos(ImVec2(350.0f - sizeText.x / 2.0f, 50.0f - sizeText.y / 2.0f));
-                            ImGui::Text("Session de repos court en cours . . .");
-                            ImGui::PopFont();
-                        
-                            ImGui::EndChild();
-                            ImGui::PopStyleVar();
-                        }
-                    
-                        if (m_LongRest_Minutes == 0 && m_LongRest_Secondes <= 45.0f) {
-                            ResetMoveNotificationParameters();
-                            MoveNotification();
-                            ImGui::SetNextWindowPos(ImVec2(360.0f, 1000.0f - (370.0f * sinf(m_Angle))));
-                            ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 10.0f);
-                            ImGui::BeginChild("##notification05", ImVec2(800.0f, 100.0f), ImGuiChildFlags_FrameStyle, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav);
-                            ImGui::Image((ImTextureID)(intptr_t) (texture), ImVec2(75.0f, 75.0f));
-                            ImGui::SameLine();
-                            ImGui::PushFont(font, 30.0f);
-                            ImGui::SetCursorPos(ImVec2(350.0f - sizeText.x / 2.0f, 50.0f - sizeText.y / 2.0f));
-                            ImGui::Text("Fin de la session de repos court . . .");
-                            ImGui::PopFont();
-                        
-                            ImGui::EndChild();
-                            ImGui::PopStyleVar();
-                        }
-                        if (minutes == 0 && secondes < 0.2f)
-                        ResetMoveNotificationParameters();
-                    }
-
-                    else if (counterSession % 4 == 0) {
-                        //definition du moment de la duree de vie de la notification
-                        if ( minutes <= m_RestMinutes - 1 && minutes > 0 && secondes >= 2.0f ) {
-                            MoveNotification();
-                            ImGui::SetNextWindowPos(ImVec2(360.0f, 1000.0f - (370.0f * sinf(m_Angle))));
-                            ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 10.0f);
-                            ImGui::BeginChild("##notification06", ImVec2(800.0f, 100.0f), ImGuiChildFlags_FrameStyle, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav);
-                            ImGui::Image((ImTextureID)(intptr_t) (texture), ImVec2(75.0f, 75.0f));
-                            ImGui::SameLine();
-                            ImGui::PushFont(font, 30.0f);
-                            ImGui::SetCursorPos(ImVec2(350.0f - sizeText.x / 2.0f, 50.0f - sizeText.y / 2.0f));
-                            ImGui::Text("Session de repos court en cours . . .");
-                            ImGui::PopFont();
-                        
-                            ImGui::EndChild();
-                            ImGui::PopStyleVar();
-                        }
-                    
-                        if (m_RestMinutes == 0 && m_RestSeconeds <= 45.0f) {
-                            ResetMoveNotificationParameters();
-                            MoveNotification();
-                            ImGui::SetNextWindowPos(ImVec2(360.0f, 1000.0f - (370.0f * sinf(m_Angle))));
-                            ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 10.0f);
-                            ImGui::BeginChild("##notification07", ImVec2(800.0f, 100.0f), ImGuiChildFlags_FrameStyle, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav);
-                            ImGui::Image((ImTextureID)(intptr_t) (texture), ImVec2(75.0f, 75.0f));
-                            ImGui::SameLine();
-                            ImGui::PushFont(font, 30.0f);
-                            ImGui::SetCursorPos(ImVec2(350.0f - sizeText.x / 2.0f, 50.0f - sizeText.y / 2.0f));
-                            ImGui::Text("Fin de la session de repos court . . .");
-                            ImGui::PopFont();
-                        
-                            ImGui::EndChild();
-                            ImGui::PopStyleVar();
-                        }
-                    }
-
+                    ManageNotification(texture, counterSession, minutes, secondes, font, sizeText);
+                    ManageEndNotification(texture, counterSession, minutes, secondes, font, sizeText);
                 break;
 
                 case backEnd::OfficialTheme::DARK_LIGHT_THEME :
-                    ImGui::SetNextWindowPos(ImVec2(350.0f, 640.0f));
-                    ImGui::BeginChild("##notification", ImVec2(700.0f, 100.0f), ImGuiChildFlags_FrameStyle, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav);
-
-                    ImGui::Image((ImTextureID)(intptr_t) (texture), ImVec2(75.0f, 75.0f));
-
-                    ImGui::EndChild();
+                    ManageNotification(texture, counterSession, minutes, secondes, font, sizeText);
+                    ManageEndNotification(texture, counterSession, minutes, secondes, font, sizeText);
                 break;
 
                 case backEnd::OfficialTheme::DARK_THEME :
-                    ImGui::SetNextWindowPos(ImVec2(350.0f, 640.0f));
-                    ImGui::BeginChild("##notification", ImVec2(700.0f, 100.0f), ImGuiChildFlags_FrameStyle, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav);
-
-                    ImGui::Image((ImTextureID)(intptr_t) (texture), ImVec2(75.0f, 75.0f));
-
-                    ImGui::EndChild();
+                    ManageNotification(texture, counterSession, minutes, secondes, font, sizeText);
+                    ManageEndNotification(texture, counterSession, minutes, secondes, font, sizeText);
                 break;
 
                 case backEnd::OfficialTheme::ORANGE_THEME :
-                    ImGui::SetNextWindowPos(ImVec2(350.0f, 640.0f));
-                    ImGui::BeginChild("##notification", ImVec2(700.0f, 100.0f), ImGuiChildFlags_FrameStyle, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav);
-
-                    ImGui::Image((ImTextureID)(intptr_t) (texture), ImVec2(75.0f, 75.0f));
-
-                    ImGui::EndChild();
+                    ManageNotification(texture, counterSession, minutes, secondes, font, sizeText);
+                    ManageEndNotification(texture, counterSession, minutes, secondes, font, sizeText);
                 break;
             }
         }
 
-        void pomodoro::MoveNotification() {
+        void pomodoro::MoveNotification(float &angle, bool &notificationUp, int &counterDelay) {
             //mouvement de la notification
-            if (m_Angle <= M_Pi / 2 && !m_notificationUp) {
-                m_Angle += 0.01f;
+            if (angle <= M_Pi / 2 && !notificationUp) {
+                angle += 0.01f;
             }
-            else if (m_Angle >= M_Pi / 2) {
-                if (m_CounterDelay <= 850) m_CounterDelay++;
+            else if (angle >= M_Pi / 2) {
+                if (counterDelay <= 850) counterDelay++;
             }
             
-            if (m_CounterDelay == 850) {
-                m_notificationUp = true;
-                m_Angle -= 0.01f;
-                if (m_Angle < 0.0f) m_Angle = 0.0f;
+            if (counterDelay == 850) {
+                notificationUp = true;
+                angle -= 0.01f;
+                if (angle < 0.0f) angle = 0.0f;
             }   
         }
 
         void pomodoro::ResetMoveNotificationParameters() {
             m_Angle = 0.0f;
+            m_Angle02 = 0.0f;
             m_CounterDelay = 0;
+            m_counterDelay02 = 0;
             m_notificationUp = false;
+            m_notificationUp02 = false;
+        }
+
+        void pomodoro::ResetMoveNotificationParametres02() {
+            m_Angle02 = 0.0f;
+            m_notificationUp02 = false;
+            m_counterDelay02 = 0;
+        }
+
+        void pomodoro::ResetMoveNotificationParameters01() {
+            m_Angle = 0.0f;
+            m_notificationUp = false;
+            m_CounterDelay = 0;
+        }
+
+        void pomodoro::ManageNotification(SDL_Texture* texture, int counterSession, int minutes, float secondes, ImFont* font,  ImVec2 sizeText) {
+            if (counterSession == 0) {
+                
+                //definition du moment de la duree de vie de la notification
+                if ( minutes <= 0 && secondes <= 5.0f ) {
+                    MoveNotification(m_Angle, m_notificationUp, m_CounterDelay);
+                    ImGui::SetNextWindowPos(ImVec2(360.0f, 1000.0f - (370.0f * sinf(m_Angle))));
+                    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 10.0f);
+                    ImGui::BeginChild("##notifications", ImVec2(800.0f, 100.0f), ImGuiChildFlags_FrameStyle, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav);
+                    ImGui::Image((ImTextureID)(intptr_t) (texture), ImVec2(75.0f, 75.0f));
+                    ImGui::SameLine();
+                    ImGui::PushFont(font, 30.0f);
+                    ImGui::SetCursorPos(ImVec2(350.0f - sizeText.x / 2.0f, 50.0f - sizeText.y / 2.0f));
+                    ImGui::Text(u8"Preparez vous à commencer . . .");
+                    ImGui::PopFont();
+                    
+                    ImGui::EndChild();
+                    ImGui::PopStyleVar();
+                }
+                if (minutes == 0 && secondes < 0.2f)
+                ResetMoveNotificationParameters01();
+            }
+
+            if (counterSession % 2 != 0 || counterSession == 1) {
+                //definition du moment de la duree de vie de la notification
+                if (minutes > 0 && secondes >= 2.0f ) {
+                        
+                    MoveNotification(m_Angle, m_notificationUp, m_CounterDelay);
+                    ImGui::SetNextWindowPos(ImVec2(360.0f, 1000.0f - (370.0f * sinf(m_Angle))));
+                    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 10.0f);
+                    ImGui::BeginChild("##notification02", ImVec2(800.0f, 100.0f), ImGuiChildFlags_FrameStyle, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav);
+                    ImGui::Image((ImTextureID)(intptr_t) (texture), ImVec2(75.0f, 75.0f));
+                    ImGui::SameLine();
+                    ImGui::PushFont(font, 30.0f);
+                    ImGui::SetCursorPos(ImVec2(350.0f - sizeText.x / 2.0f, 50.0f - sizeText.y / 2.0f));
+                    ImGui::Text("Session de concentration en cours . . .");
+                    ImGui::PopFont();
+                    
+                    ImGui::EndChild();
+                    ImGui::PopStyleVar();
+                    ResetMoveNotificationParametres02();
+                }
+                if (minutes == 0 && secondes < 0.2f)
+                ResetMoveNotificationParameters01();
+            }
+
+            else if (counterSession % 2 == 0 && counterSession % 4 != 0) {
+                //definition du moment de la duree de vie de la notification
+                if ( minutes > 0 && secondes >= 2.0f ) {
+                    MoveNotification(m_Angle, m_notificationUp, m_CounterDelay);
+                    ImGui::SetNextWindowPos(ImVec2(360.0f, 1000.0f - (370.0f * sinf(m_Angle))));
+                    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 10.0f);
+                    ImGui::BeginChild("##notification04", ImVec2(800.0f, 100.0f), ImGuiChildFlags_FrameStyle, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav);
+                    ImGui::Image((ImTextureID)(intptr_t) (texture), ImVec2(75.0f, 75.0f));
+                    ImGui::SameLine();
+                    ImGui::PushFont(font, 30.0f);
+                    ImGui::SetCursorPos(ImVec2(350.0f - sizeText.x / 2.0f, 50.0f - sizeText.y / 2.0f));
+                    ImGui::Text("Session de repos court en cours . . .");
+                    ImGui::PopFont();
+                        
+                    ImGui::EndChild();
+                    ImGui::PopStyleVar();
+                }
+                if (minutes == 0 && secondes < 0.2f)
+                ResetMoveNotificationParameters01();
+               
+            }
+
+            else if (counterSession % 4 == 0 && counterSession != 0) {
+                //definition du moment de la duree de vie de la notification
+                if (minutes > 0 && secondes >= 2.0f) {
+                    MoveNotification(m_Angle, m_notificationUp, m_CounterDelay);
+                    ImGui::SetNextWindowPos(ImVec2(360.0f, 1000.0f - (370.0f * sinf(m_Angle))));
+                    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 10.0f);
+                    ImGui::BeginChild("##notification06", ImVec2(800.0f, 100.0f), ImGuiChildFlags_FrameStyle, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav);
+                    ImGui::Image((ImTextureID)(intptr_t) (texture), ImVec2(75.0f, 75.0f));
+                    ImGui::SameLine();
+                    ImGui::PushFont(font, 30.0f);
+                    ImGui::SetCursorPos(ImVec2(350.0f - sizeText.x / 2.0f, 50.0f - sizeText.y / 2.0f));
+                    ImGui::Text("Session de repos long en cours . . .");
+                    ImGui::PopFont();
+                    
+                    ImGui::EndChild();
+                    ImGui::PopStyleVar();
+                }
+                
+                if (minutes == 0 && secondes < 0.2f)
+                ResetMoveNotificationParameters01();
+            }
+        }
+
+        void pomodoro::ManageEndNotification(SDL_Texture* texture, int counterSession, int minutes, float secondes, ImFont* font, ImVec2 sizeText) {
+            
+            if (counterSession % 2 != 0 || counterSession == 1) {
+                //definition du moment de la duree de vie de la notification    
+                if (minutes == 0 && secondes < 50.0f) {
+                    MoveNotification(m_Angle02, m_notificationUp02, m_counterDelay02);
+                    std::cout << "m_Angle02: " << m_Angle02 << std::endl;
+                    std::cout << "m_Angle: " << m_Angle << std::endl;
+                    ImGui::SetNextWindowPos(ImVec2(360.0f, 1000.0f - (370.0f * sinf(m_Angle02))));
+                    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 10.0f);
+                    ImGui::BeginChild("##notification03", ImVec2(800.0f, 100.0f), ImGuiChildFlags_FrameStyle, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav);
+                    ImGui::Image((ImTextureID)(intptr_t) (texture), ImVec2(75.0f, 75.0f));
+                    ImGui::SameLine();
+                    ImGui::PushFont(font, 30.0f);
+                    ImGui::SetCursorPos(ImVec2(350.0f - sizeText.x / 2.0f, 50.0f - sizeText.y / 2.0f));
+                    ImGui::Text("Fin de la session de concentration . . .");
+                    ImGui::PopFont();
+                
+                    ImGui::EndChild();
+                    ImGui::PopStyleVar();
+                }
+                if (minutes == 0 && secondes < 0.2f)
+                ResetMoveNotificationParametres02();
+            }
+
+            else if (counterSession % 2 == 0 && counterSession % 4 != 0) {
+                //definition du moment de la duree de vie de la notification
+
+                if (minutes == 0 && secondes <= 45.0f) {
+                    MoveNotification(m_Angle02, m_notificationUp02, m_counterDelay02);
+                    ImGui::SetNextWindowPos(ImVec2(360.0f, 1000.0f - (370.0f * sinf(m_Angle02))));
+                    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 10.0f);
+                    ImGui::BeginChild("##notification05", ImVec2(800.0f, 100.0f), ImGuiChildFlags_FrameStyle, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav);
+                    ImGui::Image((ImTextureID)(intptr_t) (texture), ImVec2(75.0f, 75.0f));
+                    ImGui::SameLine();
+                    ImGui::PushFont(font, 30.0f);
+                    ImGui::SetCursorPos(ImVec2(350.0f - sizeText.x / 2.0f, 50.0f - sizeText.y / 2.0f));
+                    ImGui::Text("Fin de la session de repos court . . .");
+                    ImGui::PopFont();
+                
+                    ImGui::EndChild();
+                    ImGui::PopStyleVar();
+                }
+                if (minutes == 0 && secondes < 0.2f)
+                ResetMoveNotificationParametres02();
+            }
+
+            else if (counterSession % 4 == 0 && counterSession != 0) {
+                //definition du moment de la duree de vie de la notification
+                if (minutes == 0 && secondes <= 45.0f) {
+                    MoveNotification(m_Angle02, m_notificationUp02, m_counterDelay02);
+                    ImGui::SetNextWindowPos(ImVec2(360.0f, 1000.0f - (370.0f * sinf(m_Angle02))));
+                    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 10.0f);
+                    ImGui::BeginChild("##notification07", ImVec2(800.0f, 100.0f), ImGuiChildFlags_FrameStyle, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav);
+                    ImGui::Image((ImTextureID)(intptr_t) (texture), ImVec2(75.0f, 75.0f));
+                    ImGui::SameLine();
+                    ImGui::PushFont(font, 30.0f);
+                    ImGui::SetCursorPos(ImVec2(350.0f - sizeText.x / 2.0f, 50.0f - sizeText.y / 2.0f));
+                    ImGui::Text("Fin de la session de repos court . . .");
+                    ImGui::PopFont();
+                    
+                    ImGui::EndChild();
+                    ImGui::PopStyleVar();
+                }
+                if (minutes == 0 && secondes < 0.2f)
+                ResetMoveNotificationParametres02();
+            }
         }
 
     } // namespace core

@@ -31,9 +31,12 @@ namespace App {
 
             //facteurs de translation(angle)
             float m_Angle;
+            float m_Angle02;
             //variable de deco;pte de temps
             int m_CounterDelay;
+            int m_counterDelay02;
             bool m_notificationUp;
+            bool m_notificationUp02;
 
             //gestions des sessions
             int m_Workminuttes;
@@ -86,8 +89,13 @@ namespace App {
             void restPresentation(SDL_Texture* texture);
             void LongRestPresentation(SDL_Texture* texture);
             //deplacement des fenetres de notification
-            void MoveNotification();
+            void MoveNotification(float &angle, bool &notificationUp, int &counterDelay);
             void ResetMoveNotificationParameters();
+            void ResetMoveNotificationParametres02();
+            void ResetMoveNotificationParameters01();
+            //affichage des notifications
+            void ManageNotification(SDL_Texture* texture, int counterSession, int minutes, float secondes, ImFont* font, ImVec2 sizeText);
+            void ManageEndNotification(SDL_Texture* texture, int counterSession, int minutes, float secondes, ImFont* font, ImVec2 sizeText);
 
             //transition de session
             void Explanations(int counterSession, Uint64 deltaTime, backEnd::OfficialTheme currentTeme);

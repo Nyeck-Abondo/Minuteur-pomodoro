@@ -11,7 +11,7 @@ int main (int argc, char* argv[]) {
     ImGui::CreateContext();
     App::core::AppCore Engine(1366.0f, 768.0f, "Minuteur Pomodoro", ImGui::GetIO());
 
-    //initialia=sation du coeur
+    //initialisation du coeur
     if (!Engine.AppInitialised()) {
         std::cerr << "❌Echec de la creation du coeur de l'application" << std::endl;
         return 1;
