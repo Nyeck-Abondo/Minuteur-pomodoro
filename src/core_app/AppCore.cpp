@@ -3,7 +3,7 @@ namespace App {
     namespace core {
         //constructeur
         AppCore::AppCore(float width, float height, std::string title, ImGuiIO& io): mwindow(height, width, title), mwindowUi(25.0f, io)
-        , mstatistics() , Session(0, 3) {
+        , mstatistics() , Session(0, 5) {
             std::cout << "🧰 Creation du coeur de l'application reussie avec succes !!" << std::endl;
         }
 

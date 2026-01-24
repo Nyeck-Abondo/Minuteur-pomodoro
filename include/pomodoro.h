@@ -30,7 +30,7 @@ namespace App {
             int mcounterFrame;
 
             //facteurs de translation(angle)
-            float angle;
+            float m_Angle;
             //variable de deco;pte de temps
             int m_CounterDelay;
             bool m_notificationUp;
@@ -75,7 +75,7 @@ namespace App {
             bool AnimationInitialised(SDL_Renderer* renderer);
             void AnimationShutdown();
             void PlayAnimation(Uint64 deltaTime, ImVec2 size, backEnd::OfficialTheme currentTeme);
-            void Dotanimation();
+
             //parametre
             void TimeSettings();
             void SoundSettings();
