@@ -31,6 +31,9 @@ namespace App {
 
             //facteurs de translation(angle)
             float angle;
+            //variable de deco;pte de temps
+            int m_CounterDelay;
+            bool m_notificationUp;
 
             //gestions des sessions
             int m_Workminuttes;
@@ -48,8 +51,7 @@ namespace App {
             bool m_Is_workSession;
             bool m_Is_LongRestSession;
 
-            //booleen de deplacement de la notification
-            bool m_IsNotificationUp;
+            
 
             public:
             //constructeur et destructeur
@@ -73,6 +75,7 @@ namespace App {
             bool AnimationInitialised(SDL_Renderer* renderer);
             void AnimationShutdown();
             void PlayAnimation(Uint64 deltaTime, ImVec2 size, backEnd::OfficialTheme currentTeme);
+            void Dotanimation();
             //parametre
             void TimeSettings();
             void SoundSettings();
@@ -83,7 +86,8 @@ namespace App {
             void restPresentation(SDL_Texture* texture);
             void LongRestPresentation(SDL_Texture* texture);
             //deplacement des fenetres de notification
-            void MoveNotification(int minutes, int secondes);
+            void MoveNotification();
+            void ResetMoveNotificationParameters();
 
             //transition de session
             void Explanations(int counterSession, Uint64 deltaTime, backEnd::OfficialTheme currentTeme);

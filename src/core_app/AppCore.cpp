@@ -44,6 +44,7 @@ namespace App {
                 if (restart) {
                     mstatistics.StatisticInitialisation();
                     Session.InitialiseTimer(0, 3);
+                    chrono.ResetMoveNotificationParameters();
                     restart = false;
                 }
 
