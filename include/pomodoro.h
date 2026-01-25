@@ -1,3 +1,5 @@
+#pragma once
+
 #include "structs.h"
 #include "statistic.h"
 #include "../libs/imgui/imgui.h"
