@@ -4,8 +4,6 @@
 #include "../libs/imgui/imgui.h"
 #include "../libs/imgui/imgui_impl_sdl3.h"
 #include "../libs/imgui/imgui_impl_sdlrenderer3.h"
-#include "../libs/imgui_toggle/imgui_toggle.h"
-#include "../libs/imgui_toggle/imgui_toggle_presets.h"
 #include <string>
 #include <iostream>
 #include "structs.h"
@@ -17,7 +15,6 @@ namespace App {
             //window configuration
             ImGuiStyle& mStyle;
             ImFont* Uifont;
-            ImGuiToggleConfig mtoggleConfig;
             ImGuiIO& mio;
             backEnd::textureUi mtools;
 
@@ -46,7 +43,6 @@ namespace App {
             backEnd::animType GetAnimType() { return manimType; }
             ImGuiStyle GetUIstyle() const { return mStyle;}
             ImFont* GetFontUi() const { return Uifont;}
-            ImGuiToggleConfig GetToggleConfig() const { return mtoggleConfig;}
             float GetFontSize() const { return mfontSize; }
             bool GetInitialisation() const { return isInitialise; }
 

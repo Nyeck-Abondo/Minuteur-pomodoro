@@ -3,7 +3,6 @@
 #include "structs.h"
 #include "statistic.h"
 #include "../libs/imgui/imgui.h"
-#include "../libs/imgui_toggle/imgui_toggle.h"
 #include "../libs/ImGui_Arc_ProgressBar/arc_progress_bar.hpp"
 #include "../libs/SDL3/SDL.h"
 #include <cmath>
@@ -17,7 +16,6 @@ namespace App {
             private:
             
             Statistic::stats m_statisitcs;
-            ImGuiToggleConfig config;
             IMG_Animation* mPresentation_Animation;
             IMG_Animation* mBlackPresentation_Animation;
             SDL_Texture** mPresentationTexture;
@@ -67,6 +65,7 @@ namespace App {
             bool GetIsWorkingSession() { return m_Is_workSession; }
             bool GetIsRestSession() { return m_Is_restSession;}
             bool GetIsLongRestSession() { return m_Is_LongRestSession; }
+            bool GetSoundAcive() { return m_Activate_Sound; }
             int GetWorkMinutes() { return m_Workminuttes; }
             int GetWorkSecondes() { return m_WorkSecondes; }
             int GetRestMinutes() { return m_RestMinutes; }

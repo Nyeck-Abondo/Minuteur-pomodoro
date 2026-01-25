@@ -174,7 +174,7 @@ namespace App {
         }
 
         void AppCore::ParameterUi() {
-            ImGui::SetNextWindowPos(ImVec2(280.0f, 300.0f), 0, ImVec2(0, 0.55f));
+            ImGui::SetNextWindowPos(ImVec2(280.0f, 320.0f), 0, ImVec2(0, 0.55f));
             ImGui::BeginChild("##parameter", ImVec2(500, 600), 0, 0);
 
             //gestion du son de l'application

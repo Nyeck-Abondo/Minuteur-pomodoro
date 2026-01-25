@@ -108,7 +108,7 @@ namespace App {
             ImGui::Spacing();
             ImGui::Text("Son actif");
             ImGui::SameLine(0.0f, 2.0f);
-            ImGui::Toggle("##sound", &m_Activate_Sound, ImGuiToggleFlags_Animated);
+            ImGui::Checkbox("##sound", &m_Activate_Sound);
             ImGui::Spacing();
         }
 

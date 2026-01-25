@@ -36,7 +36,6 @@ namespace App{
          */
         void windowUi::InitializeUi(SDL_Renderer* renderer, SDL_Window* window) {
             mio.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-            mtoggleConfig.Flags |= ImGuiToggleFlags_Animated;
             Uifont = mio.Fonts->AddFontFromFileTTF("police/Montserrat/static/Montserrat-Black.ttf");
             //initialisation des paquet imgui
             ImGui_ImplSDL3_InitForSDLRenderer(window, renderer);

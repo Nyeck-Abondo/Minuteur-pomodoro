@@ -14,8 +14,16 @@ CLIGNOTANT='\033[5m'
 
 #definition des variables globales
 VOID=" "
-MODULE_DIR=""
 LINK_HEADER=""
+OBJECTFILE= ""
+OBJEXTENTION=".o"
+BUILD="build/"
+COMPILER="g++"
+EXECUTABLE="pomodoro.exe"
+SDLLINKER=" -L./libs -lSDL3 -lSDL3_image"
+LINKER="-L./libs -lSDL3 -lSDL3_image -lsfml-audio-3 -lsfml-system-3"
+VERSION="-std=c++17 -O2"
+WARNING="-Wall -Wextra"
 
 #cette fonction verifie si les dossiers des fichiers en tête sont effectivement présents
 function verification_folder {
@@ -34,91 +42,84 @@ function verification_folder {
     fi
 }
 
+function create_object_file {
+    echo -e "${VERT}${GRAS}[-]-vérification de la presence du dossier build pour l'executables"
+
+    if [ ! -d "build" ]
+    then
+        echo -e "${ROUGE}ABSCENCE DU DOSSIER ACCEUILLANT LES EXECUTABLES${NC}"
+        echo "🧰CREATION DU DOSSIER BUILD"
+        mkdir build
+    else
+        echo "✅ PRESESNCE DU DOSSIER BUILD POUR LA CREATION DE L'EXECUTABLE"
+    fi
+
+    if [ ! -z $1 ]
+    then
+        for FOLDER in $(find "$1" -mindepth 0 -maxdepth 1 -type d -print)
+        do
+            if [ "$FOLDER" != "libs/SDL3" ] && [ "$FOLDER" != "libs/SDL3/SDL3_image" ] && [ "$FOLDER" != "libs/SFML" ] && [ "$FOLDER" != "libs/stb" ]
+            then
+                echo "Dossier: $FOLDER"
+                for FILE in $(ls $FOLDER/*.cpp)
+                do
+                    if [ "$1" = "src" ]
+                    then
+                        OBJECTNAME="${FILE##*/}"
+                        OBJECTNAME="${OBJECTNAME%.cpp}"
+                        OBJECTARGET="${OBJECTNAME}.o"
+                        echo -e "objet: ${BLEU}$OBJECTARGET${NC}"
+                        $COMPILER -c $FILE $2 $LINKER -o $BUILD$OBJECTARGET
+                        OBJECTFILE="$OBJECTFILE$BUILD$OBJECTARGET$VOID"
+                    else
+                        OBJECTNAME="${FILE##*/}"
+                        OBJECTNAME="${OBJECTNAME%.cpp}"
+                        OBJECTARGET="${OBJECTNAME}.o"
+                        echo -e "objet: ${BLEU}$OBJECTARGET${NC}"
+                        $COMPILER -c $FILE -I./libs/imgui -o $BUILD$OBJECTARGET
+                        OBJECTFILE="$OBJECTFILE$BUILD$OBJECTARGET$VOID"
+                    fi
+                done
+            fi
+        done
+        echo -e "${BLEU}$OBJECTFILE${NC}"
+    else
+    echo "Abscence des fichiers source de $1 non trouvé"
+    exit 1
+    fi
+}
+
 #cors principal
 echo -e "${JAUNE}${GRAS}======================================================================${NC}"
 echo -e "${JAUNE}${GRAS}||LANCEMENT DU PROGRAMME DE COMPILATION DU PROJET MINUTEUR POMODORO ||${NC}"
 echo -e "${JAUNE}${GRAS}======================================================================${NC}"
 echo
 
-#debut des phases de la compilation gnanga
-echo -e "${VERT}${GRAS}[1/5]-collecte des emplacements des fichiers sources du code${NC}"
-echo
 
-##identification des fichiers sources présents dans src
-if [ ! -z "src" ]
-then
-SRC="src"
-    #parcours des element natifs de src
-    for files in $(ls $SRC/*.cpp)
-    do
-        echo -e "🔃 ${BLEU}${GRAS} collecte des chemins d'acces des fichiers .cpp de :${NC} $files"
-        echo
-        echo -e "fichier trouvé : ${ORANGE}$files${NC}"
-        MODULE_DIR="$MODULE_DIR$files$VOID"
-    done
 
-    #parcours du dossier et de ses sous dossiers
-    for folder in $(find "src" -mindepth 1 -maxdepth 2 -type d -print)
-    do
-        echo -e "🔃 ${BLEU}${GRAS} collecte des chemins d'acces des fichiers .cpp de :${NC} $folder"
-        #affichage des modules objets et des fichiers trouvés dans le dossier
-        for file in $(ls $folder/*.cpp)
-        do
-        echo
-        echo -e "fichier trouvé : ${ORANGE}$file${NC}"
-        MODULE_DIR="$MODULE_DIR$file$VOID"
-        done
 
-        echo
-    done
-else
-    echo "Abscence des fichiers source de src/ src non trouvé"
-    exit 1
-fi
-
-#verification de l'existence de libs
-if [ ! -z "libs" ]
-then
-    #parcours du dossier et de ses sous dossiers
-    for folder in $(find "libs" -mindepth 1 -maxdepth 2 -type d -print)
-    do
-        echo -e "🔃 ${BLEU}${GRAS}collecte des chemins d'acces des fichiers .cpp de :${NC} $folder"
-        if [ $folder = "libs/ImGui_Arc_ProgressBar" ]
-        then
-            ARC=" libs/ImGui_Arc_ProgressBar/arc_progress_bar.cpp "
-            MODULE_DIR="$MODULE_DIR$ARC"
-        else
-            #affichage des modules objets et des fichiers trouvés dans le dossier
-            for file in $(ls $folder/*.cpp)
-            do
-                echo
-                echo -e "fichier trouvé : ${ORANGE}$file${NC}"
-                MODULE_DIR="$MODULE_DIR$file$VOID"
-            done
-        fi
-    done
-    echo
-
-else
-    echo "Abscence des bobliotheques statiques"
-    exit 1
-fi
 
 echo "$MODULE_DIR"
 echo -e "${ROUGE}${GRAS}[2/5]- verification de la présence des bibliotheques necessaire${NC}"
 echo
 
+echo "VERIFICATION DES HEADERS"
+echo
+verification_folder "include" "headers de compilation"
+
 echo "VERIFICATION DE LA PRESENCE DE LA SDL3"
 echo
 verification_folder "libs/SDL3" "SDL3"
+verification_folder "libs/SDL3/SDL3_image" "SDL3_image"
 
-echo "==========VERIFICATION DE LA PRESENCE DE IMGUI============="
+echo "VERIFICATION DE LA PRESENCE DE IMGUI"
 echo
 verification_folder "libs/imgui" "imgui"
 
-echo "VERIFICATION DE LA PRESENCE DE IMGUI_TOGGLE============"
+echo "VERIFICATION DE LA PRESENCE DE SFML"
 echo
-verification_folder "libs/imgui_toggle" "imgui_toggle"
+verification_folder "libs/SFML" "SFML"
+verification_folder "libs/SFML/System" "SFML/System"
 
 echo "VERIFICATION DE LA PRESENCE DE STB_IMGAGE"
 echo
@@ -128,16 +129,16 @@ echo "VERIFICATION DE LA PRESENCE DE IMGUI_ARC_PROGRESS_BAR"
 echo
 verification_folder "libs/ImGui_Arc_ProgressBar" "imgui_arc_progressBar"
 
-echo -e "${VERT}${GRAS}[3/5]-vérification de la presence du dossier build pour l'executables"
+#debut des phases de la compilation gnanga
+echo -e "${VERT}${GRAS}[1/5]-collecte des emplacements des fichiers sources du code${NC}"
+echo
 
-if [ ! -d "build" ]
-then
-    echo -e "${ROUGE}ABSCENCE DU DOSSIER ACCEUILLANT LES EXECUTABLES"
-    echo "🧰CREATION DU DOSSIER BUILD"
-    mkdir build
-else
-    echo "✅ PRESESNCE DU DOSSIER BUILD POUR LA CREATION DE L'EXECUTABLE"
-fi
+##identification des fichiers sources présents dans src
+create_object_file "src" "$LINK_HEADER"
+
+#verification de l'existence de libs
+create_object_file "libs"
+
 
 echo -e "${VERT}${GRAS}[4/5]-vérification de la presence du dossier INCLUDE pour l'executables"
 if [ ! -d "include" ]
@@ -153,15 +154,17 @@ fi
 
 echo -e "${JAUNE}${GRAS}[5/5] COMPILATION DES ELEMENTS DU PROJET${NC}"
 
-COMPILER="clang++"
-EXECUTABLE="pomodoro.exe"
-LINKER="-L./libs -lSDL3 -lSDL3_image"
-VERSION="-std=c++17 -O2"
-WARNING="-Wall -Wextra"
+
 
 echo
 echo -e "${CLIGNOTANT}LANCEMENT DE LA COMMANDE DE COMPILATION....${NC}"
-$COMPILER $MODULE_DIR $LINK_HEADER $LINKER $WARNING $VERSION -o  $EXECUTABLE
+$COMPILER $OBJECTFILE $LINKER $WARNING $VERSION -o  $EXECUTABLE
+
+echo -e "${ROUGE}[-]suression des fichiers objet (.o)${NC}"
+for object in $(ls build/*.o)
+do
+    rm $object
+done
 
 echo "executez avec: ./build/pomodoro.exe"
 #fin du programme en appuant sur une touche specifique
