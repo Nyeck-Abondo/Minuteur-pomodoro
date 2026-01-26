@@ -5,10 +5,11 @@ namespace App {
         
         pomodoro::pomodoro(): m_statisitcs(),mPresentation_Animation(nullptr), mBlackPresentation_Animation(nullptr),
                 mPresentationTexture(nullptr), mBlackPresentationTexture(nullptr),mcounterFrame(0.0f), m_Angle(0.0f),
-                m_Angle02(0.0f), m_CounterDelay(0), m_counterDelay02(0), m_notificationUp(false), m_notificationUp02(false),
-                m_Workminuttes(25), m_WorkSecondes(0), m_RestMinutes(5), m_RestSeconeds(0), m_LongRest_Minutes(15),
-                m_LongRest_Secondes(0), m_SessionNumber(7),m_Activate_Sound(true), m_Is_restSession(false), m_Is_workSession(false),
-                m_Is_LongRestSession(false) {
+                m_Angle02(0.0f), m_angleStats(0.0f), m_angleSuccess(0.0f), m_CounterDelay(0), m_counterDelay02(0),
+                m_counterDelayStatistics(0), m_counterDelaySuccess(0), m_notificationUp(false), m_notificationUp02(false),
+                m_statisticsup(false), m_successUp(false), m_Workminuttes(25), m_WorkSecondes(0), m_RestMinutes(5), m_RestSeconeds(0),
+                m_LongRest_Minutes(15), m_LongRest_Secondes(0), m_SessionNumber(7),m_Activate_Sound(true), m_Is_restSession(false),
+                m_Is_workSession(false), m_Is_LongRestSession(false) {
                     std::cout << "⏱️ Creation du pomodoro effectuée avec succès !" <<std::endl;
                 }
         
@@ -229,30 +230,32 @@ namespace App {
             return 60.0f;
         }
 
-        void pomodoro::SessionNotification(int minutes, int secondes, int counterSession, backEnd::OfficialTheme currentTheme, SDL_Texture* texture, ImFont* font) {
+        void pomodoro::SessionNotification(int minutes, int secondes, int counterSession, backEnd::OfficialTheme currentTheme, SDL_Texture* textureLigth01, SDL_Texture* textureLigth02, SDL_Texture* textureOrange, ImFont* font) {
             //definition de l'angle
             ImVec2 sizeText = ImGui::CalcTextSize("Session de concentration en cours . . .");
             
             switch (currentTheme) {
                 case backEnd::OfficialTheme::DARK_LIGHT_THEME02 :
                     //mouvement de la notification
-                    ManageNotification(texture, counterSession, minutes, secondes, font, sizeText);
-                    ManageEndNotification(texture, counterSession, minutes, secondes, font, sizeText);
+                    ManageNotification(textureLigth02, counterSession, minutes, secondes, font, sizeText);
+                    ManageEndNotification(textureLigth02, counterSession, minutes, secondes, font, sizeText);
+                    ManageStatisticNotification(textureLigth02, counterSession, minutes, secondes, font, sizeText);
                 break;
 
                 case backEnd::OfficialTheme::DARK_LIGHT_THEME :
-                    ManageNotification(texture, counterSession, minutes, secondes, font, sizeText);
-                    ManageEndNotification(texture, counterSession, minutes, secondes, font, sizeText);
+                    ManageNotification(textureLigth01, counterSession, minutes, secondes, font, sizeText);
+                    ManageEndNotification(textureLigth01, counterSession, minutes, secondes, font, sizeText);
                 break;
 
                 case backEnd::OfficialTheme::DARK_THEME :
-                    ManageNotification(texture, counterSession, minutes, secondes, font, sizeText);
-                    ManageEndNotification(texture, counterSession, minutes, secondes, font, sizeText);
+                    ManageNotification(textureLigth01, counterSession, minutes, secondes, font, sizeText);
+                    ManageEndNotification(textureLigth01, counterSession, minutes, secondes, font, sizeText);
                 break;
 
                 case backEnd::OfficialTheme::ORANGE_THEME :
-                    ManageNotification(texture, counterSession, minutes, secondes, font, sizeText);
-                    ManageEndNotification(texture, counterSession, minutes, secondes, font, sizeText);
+                    ManageNotification(textureOrange, counterSession, minutes, secondes, font, sizeText);
+                    ManageEndNotification(textureOrange, counterSession, minutes, secondes, font, sizeText);
+                    ManageStatisticNotification(textureOrange, counterSession, minutes, secondes, font, sizeText);
                 break;
             }
         }
@@ -292,6 +295,40 @@ namespace App {
             m_Angle = 0.0f;
             m_notificationUp = false;
             m_CounterDelay = 0;
+        }
+
+        void pomodoro::ResetStatisticNotification() {
+            m_statisticsup = false;
+            m_counterDelayStatistics = 0;
+            m_angleStats = 0.0f;
+        }
+
+        void pomodoro::ResetSuccessNotification() {
+            m_successUp = false;
+            m_angleSuccess = 0.0f;
+            m_counterDelaySuccess = 0;
+        }
+
+        void pomodoro::ManageStatisticNotification(SDL_Texture* texture, int counterSession, int minutes, float secondes, ImFont* font, ImVec2 sizeText) {
+            //conditions d'apparitions des nnotifications et deplacement
+            if (counterSession % 2 != 0 || counterSession == 1) {
+                if ( minutes >= 0 && secondes >= 5.0f ) {
+                    MoveNotification(m_angleStats, m_statisticsup, m_counterDelayStatistics);
+                    std::cout <<"m_anglestats: " << m_angleStats <<std::endl;
+                    ImGui::SetNextWindowPos(ImVec2(360.0f, -350.0f+ (370.0f * sinf(m_angleStats))));
+                    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 10.0f);
+                    ImGui::BeginChild("##notificationstats", ImVec2(800.0f, 100.0f), ImGuiChildFlags_FrameStyle, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav);
+                    ImGui::Image((ImTextureID)(intptr_t) (texture), ImVec2(75.0f, 75.0f));
+                    ImGui::SameLine();
+                    ImGui::PushFont(font, 30.0f);
+                    ImGui::SetCursorPos(ImVec2(350.0f - sizeText.x / 2.0f, 50.0f - sizeText.y / 2.0f));
+                    ImGui::Text("Session de concentration en cours . . .");
+                    ImGui::PopFont();
+                    
+                    ImGui::EndChild();
+                    ImGui::PopStyleVar();
+                }
+            }
         }
 
         void pomodoro::ManageNotification(SDL_Texture* texture, int counterSession, int minutes, float secondes, ImFont* font,  ImVec2 sizeText) {

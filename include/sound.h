@@ -13,7 +13,7 @@ namespace App {
         sf::Music m_notificationEndTonality;
         sf::Music m_EndPomodoro;
 
-        //counstructeurs et destructeurs
+        //counstructeurs
         sound(std::filesystem::path alarm, std::filesystem::path notifdone, std::filesystem::path notifbegin
                 , std::filesystem::path notifEnd, std::filesystem::path endTonality);
 

@@ -3,7 +3,8 @@ namespace App {
     namespace core {
         //constructeur
         AppCore::AppCore(float width, float height, std::string title, ImGuiIO& io): mwindow(height, width, title), mwindowUi(25.0f, io)
-        , mstatistics() , Session(0, 5) {
+            , mstatistics() , Session(0, 5), mtonality("assets/musique/short-beep-tone-47916.mp3","assets/musique/tiktok_ding_tone3_kofi_by_miraclei-360025.mp3",
+            "assets/musique/tap-notification-180637.mp3", "assets/musique/button_09-190435.mp3", "assets/musique/electronic-hit-98242.mp3") {
             std::cout << "🧰 Creation du coeur de l'application reussie avec succes !!" << std::endl;
         }
 
@@ -102,7 +103,8 @@ namespace App {
                 ImGui::EndChild();
                 ImGui::PopFont();
 
-                chrono.SessionNotification(Session.minutes, Session.secondes, mstatistics.GetPeriod(),mwindow.mCurrenTheme, mwindowUi.GettextureUI().yellowNotification, mwindowUi.GetFontUi());
+                chrono.SessionNotification(Session.minutes, Session.secondes, mstatistics.GetPeriod(),mwindow.mCurrenTheme, mwindowUi.GettextureUI().darkNotification,
+                                            mwindowUi.GettextureUI().blueNotification, mwindowUi.GettextureUI().yellowNotification, mwindowUi.GetFontUi());
 
                 //fenetre des parametres
                 if (show_parameters) {
@@ -174,7 +176,7 @@ namespace App {
         }
 
         void AppCore::ParameterUi() {
-            ImGui::SetNextWindowPos(ImVec2(280.0f, 320.0f), 0, ImVec2(0, 0.55f));
+            ImGui::SetNextWindowPos(ImVec2(280.0f, 340.0f), 0, ImVec2(0, 0.55f));
             ImGui::BeginChild("##parameter", ImVec2(500, 600), 0, 0);
 
             //gestion du son de l'application

@@ -32,11 +32,18 @@ namespace App {
             //facteurs de translation(angle)
             float m_Angle;
             float m_Angle02;
-            //variable de deco;pte de temps
+            float m_angleStats;
+            float m_angleSuccess;
+            //variable de decompte de temps
             int m_CounterDelay;
             int m_counterDelay02;
+            int m_counterDelayStatistics;
+            int m_counterDelaySuccess;
+            //booleens de verification de position des notifications
             bool m_notificationUp;
             bool m_notificationUp02;
+            bool m_statisticsup;
+            bool m_successUp;
 
             //gestions des sessions
             int m_Workminuttes;
@@ -94,13 +101,17 @@ namespace App {
             void ResetMoveNotificationParameters();
             void ResetMoveNotificationParametres02();
             void ResetMoveNotificationParameters01();
+            void ResetSuccessNotification();
+            void ResetStatisticNotification();
             //affichage des notifications
             void ManageNotification(SDL_Texture* texture, int counterSession, int minutes, float secondes, ImFont* font, ImVec2 sizeText);
             void ManageEndNotification(SDL_Texture* texture, int counterSession, int minutes, float secondes, ImFont* font, ImVec2 sizeText);
+            void ManageSuccesNotification(SDL_Texture* texture, int counterSession, int minutes, float secondes, ImFont* font, ImVec2 sizeText);
+            void ManageStatisticNotification(SDL_Texture* texture, int counterSession, int minutes, float secondes, ImFont* font, ImVec2 sizeText);
 
             //transition de session
             void Explanations(int counterSession, Uint64 deltaTime, backEnd::OfficialTheme currentTeme);
-            void SessionNotification(int minutes, int secondes, int counterSession, backEnd::OfficialTheme currentTheme, SDL_Texture* texture, ImFont* font);
+            void SessionNotification(int minutes, int secondes, int counterSession, backEnd::OfficialTheme currentTheme, SDL_Texture* textureLigth01, SDL_Texture* textureLigth02, SDL_Texture* textureOrange, ImFont* font);
         };
     } // namespace core
     

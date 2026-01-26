@@ -19,7 +19,7 @@ OBJECTFILE= ""
 OBJEXTENTION=".o"
 BUILD="build/"
 COMPILER="g++"
-EXECUTABLE="pomodoro.exe"
+EXECUTABLE="libs/pomodoro.exe"
 SDLLINKER=" -L./libs -lSDL3 -lSDL3_image"
 LINKER="-L./libs -lSDL3 -lSDL3_image -lsfml-audio-3 -lsfml-system-3"
 VERSION="-std=c++17 -O2"
@@ -32,8 +32,6 @@ function verification_folder {
         HEADER="-I./$1"
         LINK_HEADER="$LINK_HEADER$HEADER$VOID"
         echo -e "✅ ${VERT}Bibliothèque $2 trouvée${NC}"
-        echo "Dessin des fenetres possibles. Aucun besoin de telechargement supplementaire"
-        echo -e "${JAUNE}$LINK_HEADER${NC}"
         echo
     else
         echo -e "❌ ${ROUGE}ERREUR: bibliothèque $2 non trouvée !!${NC}"
@@ -82,7 +80,6 @@ function create_object_file {
                 done
             fi
         done
-        echo -e "${BLEU}$OBJECTFILE${NC}"
     else
     echo "Abscence des fichiers source de $1 non trouvé"
     exit 1

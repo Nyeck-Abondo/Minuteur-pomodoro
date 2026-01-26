@@ -5,6 +5,7 @@
 #include "statistic.h"
 #include "pomodoro.h"
 #include "renderStats.h"
+#include "sound.h"
 
 namespace App {
     namespace core {
@@ -15,6 +16,7 @@ namespace App {
             Statistic::stats mstatistics;
             pomodoro chrono;
             backEnd::Timer Session;
+            Sound::sound mtonality;
 
             //booleens  d'affichage
             bool mrunning = true;
