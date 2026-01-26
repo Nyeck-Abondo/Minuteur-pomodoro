@@ -4,7 +4,7 @@ namespace App {
     namespace core {
         
         pomodoro::pomodoro(): m_statisitcs(),mPresentation_Animation(nullptr), mBlackPresentation_Animation(nullptr),
-                mPresentationTexture(nullptr), mBlackPresentationTexture(nullptr),mcounterFrame(0.0f), m_Angle(0.0f),
+                mPresentationTexture(nullptr), mBlackPresentationTexture(nullptr), mcounterFrame(0), m_counterFrameNotif(0), m_Angle(0.0f),
                 m_Angle02(0.0f), m_angleStats(0.0f), m_angleSuccess(0.0f), m_CounterDelay(0), m_counterDelay02(0),
                 m_counterDelayStatistics(0), m_counterDelaySuccess(0), m_notificationUp(false), m_notificationUp02(false),
                 m_statisticsup(false), m_successUp(false), m_Workminuttes(25), m_WorkSecondes(0), m_RestMinutes(5), m_RestSeconeds(0),
@@ -77,6 +77,49 @@ namespace App {
                 }
                 ImGui::Image((ImTextureID)(intptr_t) mPresentationTexture[mcounterFrame], size);
             }
+        }
+
+        void pomodoro::PlayAnimation(Uint64 deltaTime, ImVec2 size, backEnd::animType animationNotification, backEnd::animPicture notifaicationTexture, backEnd::animTexureUi animUi) {
+            if (animationNotification == backEnd::animType::GRAPH) {
+                if (static_cast<int> (deltaTime) >= notifaicationTexture.animationGraph->delays[m_counterFrameNotif]) {
+                    m_counterFrameNotif++;
+                    if (m_counterFrameNotif >= notifaicationTexture.animationGraph->count) {
+                        m_counterFrameNotif = 0;
+                    }
+                }
+                ImGui::Image((ImTextureID)(intptr_t) (animUi.graphics[m_counterFrameNotif]), size);
+            }
+            //animation de la notification de travail
+            if (animationNotification == backEnd::animType::EXECUTION) {
+                if (static_cast<int> (deltaTime) >= notifaicationTexture.animationEXE->delays[m_counterFrameNotif]) {
+                    m_counterFrameNotif++;
+                    if (m_counterFrameNotif >= notifaicationTexture.animationEXE->count) {
+                        m_counterFrameNotif = 0;
+                    }
+                }
+                ImGui::Image((ImTextureID)(intptr_t) (animUi.execution[m_counterFrameNotif]), size);
+            }
+            //animation de la notification de succes
+            if (animationNotification == backEnd::animType::SUCCESSPURPLE) {
+                if (static_cast<int> (deltaTime) >= notifaicationTexture.animationSP->delays[m_counterFrameNotif]) {
+                    m_counterFrameNotif++;
+                    if (m_counterFrameNotif >= notifaicationTexture.animationSP->count) {
+                        m_counterFrameNotif = 0;
+                    }
+                }
+                ImGui::Image((ImTextureID)(intptr_t) (animUi.successPurple[m_counterFrameNotif]), size);
+            }
+            //animation de la notificaction de succes jaune
+            if (animationNotification == backEnd::animType::SUCCESSYELLOW) {
+                if (static_cast<int> (deltaTime) >= notifaicationTexture.animationSY->delays[m_counterFrameNotif]) {
+                    m_counterFrameNotif++;
+                    if (m_counterFrameNotif >= notifaicationTexture.animationSY->count) {
+                        m_counterFrameNotif = 0;
+                    }
+                }
+                ImGui::Image((ImTextureID)(intptr_t) (animUi.successYellow[m_counterFrameNotif]), size);
+            }
+            
         }
 
         void pomodoro::TimeSettings() {
@@ -230,7 +273,7 @@ namespace App {
             return 60.0f;
         }
 
-        void pomodoro::SessionNotification(int minutes, int secondes, int counterSession, backEnd::OfficialTheme currentTheme, SDL_Texture* textureLigth01, SDL_Texture* textureLigth02, SDL_Texture* textureOrange, ImFont* font) {
+        void pomodoro::SessionNotification(int minutes, int secondes, int counterSession, backEnd::OfficialTheme currentTheme, SDL_Texture* textureLigth01, SDL_Texture* textureLigth02, SDL_Texture* textureOrange, ImFont* font, Uint64 lastTime, backEnd::animPicture notifaicationTexture, backEnd::animTexureUi texturenotif) {
             //definition de l'angle
             ImVec2 sizeText = ImGui::CalcTextSize("Session de concentration en cours . . .");
             
@@ -239,7 +282,7 @@ namespace App {
                     //mouvement de la notification
                     ManageNotification(textureLigth02, counterSession, minutes, secondes, font, sizeText);
                     ManageEndNotification(textureLigth02, counterSession, minutes, secondes, font, sizeText);
-                    ManageStatisticNotification(textureLigth02, counterSession, minutes, secondes, font, sizeText);
+                    ManageStatisticNotification(textureLigth02, counterSession, minutes, secondes, font, sizeText, lastTime, notifaicationTexture, texturenotif);
                 break;
 
                 case backEnd::OfficialTheme::DARK_LIGHT_THEME :
@@ -255,7 +298,7 @@ namespace App {
                 case backEnd::OfficialTheme::ORANGE_THEME :
                     ManageNotification(textureOrange, counterSession, minutes, secondes, font, sizeText);
                     ManageEndNotification(textureOrange, counterSession, minutes, secondes, font, sizeText);
-                    ManageStatisticNotification(textureOrange, counterSession, minutes, secondes, font, sizeText);
+                    ManageStatisticNotification(textureOrange, counterSession, minutes, secondes, font, sizeText,lastTime, notifaicationTexture, texturenotif);
                 break;
             }
         }
@@ -309,7 +352,7 @@ namespace App {
             m_counterDelaySuccess = 0;
         }
 
-        void pomodoro::ManageStatisticNotification(SDL_Texture* texture, int counterSession, int minutes, float secondes, ImFont* font, ImVec2 sizeText) {
+        void pomodoro::ManageStatisticNotification(SDL_Texture* texture, int counterSession, int minutes, float secondes, ImFont* font, ImVec2 sizeText, Uint64 lastTime, backEnd::animPicture notifaicationTexture, backEnd::animTexureUi texturenotif) {
             //conditions d'apparitions des nnotifications et deplacement
             if (counterSession % 2 != 0 || counterSession == 1) {
                 if ( minutes >= 0 && secondes >= 5.0f ) {
@@ -318,7 +361,10 @@ namespace App {
                     ImGui::SetNextWindowPos(ImVec2(360.0f, -350.0f+ (370.0f * sinf(m_angleStats))));
                     ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 10.0f);
                     ImGui::BeginChild("##notificationstats", ImVec2(800.0f, 100.0f), ImGuiChildFlags_FrameStyle, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav);
-                    ImGui::Image((ImTextureID)(intptr_t) (texture), ImVec2(75.0f, 75.0f));
+
+                    //lancement de l'image animee de la statisatique
+                    PlayAnimation(lastTime, ImVec2(75.0f, 75.0f), backEnd::animType::GRAPH, notifaicationTexture, texturenotif);
+                    
                     ImGui::SameLine();
                     ImGui::PushFont(font, 30.0f);
                     ImGui::SetCursorPos(ImVec2(350.0f - sizeText.x / 2.0f, 50.0f - sizeText.y / 2.0f));
@@ -371,7 +417,6 @@ namespace App {
                     
                     ImGui::EndChild();
                     ImGui::PopStyleVar();
-                    ResetMoveNotificationParametres02();
                 }
                 if (minutes == 0 && secondes < 0.2f)
                 ResetMoveNotificationParameters01();

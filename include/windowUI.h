@@ -7,6 +7,7 @@
 #include <string>
 #include <iostream>
 #include "structs.h"
+#include "pomodoro.h"
 
 namespace App {
     namespace Uigraphics {
@@ -41,6 +42,7 @@ namespace App {
             backEnd::textureUi GettextureUI() { return mtools; }
             backEnd::animTexureUi GetAnimTextureUI() { return manimation; }
             backEnd::animType GetAnimType() { return manimType; }
+            backEnd::animPicture GetAnimPicture() { return manimPicture; }
             ImGuiStyle GetUIstyle() const { return mStyle;}
             ImFont* GetFontUi() const { return Uifont;}
             float GetFontSize() const { return mfontSize; }
@@ -53,8 +55,9 @@ namespace App {
             int igThemeV3(int hue07, int alt07, int nav07, int lit01 = 0, int compact01 = 0, int border01 = 1, int shape0123 = 1);
             SDL_Texture* Load_imageTexture(SDL_Renderer* renderer, const char* fileLocation);
             bool Load_animatedTexture(SDL_Renderer* renderer);
-            void PlayAnimation(backEnd::animType animation, Uint64 lastTime);
+            void PlayAnimation(backEnd::animType animation, Uint64 lastTime, ImVec2 size);
             void CreateUITexture(SDL_Renderer* renderer);
+
         };
     } //namespace Uigraphics
 } //namespace App

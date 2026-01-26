@@ -104,7 +104,8 @@ namespace App {
                 ImGui::PopFont();
 
                 chrono.SessionNotification(Session.minutes, Session.secondes, mstatistics.GetPeriod(),mwindow.mCurrenTheme, mwindowUi.GettextureUI().darkNotification,
-                                            mwindowUi.GettextureUI().blueNotification, mwindowUi.GettextureUI().yellowNotification, mwindowUi.GetFontUi());
+                                            mwindowUi.GettextureUI().blueNotification, mwindowUi.GettextureUI().yellowNotification, mwindowUi.GetFontUi(), lastTime,
+                                            mwindowUi.GetAnimPicture(), mwindowUi.GetAnimTextureUI());
 
                 //fenetre des parametres
                 if (show_parameters) {

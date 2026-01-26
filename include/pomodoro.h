@@ -5,6 +5,7 @@
 #include "../libs/imgui/imgui.h"
 #include "../libs/ImGui_Arc_ProgressBar/arc_progress_bar.hpp"
 #include "../libs/SDL3/SDL.h"
+#include "windowUI.h"
 #include <cmath>
 
 const double M_Pi =3.14159265358979323846;
@@ -28,6 +29,7 @@ namespace App {
             
             //compteur de frames
             int mcounterFrame;
+            int m_counterFrameNotif;
 
             //facteurs de translation(angle)
             float m_Angle;
@@ -86,6 +88,7 @@ namespace App {
             bool AnimationInitialised(SDL_Renderer* renderer);
             void AnimationShutdown();
             void PlayAnimation(Uint64 deltaTime, ImVec2 size, backEnd::OfficialTheme currentTeme);
+            void PlayAnimation(Uint64 deltaTime, ImVec2 size, backEnd::animType animationNotification, backEnd::animPicture notifaicationTexture, backEnd::animTexureUi texturenotif);
 
             //parametre
             void TimeSettings();
@@ -106,12 +109,13 @@ namespace App {
             //affichage des notifications
             void ManageNotification(SDL_Texture* texture, int counterSession, int minutes, float secondes, ImFont* font, ImVec2 sizeText);
             void ManageEndNotification(SDL_Texture* texture, int counterSession, int minutes, float secondes, ImFont* font, ImVec2 sizeText);
-            void ManageSuccesNotification(SDL_Texture* texture, int counterSession, int minutes, float secondes, ImFont* font, ImVec2 sizeText);
-            void ManageStatisticNotification(SDL_Texture* texture, int counterSession, int minutes, float secondes, ImFont* font, ImVec2 sizeText);
+            //fonctions amies de la classe windowUi
+            void ManageSuccesNotification(SDL_Texture* texture, int counterSession, int minutes, float secondes, ImFont* font, ImVec2 sizeText, Uint64 lastTime, backEnd::animPicture notifaicationTexture, backEnd::animTexureUi texturenotif);
+            void ManageStatisticNotification(SDL_Texture* texture, int counterSession, int minutes, float secondes, ImFont* font, ImVec2 sizeText, Uint64 lastTime, backEnd::animPicture notifaicationTexture, backEnd::animTexureUi texturenotif);
 
             //transition de session
             void Explanations(int counterSession, Uint64 deltaTime, backEnd::OfficialTheme currentTeme);
-            void SessionNotification(int minutes, int secondes, int counterSession, backEnd::OfficialTheme currentTheme, SDL_Texture* textureLigth01, SDL_Texture* textureLigth02, SDL_Texture* textureOrange, ImFont* font);
+            void SessionNotification(int minutes, int secondes, int counterSession, backEnd::OfficialTheme currentTheme, SDL_Texture* textureLigth01, SDL_Texture* textureLigth02, SDL_Texture* textureOrange, ImFont* font, Uint64 lastTime, backEnd::animPicture notifaicationTexture, backEnd::animTexureUi texturenotif);
         };
     } // namespace core
     

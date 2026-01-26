@@ -227,7 +227,7 @@ namespace App{
             return true;
         }
 
-        void windowUi::PlayAnimation(backEnd::animType animation, Uint64 lastTime) {
+        void windowUi::PlayAnimation(backEnd::animType animation, Uint64 lastTime, ImVec2 size) {
             //temps actuel lors de l'appel de la fenetre de notification
             Uint64 currentTime = SDL_GetTicks();
             //frame actuelle
@@ -242,7 +242,7 @@ namespace App{
                             currentFrame = 0;
                         }
                     }
-                    ImGui::Image((ImTextureID)(intptr_t) manimation.successPurple[currentFrame], ImVec2(300.0f, 300.0f));
+                    ImGui::Image((ImTextureID)(intptr_t) manimation.successPurple[currentFrame], size);
                 break;
 
                 case backEnd::animType::SUCCESSYELLOW :
@@ -253,7 +253,7 @@ namespace App{
                             currentFrame = 0;
                         }
                     }
-                    ImGui::Image((ImTextureID)(intptr_t) manimation.successYellow[currentFrame], ImVec2(300.0f, 300.0f));
+                    ImGui::Image((ImTextureID)(intptr_t) manimation.successYellow[currentFrame], size);
                 break;
 
                 case backEnd::animType::TIMERBLACK :
@@ -263,7 +263,7 @@ namespace App{
                             currentFrame = 0;
                         }
                     }
-                    ImGui::Image((ImTextureID)(intptr_t) manimation.timerBlack[currentFrame], ImVec2(300.0f, 300.0f));
+                    ImGui::Image((ImTextureID)(intptr_t) manimation.timerBlack[currentFrame], size);
                 break;
 
                 case backEnd::animType::TIMERYELLOW :
@@ -273,7 +273,7 @@ namespace App{
                             currentFrame = 0;
                         }
                     }
-                    ImGui::Image((ImTextureID)(intptr_t) manimation.TimerYellow[currentFrame], ImVec2(300.0f, 300.0f));
+                    ImGui::Image((ImTextureID)(intptr_t) manimation.TimerYellow[currentFrame], size);
                 break;
 
                 case backEnd::animType::EXECUTION :
@@ -283,7 +283,7 @@ namespace App{
                             currentFrame = 0;
                         }
                     }
-                    ImGui::Image((ImTextureID)(intptr_t) manimation.execution[currentFrame], ImVec2(300.0f, 300.0f));
+                    ImGui::Image((ImTextureID)(intptr_t) manimation.execution[currentFrame], size);
                 break;
 
                 case backEnd::animType::GRAPH :
@@ -293,7 +293,7 @@ namespace App{
                             currentFrame = 0;
                         }
                     }
-                    ImGui::Image((ImTextureID)(intptr_t) manimation.graphics[currentFrame], ImVec2(300.0f, 300.0f));
+                    ImGui::Image((ImTextureID)(intptr_t) manimation.graphics[currentFrame], size);
                 break;
             }
         }
@@ -526,7 +526,7 @@ int windowUi::igThemeV3(int hue07, int alt07, int nav07, int lit01, int compact0
 #if 0
 // demo
 int theme = 0;
-static int hue = 0, alt = 0, nav = 0, shape = 1;
+static int hue = 0, alt = 0, nav = 023, shape = 1;
 static bool light = 0, compact = 0, borders = 0;
 theme |= ImGui::SliderInt("Hue", &hue, 0, 7);
 theme |= ImGui::SliderInt("Alt", &alt, 0, 7);
