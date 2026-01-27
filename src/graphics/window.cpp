@@ -33,7 +33,7 @@ namespace App {
                 return false;
             }
             //fond par defaut
-            mCurrenTheme = App::backEnd::OfficialTheme::DARK_LIGHT_THEME02;
+            mCurrenTheme = App::backEnd::OfficialTheme::ORANGE_THEME;
 
             winIsinitialise = true;
             return winIsinitialise;

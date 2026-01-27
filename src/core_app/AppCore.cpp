@@ -33,11 +33,11 @@ namespace App {
                 ImGui::BeginChild("##Tools barr", ImVec2(300.0f, ImGui::GetWindowHeight()), 0, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollWithMouse);
                 ImGui::Selectable("Parametre", &show_parameters, 0, ImVec2(300.0f, 100.0f));
                 ImGui::Selectable("Statistique", &show_statistics, 0, ImVec2(300.0f, 100.0f));
-                ImGui::Selectable("Get Started", &Get_started, 0, ImVec2(300.0f, 100.0f));
+                ImGui::Selectable("Get Started", &mGet_started, 0, ImVec2(300.0f, 100.0f));
                 ImGui::Selectable("Restart", &restart, 0, ImVec2(300.0f, 100.0f));
-                chrono.WorkPresentation(mwindowUi.GettextureUI().work);
-                chrono.restPresentation(mwindowUi.GettextureUI().restTexture);
-                chrono.LongRestPresentation(mwindowUi.GettextureUI().chronoTexture);
+               mChrono.WorkPresentation(mwindowUi.GettextureUI().work);
+               mChrono.restPresentation(mwindowUi.GettextureUI().restTexture);
+               mChrono.LongRestPresentation(mwindowUi.GettextureUI().chronoTexture);
 
                 ImGui::EndChild();
 
@@ -45,22 +45,22 @@ namespace App {
                 if (restart) {
                     mstatistics.StatisticInitialisation();
                     Session.InitialiseTimer(0, 3);
-                    chrono.ResetMoveNotificationParameters();
+                   mChrono.ResetMoveNotificationParameters();
                     restart = false;
                 }
 
                 //calcul des statistiques
                 mstatistics.ShortRestSessionDone(Session.minutes, Session.secondes, mstatistics.GetPeriod());
-                mstatistics.WorkSessionComplete(Session.minutes, Session.secondes, chrono.GetSessionNumber(), chrono.GetWorkMinutes(), chrono.GetWorkSecondes(), chrono.GetRestMinutes(),
-                                                chrono.GetRestSecondes(), chrono.GetLonRestMinutes(), chrono.GetLongRestSecondes());
+                mstatistics.WorkSessionComplete(Session.minutes, Session.secondes,mChrono.GetSessionNumber(),mChrono.GetWorkMinutes(),mChrono.GetWorkSecondes(),mChrono.GetRestMinutes(),
+                                               mChrono.GetRestSecondes(),mChrono.GetLonRestMinutes(),mChrono.GetLongRestSecondes());
                 //explication d'entree de jeu
                 static int count = 0;
                 if (count <= 500) count++;
                 if (count < 500) {
-                    chrono.Explanations(mstatistics.GetPeriod(), deltaTime, mwindow.mCurrenTheme);
+                   mChrono.Explanations(mstatistics.GetPeriod(), deltaTime, mwindow.mCurrenTheme);
                 }
                 //test fenetre globale de statistics
-                if (mstatistics.GetPeriod() == chrono.GetSessionNumber() && Session.minutes == 0 && Session.secondes <= 0.4f && Session.secondes >= 0.20f) { 
+                if (mstatistics.GetPeriod() ==mChrono.GetSessionNumber() && Session.minutes == 0 && Session.secondes <= 0.4f && Session.secondes >= 0.20f) { 
                     show_statistics = true;
                 }
                 
@@ -71,12 +71,12 @@ namespace App {
                                                 Session.timeCounter, show_statistics);
                 }
                 
-                //fenetre des chronometres
+                //fenetre desmChronometres
                 ImVec2 center = ImGui::GetMainViewport()->GetCenter();
                 ImGui::SetNextWindowPos(ImVec2(center.x + 90.0f, center.y), 0, ImVec2(0.5, 0.55));
                 ImGui::BeginChild("##chrono01", ImVec2(650.0f, 500.0f), ImGuiChildFlags_None, ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoBringToFrontOnFocus);
 
-                if (Get_started) {
+                if (mGet_started) {
                     //calcul du temps restant
                     Session.timeleft();
                 }
@@ -87,23 +87,23 @@ namespace App {
                 //ajout du bouton de lancement
                 ImGui::SetCursorPos(ImVec2(340.0f, 355.0f));
                 if (ImGui::ImageButton("start", (ImTextureID)(intptr_t) mwindowUi.GettextureUI().pause, ImVec2(70.0f, 70.0f))) {
-                    Get_started = true;
+                    mGet_started = true;
                 }
-                //affichage du chronometre
+                //affichage dumChronometre
                 ImGui::PushFont(mwindowUi.GetFontUi(), 80.0f);
                 ImGui::SetCursorPos(ImVec2(210.0f, 210.0f));
                 ImGui::Text("%s", Session.chrono);
                 ImGui::PopFont();
                 ImGui::SetCursorPos(ImVec2(150.0f, 20.0f));
                 ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(252.0f / 255.0f, 1.0f, 254.0f, 1.0f));
-                ImGuiExt::ProgressBarArc(450.0f, 360, ((float)Session.minutes * 60 + Session.secondes) * 100.0f / chrono.totalTimeToDo(mstatistics.GetPeriod()), 25.0f);
+                ImGuiExt::ProgressBarArc(450.0f, 360, ((float)Session.minutes * 60 + Session.secondes) * 100.0f /mChrono.totalTimeToDo(mstatistics.GetPeriod()), 25.0f);
                 ImGui::PopStyleColor();
 
                 //progression des sessions
                 ImGui::EndChild();
                 ImGui::PopFont();
 
-                chrono.SessionNotification(Session.minutes, Session.secondes, mstatistics.GetPeriod(),mwindow.mCurrenTheme, mwindowUi.GettextureUI().darkNotification,
+               mChrono.SessionNotification(Session.minutes, Session.secondes, mstatistics.GetPeriod(),mwindow.mCurrenTheme, mwindowUi.GettextureUI().darkNotification,
                                             mwindowUi.GettextureUI().blueNotification, mwindowUi.GettextureUI().yellowNotification, mwindowUi.GetFontUi(), lastTime,
                                             mwindowUi.GetAnimPicture(), mwindowUi.GetAnimTextureUI());
 
@@ -146,7 +146,7 @@ namespace App {
             mwindowUi.InitializeUi(mwindow.GetRenderer(), mwindow.GetWindowSDL());
             std::cout <<"✅ creation de la fenetre ImGui de l' application !" <<std::endl;
 
-            //mwindowUi.igThemeV3(7, 7, 7, 0, 0, 1, 1);
+            //theme par defaut de l'interface
             Uigraphics::UiStyleOrange();
             //statistiques a zero
             mstatistics.StatisticInitialisation();
@@ -154,7 +154,7 @@ namespace App {
             mwindow.ChangePrincipalTheme(mwindow.mCurrenTheme);
             std::cout << "initialisation des statistiques a 0" <<std::endl;
 
-            if (!chrono.AnimationInitialised(mwindow.GetRenderer())) {
+            if (!mChrono.AnimationInitialised(mwindow.GetRenderer())) {
                 std::cout << "❌ Echec de chargement des Gifs de presentation" << std::endl;
                 return false;
             }
@@ -170,7 +170,7 @@ namespace App {
         }
 
         void AppCore::AppSutdown() {
-            chrono.AnimationShutdown();
+           mChrono.AnimationShutdown();
             mwindowUi.ShutdownUI();
             mwindow.ShutdownWindow();
             std::cout << "🛠️ Arret du moteur de l'application !!" <<std::endl;
@@ -181,9 +181,9 @@ namespace App {
             ImGui::BeginChild("##parameter", ImVec2(500, 600), 0, 0);
 
             //gestion du son de l'application
-            chrono.SoundSettings();
+           mChrono.SoundSettings();
             //parametre de temps
-            chrono.TimeSettings();
+           mChrono.TimeSettings();
             //parametre de choix de theme d'arriere plan
             ThemeSettings();
             //image de parametre
@@ -224,23 +224,28 @@ namespace App {
                                 mwindow.mCurrenTheme = backEnd::OfficialTheme::DARK_LIGHT_THEME02;
                                 mwindow.ChangePrincipalTheme(mwindow.mCurrenTheme);
                                 SDL_RenderTexture(mwindow.GetRenderer(),mwindow.GetWindowTexture(), nullptr, nullptr);
+                                Uigraphics::UiStyleLigth();
                             break;
 
                             case 1:
                                 mwindow.mCurrenTheme = backEnd::OfficialTheme::DARK_THEME;
                                 mwindow.ChangePrincipalTheme(mwindow.mCurrenTheme);
                                 SDL_RenderTexture(mwindow.GetRenderer(),mwindow.GetWindowTexture(), nullptr, nullptr);
+                                Uigraphics::UiStyleDark();
                             break;
                             case 2:
                                 mwindow.mCurrenTheme = backEnd::OfficialTheme::DARK_LIGHT_THEME;
                                 mwindow.ChangePrincipalTheme(mwindow.mCurrenTheme);
                                 SDL_RenderTexture(mwindow.GetRenderer(),mwindow.GetWindowTexture(), nullptr, nullptr);
+                                //changement du theme de l'interface
+                                Uigraphics::UiStyleDark();
                             break;
 
                             case 3:
                                 mwindow.mCurrenTheme = backEnd::OfficialTheme::ORANGE_THEME;
                                 mwindow.ChangePrincipalTheme(mwindow.mCurrenTheme);
                                 SDL_RenderTexture(mwindow.GetRenderer(),mwindow.GetWindowTexture(), nullptr, nullptr);
+                                Uigraphics::UiStyleOrange();
                             break;
                         }
                     }
@@ -252,7 +257,7 @@ namespace App {
         void AppCore::SessionRepresentaion(int counterSession, Uint64 deltaTime) {
             if (counterSession == 0) {
                 ImGui::SetCursorPos(ImVec2(340.0f, 130.0f));
-                chrono.PlayAnimation(deltaTime, ImVec2(70.0f, 70.0f), mwindow.mCurrenTheme);
+               mChrono.PlayAnimation(deltaTime, ImVec2(70.0f, 70.0f), mwindow.mCurrenTheme);
             }
             else if (counterSession % 2 != 0 || counterSession == 1) {
                 ImGui::SetCursorPos(ImVec2(340.0f, 130.0f));

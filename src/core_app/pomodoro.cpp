@@ -332,6 +332,12 @@ namespace App {
             m_counterDelay02 = 0;
             m_notificationUp = false;
             m_notificationUp02 = false;
+            m_statisticsup = false;
+            m_counterDelayStatistics = 0;
+            m_angleStats = 0.0f;
+            m_successUp = false;
+            m_angleSuccess = 0.0f;
+            m_counterDelaySuccess = 0;
         }
 
         void pomodoro::ResetMoveNotificationParametres02() {
@@ -369,7 +375,7 @@ namespace App {
                     ImGui::BeginChild("##notificationstats", ImVec2(800.0f, 100.0f), ImGuiChildFlags_FrameStyle, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav | ImGuiWindowFlags_NoScrollbar);
 
                     //lancement de l'image animee de la statisatique
-                    PlayAnimation(lastTime, ImVec2(75.0f, 75.0f), animationType, notifaicationTexture, texturenotif);
+                    PlayAnimation(lastTime, ImVec2(100.0f, 100.0f), animationType, notifaicationTexture, texturenotif);
                     
                     ImGui::SameLine();
                     ImGui::PushFont(font, 30.0f);
@@ -380,6 +386,8 @@ namespace App {
                     ImGui::EndChild();
                     ImGui::PopStyleVar();
                 }
+                if (minutes == 0 && secondes < 0.2f)
+                ResetSuccessNotification();
             }
         }
 
@@ -392,7 +400,7 @@ namespace App {
                     ImGui::SetNextWindowPos(ImVec2(360.0f, -350.0f+ (370.0f * sinf(m_angleStats))));
                     ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 10.0f);
                     ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(252.0f / 255.0f, 252.0f / 255.0f, 252.0f / 255.0f, 1.0f));
-                    ImGui::BeginChild("##notificationstats", ImVec2(800.0f, 100.0f), ImGuiChildFlags_FrameStyle, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav);
+                    ImGui::BeginChild("##notificationstats", ImVec2(800.0f, 100.0f), ImGuiChildFlags_FrameStyle, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav | ImGuiWindowFlags_NoScrollbar);
 
                     //lancement de l'image animee de la statisatique
                     PlayAnimation(lastTime, ImVec2(100.0f, 100.0f), backEnd::animType::GRAPH, notifaicationTexture, texturenotif);
@@ -407,6 +415,8 @@ namespace App {
                     ImGui::PopStyleColor();
                     ImGui::PopStyleVar();
                 }
+                if (minutes == 0 && secondes < 0.2f)
+                ResetStatisticNotification();
             }
         }
 

@@ -15,13 +15,13 @@ namespace App {
             Graphics::window mwindow;
             Uigraphics::windowUi mwindowUi;
             Statistic::stats mstatistics;
-            pomodoro chrono;
+            pomodoro mChrono;
             backEnd::Timer Session;
             Sound::sound mtonality;
 
             //booleens  d'affichage
             bool mrunning = true;
-            bool Get_started = false;
+            bool mGet_started = false;
             bool show_statistics = false;
             bool show_parameters = false;
             bool show_interface = true;
