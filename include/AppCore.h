@@ -6,6 +6,7 @@
 #include "pomodoro.h"
 #include "renderStats.h"
 #include "sound.h"
+#include "renderUi.h"
 
 namespace App {
     namespace core {

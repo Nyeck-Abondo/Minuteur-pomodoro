@@ -146,8 +146,8 @@ namespace App {
             mwindowUi.InitializeUi(mwindow.GetRenderer(), mwindow.GetWindowSDL());
             std::cout <<"✅ creation de la fenetre ImGui de l' application !" <<std::endl;
 
-            mwindowUi.igThemeV3(7, 7, 7, 0, 0, 1, 1);
-
+            //mwindowUi.igThemeV3(7, 7, 7, 0, 0, 1, 1);
+            Uigraphics::UiStyleOrange();
             //statistiques a zero
             mstatistics.StatisticInitialisation();
 

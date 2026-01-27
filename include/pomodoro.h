@@ -106,11 +106,15 @@ namespace App {
             void ResetMoveNotificationParameters01();
             void ResetSuccessNotification();
             void ResetStatisticNotification();
+
+            //fonction de fentre de notifications
+            void BeginNotification(SDL_Texture* texture, int counterSession, int minutes, float secondes, ImFont* font, ImVec2 sizeText, const char* message);
+            void EndNotification(SDL_Texture* texture, int counterSession, int minutes, float secondes, ImFont* font, ImVec2 sizeText, const char* message);
             //affichage des notifications
             void ManageNotification(SDL_Texture* texture, int counterSession, int minutes, float secondes, ImFont* font, ImVec2 sizeText);
             void ManageEndNotification(SDL_Texture* texture, int counterSession, int minutes, float secondes, ImFont* font, ImVec2 sizeText);
             //fonctions amies de la classe windowUi
-            void ManageSuccesNotification(SDL_Texture* texture, int counterSession, int minutes, float secondes, ImFont* font, ImVec2 sizeText, Uint64 lastTime, backEnd::animPicture notifaicationTexture, backEnd::animTexureUi texturenotif);
+            void ManageSuccesNotification(SDL_Texture* texture, int counterSession, int minutes, float secondes, ImFont* font, ImVec2 sizeText, Uint64 lastTime, backEnd::animPicture notifaicationTexture, backEnd::animTexureUi texturenotif, backEnd::animType animationType);
             void ManageStatisticNotification(SDL_Texture* texture, int counterSession, int minutes, float secondes, ImFont* font, ImVec2 sizeText, Uint64 lastTime, backEnd::animPicture notifaicationTexture, backEnd::animTexureUi texturenotif);
 
             //transition de session

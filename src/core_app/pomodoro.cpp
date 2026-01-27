@@ -283,22 +283,28 @@ namespace App {
                     ManageNotification(textureLigth02, counterSession, minutes, secondes, font, sizeText);
                     ManageEndNotification(textureLigth02, counterSession, minutes, secondes, font, sizeText);
                     ManageStatisticNotification(textureLigth02, counterSession, minutes, secondes, font, sizeText, lastTime, notifaicationTexture, texturenotif);
+                    ManageSuccesNotification(textureLigth02, counterSession, minutes, secondes, font, sizeText, lastTime, notifaicationTexture, texturenotif, backEnd::animType::SUCCESSPURPLE);
                 break;
 
                 case backEnd::OfficialTheme::DARK_LIGHT_THEME :
                     ManageNotification(textureLigth01, counterSession, minutes, secondes, font, sizeText);
                     ManageEndNotification(textureLigth01, counterSession, minutes, secondes, font, sizeText);
+                    ManageStatisticNotification(textureOrange, counterSession, minutes, secondes, font, sizeText,lastTime, notifaicationTexture, texturenotif);
+                    ManageSuccesNotification(textureLigth02, counterSession, minutes, secondes, font, sizeText, lastTime, notifaicationTexture, texturenotif, backEnd::animType::SUCCESSPURPLE);
                 break;
 
                 case backEnd::OfficialTheme::DARK_THEME :
                     ManageNotification(textureLigth01, counterSession, minutes, secondes, font, sizeText);
                     ManageEndNotification(textureLigth01, counterSession, minutes, secondes, font, sizeText);
+                    ManageStatisticNotification(textureOrange, counterSession, minutes, secondes, font, sizeText,lastTime, notifaicationTexture, texturenotif);
+                    ManageSuccesNotification(textureLigth02, counterSession, minutes, secondes, font, sizeText, lastTime, notifaicationTexture, texturenotif, backEnd::animType::SUCCESSPURPLE);
                 break;
 
                 case backEnd::OfficialTheme::ORANGE_THEME :
                     ManageNotification(textureOrange, counterSession, minutes, secondes, font, sizeText);
                     ManageEndNotification(textureOrange, counterSession, minutes, secondes, font, sizeText);
                     ManageStatisticNotification(textureOrange, counterSession, minutes, secondes, font, sizeText,lastTime, notifaicationTexture, texturenotif);
+                    ManageSuccesNotification(textureLigth02, counterSession, minutes, secondes, font, sizeText, lastTime, notifaicationTexture, texturenotif, backEnd::animType::SUCCESSYELLOW);
                 break;
             }
         }
@@ -309,10 +315,10 @@ namespace App {
                 angle += 0.01f;
             }
             else if (angle >= M_Pi / 2) {
-                if (counterDelay <= 850) counterDelay++;
+                if (counterDelay <= 700) counterDelay++;
             }
             
-            if (counterDelay == 850) {
+            if (counterDelay == 700) {
                 notificationUp = true;
                 angle -= 0.01f;
                 if (angle < 0.0f) angle = 0.0f;
@@ -352,23 +358,23 @@ namespace App {
             m_counterDelaySuccess = 0;
         }
 
-        void pomodoro::ManageStatisticNotification(SDL_Texture* texture, int counterSession, int minutes, float secondes, ImFont* font, ImVec2 sizeText, Uint64 lastTime, backEnd::animPicture notifaicationTexture, backEnd::animTexureUi texturenotif) {
+        void pomodoro::ManageSuccesNotification(SDL_Texture* texture, int counterSession, int minutes, float secondes, ImFont* font, ImVec2 sizeText, Uint64 lastTime, backEnd::animPicture notifaicationTexture, backEnd::animTexureUi texturenotif, backEnd::animType animationType) {
             //conditions d'apparitions des nnotifications et deplacement
-            if (counterSession % 2 != 0 || counterSession == 1) {
-                if ( minutes >= 0 && secondes >= 5.0f ) {
+            if (counterSession % 4 == 0 && counterSession != 0) {
+                if (minutes == 0 && secondes <= 30.0f ) {
                     MoveNotification(m_angleStats, m_statisticsup, m_counterDelayStatistics);
                     std::cout <<"m_anglestats: " << m_angleStats <<std::endl;
                     ImGui::SetNextWindowPos(ImVec2(360.0f, -350.0f+ (370.0f * sinf(m_angleStats))));
                     ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 10.0f);
-                    ImGui::BeginChild("##notificationstats", ImVec2(800.0f, 100.0f), ImGuiChildFlags_FrameStyle, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav);
+                    ImGui::BeginChild("##notificationstats", ImVec2(800.0f, 100.0f), ImGuiChildFlags_FrameStyle, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav | ImGuiWindowFlags_NoScrollbar);
 
                     //lancement de l'image animee de la statisatique
-                    PlayAnimation(lastTime, ImVec2(75.0f, 75.0f), backEnd::animType::GRAPH, notifaicationTexture, texturenotif);
+                    PlayAnimation(lastTime, ImVec2(75.0f, 75.0f), animationType, notifaicationTexture, texturenotif);
                     
                     ImGui::SameLine();
                     ImGui::PushFont(font, 30.0f);
                     ImGui::SetCursorPos(ImVec2(350.0f - sizeText.x / 2.0f, 50.0f - sizeText.y / 2.0f));
-                    ImGui::Text("Session de concentration en cours . . .");
+                    ImGui::Text("succes");
                     ImGui::PopFont();
                     
                     ImGui::EndChild();
@@ -377,12 +383,34 @@ namespace App {
             }
         }
 
-        void pomodoro::ManageNotification(SDL_Texture* texture, int counterSession, int minutes, float secondes, ImFont* font,  ImVec2 sizeText) {
-            if (counterSession == 0) {
-                
-                //definition du moment de la duree de vie de la notification
-                if ( minutes <= 0 && secondes <= 5.0f ) {
-                    MoveNotification(m_Angle, m_notificationUp, m_CounterDelay);
+        void pomodoro::ManageStatisticNotification(SDL_Texture* texture, int counterSession, int minutes, float secondes, ImFont* font, ImVec2 sizeText, Uint64 lastTime, backEnd::animPicture notifaicationTexture, backEnd::animTexureUi texturenotif) {
+            //conditions d'apparitions des nnotifications et deplacement
+            if (counterSession % 2 == 0 && counterSession % 4 != 0) {
+                if (minutes >= m_RestMinutes - 2 && secondes >= 5.0f ) {
+                    MoveNotification(m_angleStats, m_statisticsup, m_counterDelayStatistics);
+                    std::cout <<"m_anglestats: " << m_angleStats <<std::endl;
+                    ImGui::SetNextWindowPos(ImVec2(360.0f, -350.0f+ (370.0f * sinf(m_angleStats))));
+                    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 10.0f);
+                    ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(252.0f / 255.0f, 252.0f / 255.0f, 252.0f / 255.0f, 1.0f));
+                    ImGui::BeginChild("##notificationstats", ImVec2(800.0f, 100.0f), ImGuiChildFlags_FrameStyle, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav);
+
+                    //lancement de l'image animee de la statisatique
+                    PlayAnimation(lastTime, ImVec2(100.0f, 100.0f), backEnd::animType::GRAPH, notifaicationTexture, texturenotif);
+                    
+                    ImGui::SameLine();
+                    ImGui::PushFont(font, 30.0f);
+                    ImGui::SetCursorPos(ImVec2(350.0f - sizeText.x / 2.0f, 50.0f - sizeText.y / 2.0f));
+                    ImGui::Text("Augmentation des statistiques de sessions: %d", counterSession);
+                    ImGui::PopFont();
+                    
+                    ImGui::EndChild();
+                    ImGui::PopStyleColor();
+                    ImGui::PopStyleVar();
+                }
+            }
+        }
+
+        void pomodoro::BeginNotification(SDL_Texture* texture, int counterSession, int minutes, float secondes, ImFont* font, ImVec2 sizeText, const char* message) {
                     ImGui::SetNextWindowPos(ImVec2(360.0f, 1000.0f - (370.0f * sinf(m_Angle))));
                     ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 10.0f);
                     ImGui::BeginChild("##notifications", ImVec2(800.0f, 100.0f), ImGuiChildFlags_FrameStyle, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav);
@@ -390,12 +418,37 @@ namespace App {
                     ImGui::SameLine();
                     ImGui::PushFont(font, 30.0f);
                     ImGui::SetCursorPos(ImVec2(350.0f - sizeText.x / 2.0f, 50.0f - sizeText.y / 2.0f));
-                    ImGui::Text(u8"Preparez vous à commencer . . .");
+                    ImGui::Text(message);
                     ImGui::PopFont();
                     
                     ImGui::EndChild();
                     ImGui::PopStyleVar();
+        }
+
+        void pomodoro::EndNotification(SDL_Texture* texture, int counterSession, int minutes, float secondes, ImFont* font, ImVec2 sizeText, const char* message) {
+            ImGui::SetNextWindowPos(ImVec2(360.0f, 1000.0f - (370.0f * sinf(m_Angle02))));
+            ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 10.0f);
+            ImGui::BeginChild("##notifications", ImVec2(800.0f, 100.0f), ImGuiChildFlags_FrameStyle, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav);
+            ImGui::Image((ImTextureID)(intptr_t) (texture), ImVec2(75.0f, 75.0f));
+            ImGui::SameLine();
+            ImGui::PushFont(font, 30.0f);
+            ImGui::SetCursorPos(ImVec2(350.0f - sizeText.x / 2.0f, 50.0f - sizeText.y / 2.0f));
+            ImGui::Text(message);
+            ImGui::PopFont();
+                    
+            ImGui::EndChild();
+            ImGui::PopStyleVar();
+        }
+
+        void pomodoro::ManageNotification(SDL_Texture* texture, int counterSession, int minutes, float secondes, ImFont* font,  ImVec2 sizeText) {
+            if (counterSession == 0) {
+                
+                //definition du moment de la duree de vie de la notification
+                if ( minutes <= 0 && secondes <= 5.0f ) {
+                    MoveNotification(m_Angle, m_notificationUp, m_CounterDelay);
+                    BeginNotification(texture, counterSession, minutes, secondes, font, sizeText, u8"Preparez vous à commencer . . .");
                 }
+                //reinitialisation
                 if (minutes == 0 && secondes < 0.2f)
                 ResetMoveNotificationParameters01();
             }
@@ -405,19 +458,9 @@ namespace App {
                 if (minutes > 0 && secondes >= 2.0f ) {
                         
                     MoveNotification(m_Angle, m_notificationUp, m_CounterDelay);
-                    ImGui::SetNextWindowPos(ImVec2(360.0f, 1000.0f - (370.0f * sinf(m_Angle))));
-                    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 10.0f);
-                    ImGui::BeginChild("##notification02", ImVec2(800.0f, 100.0f), ImGuiChildFlags_FrameStyle, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav);
-                    ImGui::Image((ImTextureID)(intptr_t) (texture), ImVec2(75.0f, 75.0f));
-                    ImGui::SameLine();
-                    ImGui::PushFont(font, 30.0f);
-                    ImGui::SetCursorPos(ImVec2(350.0f - sizeText.x / 2.0f, 50.0f - sizeText.y / 2.0f));
-                    ImGui::Text("Session de concentration en cours . . .");
-                    ImGui::PopFont();
-                    
-                    ImGui::EndChild();
-                    ImGui::PopStyleVar();
+                    BeginNotification(texture, counterSession, minutes, secondes, font, sizeText, u8"Session de concentration en cours . . .");
                 }
+                //reinitialisation
                 if (minutes == 0 && secondes < 0.2f)
                 ResetMoveNotificationParameters01();
             }
@@ -426,42 +469,20 @@ namespace App {
                 //definition du moment de la duree de vie de la notification
                 if ( minutes > 0 && secondes >= 2.0f ) {
                     MoveNotification(m_Angle, m_notificationUp, m_CounterDelay);
-                    ImGui::SetNextWindowPos(ImVec2(360.0f, 1000.0f - (370.0f * sinf(m_Angle))));
-                    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 10.0f);
-                    ImGui::BeginChild("##notification04", ImVec2(800.0f, 100.0f), ImGuiChildFlags_FrameStyle, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav);
-                    ImGui::Image((ImTextureID)(intptr_t) (texture), ImVec2(75.0f, 75.0f));
-                    ImGui::SameLine();
-                    ImGui::PushFont(font, 30.0f);
-                    ImGui::SetCursorPos(ImVec2(350.0f - sizeText.x / 2.0f, 50.0f - sizeText.y / 2.0f));
-                    ImGui::Text("Session de repos court en cours . . .");
-                    ImGui::PopFont();
-                        
-                    ImGui::EndChild();
-                    ImGui::PopStyleVar();
+                    BeginNotification(texture, counterSession, minutes, secondes, font, sizeText, "Session de repos court en cours . . .");
                 }
+                //reinitialisation
                 if (minutes == 0 && secondes < 0.2f)
                 ResetMoveNotificationParameters01();
-               
             }
 
             else if (counterSession % 4 == 0 && counterSession != 0) {
                 //definition du moment de la duree de vie de la notification
                 if (minutes > 0 && secondes >= 2.0f) {
                     MoveNotification(m_Angle, m_notificationUp, m_CounterDelay);
-                    ImGui::SetNextWindowPos(ImVec2(360.0f, 1000.0f - (370.0f * sinf(m_Angle))));
-                    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 10.0f);
-                    ImGui::BeginChild("##notification06", ImVec2(800.0f, 100.0f), ImGuiChildFlags_FrameStyle, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav);
-                    ImGui::Image((ImTextureID)(intptr_t) (texture), ImVec2(75.0f, 75.0f));
-                    ImGui::SameLine();
-                    ImGui::PushFont(font, 30.0f);
-                    ImGui::SetCursorPos(ImVec2(350.0f - sizeText.x / 2.0f, 50.0f - sizeText.y / 2.0f));
-                    ImGui::Text("Session de repos long en cours . . .");
-                    ImGui::PopFont();
-                    
-                    ImGui::EndChild();
-                    ImGui::PopStyleVar();
+                    BeginNotification(texture, counterSession, minutes, secondes, font, sizeText, "Session de repos long en cours . . .");
                 }
-                
+                //reinitialisation
                 if (minutes == 0 && secondes < 0.2f)
                 ResetMoveNotificationParameters01();
             }
@@ -473,8 +494,6 @@ namespace App {
                 //definition du moment de la duree de vie de la notification    
                 if (minutes == 0 && secondes < 50.0f) {
                     MoveNotification(m_Angle02, m_notificationUp02, m_counterDelay02);
-                    std::cout << "m_Angle02: " << m_Angle02 << std::endl;
-                    std::cout << "m_Angle: " << m_Angle << std::endl;
                     ImGui::SetNextWindowPos(ImVec2(360.0f, 1000.0f - (370.0f * sinf(m_Angle02))));
                     ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 10.0f);
                     ImGui::BeginChild("##notification03", ImVec2(800.0f, 100.0f), ImGuiChildFlags_FrameStyle, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav);
